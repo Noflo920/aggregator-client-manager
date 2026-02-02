@@ -19,12 +19,88 @@
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/prop-types@15.8.1/prop-types.min.js"></script>
     <script src="https://unpkg.com/recharts@2.12.7/umd/Recharts.js"></script>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script>
+      // Initialize Firebase before Babel script
+      const firebaseConfig = {
+        apiKey: "AIzaSyDpLLYMiLFa-6h4khzHQ9M5Ntn-Y6Lvw0Q",
+        authDomain: "aggregator-client-manager.firebaseapp.com",
+        projectId: "aggregator-client-manager",
+        storageBucket: "aggregator-client-manager.firebasestorage.app",
+        messagingSenderId: "606375112772",
+        appId: "1:606375112772:web:a4a8d5a49e995882300c11",
+        measurementId: "G-6NEE7RTMHE"
+      };
+      firebase.initializeApp(firebaseConfig);
+      window.db = firebase.firestore();
+    </script>
     <script type="text/babel">
-const { useState, useEffect, useMemo } = React;
+const { useState, useEffect, useMemo, useCallback } = React;
 const { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } = window.Recharts;
 
-// Storage utility
+// Firestore database reference
+const db = window.db;
+
+// Firestore utility functions
+const firestoreUtils = {
+  // Subscribe to a collection and return unsubscribe function
+  subscribe: (collection, callback) => {
+    return db.collection(collection).onSnapshot((snapshot) => {
+      const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      callback(data);
+    }, (error) => {
+      console.error(`Error subscribing to ${collection}:`, error);
+    });
+  },
+
+  // Save/update a document
+  save: async (collection, data) => {
+    try {
+      if (data.id) {
+        // Update existing document
+        const { id, ...docData } = data;
+        await db.collection(collection).doc(id).set(docData);
+      } else {
+        // Create new document with auto-generated ID
+        const docRef = await db.collection(collection).add(data);
+        return docRef.id;
+      }
+    } catch (error) {
+      console.error(`Error saving to ${collection}:`, error);
+      throw error;
+    }
+  },
+
+  // Delete a document
+  delete: async (collection, id) => {
+    try {
+      await db.collection(collection).doc(id).delete();
+    } catch (error) {
+      console.error(`Error deleting from ${collection}:`, error);
+      throw error;
+    }
+  },
+
+  // Batch update multiple documents
+  batchUpdate: async (collection, updates) => {
+    try {
+      const batch = db.batch();
+      updates.forEach(({ id, data }) => {
+        const ref = db.collection(collection).doc(id);
+        batch.set(ref, data);
+      });
+      await batch.commit();
+    } catch (error) {
+      console.error(`Error batch updating ${collection}:`, error);
+      throw error;
+    }
+  }
+};
+
+// Legacy storage utility (fallback)
 const storage = {
   get: (key, defaultValue) => {
     try {
@@ -1135,8 +1211,11 @@ function App() {
   // Main view mode: 'clients' or 'referrals'
   const [viewMode, setViewMode] = useState('clients');
 
-  // Client state
-  const [clients, setClients] = useState(() => storage.get('clients', []));
+  // Loading state for initial data fetch
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Client state - initialized empty, populated by Firestore subscription
+  const [clients, setClients] = useState([]);
   const [showDashboard, setShowDashboard] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [editingClient, setEditingClient] = useState(null);
@@ -1147,9 +1226,9 @@ function App() {
   const [sortConfig, setSortConfig] = useState({ key: 'name', direction: 'asc' });
   const [networkViewAggregator, setNetworkViewAggregator] = useState(null);
 
-  // Referral state
-  const [referrers, setReferrers] = useState(() => storage.get('referrers', []));
-  const [referrals, setReferrals] = useState(() => storage.get('referrals', []));
+  // Referral state - initialized empty, populated by Firestore subscription
+  const [referrers, setReferrers] = useState([]);
+  const [referrals, setReferrals] = useState([]);
   const [showReferrerModal, setShowReferrerModal] = useState(false);
   const [showReferralModal, setShowReferralModal] = useState(false);
   const [editingReferrer, setEditingReferrer] = useState(null);
@@ -1171,82 +1250,143 @@ function App() {
     return referrals.filter(r => r.referrerId === referrerId);
   };
 
+  // Subscribe to Firestore collections for real-time sync
   useEffect(() => {
-    storage.set('clients', clients);
-  }, [clients]);
+    let loadedCount = 0;
+    const checkLoaded = () => {
+      loadedCount++;
+      if (loadedCount >= 3) setIsLoading(false);
+    };
 
-  useEffect(() => {
-    storage.set('referrers', referrers);
-  }, [referrers]);
+    // Subscribe to clients collection
+    const unsubClients = firestoreUtils.subscribe('clients', (data) => {
+      setClients(data);
+      checkLoaded();
+    });
 
-  useEffect(() => {
-    storage.set('referrals', referrals);
-  }, [referrals]);
+    // Subscribe to referrers collection
+    const unsubReferrers = firestoreUtils.subscribe('referrers', (data) => {
+      setReferrers(data);
+      checkLoaded();
+    });
+
+    // Subscribe to referrals collection
+    const unsubReferrals = firestoreUtils.subscribe('referrals', (data) => {
+      setReferrals(data);
+      checkLoaded();
+    });
+
+    // Cleanup subscriptions on unmount
+    return () => {
+      unsubClients();
+      unsubReferrers();
+      unsubReferrals();
+    };
+  }, []);
 
   const showToast = (message, type = 'success') => {
     setToast({ message, type });
   };
 
-  const handleSave = (client) => {
-    if (editingClient) {
-      setClients(clients.map(c => c.id === client.id ? client : c));
-      showToast('Client updated successfully');
-    } else {
-      setClients([...clients, client]);
-      showToast('Client added successfully');
+  const handleSave = async (client) => {
+    try {
+      if (editingClient) {
+        // Update existing client in Firestore
+        await firestoreUtils.save('clients', client);
+        showToast('Client updated successfully');
+      } else {
+        // Add new client to Firestore (will get ID from Firestore)
+        const { id, ...clientData } = client;
+        await db.collection('clients').doc(id).set(clientData);
+        showToast('Client added successfully');
+      }
+      setShowModal(false);
+      setEditingClient(null);
+    } catch (error) {
+      showToast('Error saving client: ' + error.message, 'error');
     }
-    setShowModal(false);
-    setEditingClient(null);
   };
 
-  const handleDelete = () => {
-    // Clear parentAggregatorId from any sub-merchants that reference this client
-    const updatedClients = clients
-      .filter(c => c.id !== deleteTarget.id)
-      .map(c => c.parentAggregatorId === deleteTarget.id ? { ...c, parentAggregatorId: '' } : c);
-    setClients(updatedClients);
-    showToast('Client deleted successfully');
-    setDeleteTarget(null);
+  const handleDelete = async () => {
+    try {
+      // Delete the client from Firestore
+      await firestoreUtils.delete('clients', deleteTarget.id);
+
+      // Clear parentAggregatorId from any sub-merchants that reference this client
+      const affectedSubMerchants = clients.filter(c => c.parentAggregatorId === deleteTarget.id);
+      for (const subMerchant of affectedSubMerchants) {
+        const { id, ...data } = subMerchant;
+        await db.collection('clients').doc(id).set({ ...data, parentAggregatorId: '' });
+      }
+
+      showToast('Client deleted successfully');
+      setDeleteTarget(null);
+    } catch (error) {
+      showToast('Error deleting client: ' + error.message, 'error');
+    }
   };
 
   // Referrer handlers
-  const handleSaveReferrer = (referrer) => {
-    if (editingReferrer) {
-      setReferrers(referrers.map(r => r.id === referrer.id ? referrer : r));
-      showToast('Referrer updated successfully');
-    } else {
-      setReferrers([...referrers, referrer]);
-      showToast('Referrer added successfully');
+  const handleSaveReferrer = async (referrer) => {
+    try {
+      if (editingReferrer) {
+        await firestoreUtils.save('referrers', referrer);
+        showToast('Referrer updated successfully');
+      } else {
+        const { id, ...referrerData } = referrer;
+        await db.collection('referrers').doc(id).set(referrerData);
+        showToast('Referrer added successfully');
+      }
+      setShowReferrerModal(false);
+      setEditingReferrer(null);
+    } catch (error) {
+      showToast('Error saving referrer: ' + error.message, 'error');
     }
-    setShowReferrerModal(false);
-    setEditingReferrer(null);
   };
 
-  const handleDeleteReferrer = () => {
-    // Also delete all referrals for this referrer
-    setReferrals(referrals.filter(r => r.referrerId !== deleteReferrerTarget.id));
-    setReferrers(referrers.filter(r => r.id !== deleteReferrerTarget.id));
-    showToast('Referrer deleted successfully');
-    setDeleteReferrerTarget(null);
+  const handleDeleteReferrer = async () => {
+    try {
+      // Delete all referrals for this referrer
+      const referralsToDelete = referrals.filter(r => r.referrerId === deleteReferrerTarget.id);
+      for (const referral of referralsToDelete) {
+        await firestoreUtils.delete('referrals', referral.id);
+      }
+
+      // Delete the referrer
+      await firestoreUtils.delete('referrers', deleteReferrerTarget.id);
+      showToast('Referrer deleted successfully');
+      setDeleteReferrerTarget(null);
+    } catch (error) {
+      showToast('Error deleting referrer: ' + error.message, 'error');
+    }
   };
 
   // Referral handlers
-  const handleSaveReferral = (referral) => {
-    if (editingReferral) {
-      setReferrals(referrals.map(r => r.id === referral.id ? referral : r));
-      showToast('Referral updated successfully');
-    } else {
-      setReferrals([...referrals, referral]);
-      showToast('Referral added successfully');
+  const handleSaveReferral = async (referral) => {
+    try {
+      if (editingReferral) {
+        await firestoreUtils.save('referrals', referral);
+        showToast('Referral updated successfully');
+      } else {
+        const { id, ...referralData } = referral;
+        await db.collection('referrals').doc(id).set(referralData);
+        showToast('Referral added successfully');
+      }
+      setShowReferralModal(false);
+      setEditingReferral(null);
+    } catch (error) {
+      showToast('Error saving referral: ' + error.message, 'error');
     }
-    setShowReferralModal(false);
-    setEditingReferral(null);
   };
 
-  const handleDeleteReferral = () => {
-    setReferrals(referrals.filter(r => r.id !== deleteReferralTarget.id));
-    showToast('Referral deleted successfully');
-    setDeleteReferralTarget(null);
+  const handleDeleteReferral = async () => {
+    try {
+      await firestoreUtils.delete('referrals', deleteReferralTarget.id);
+      showToast('Referral deleted successfully');
+      setDeleteReferralTarget(null);
+    } catch (error) {
+      showToast('Error deleting referral: ' + error.message, 'error');
+    }
   };
 
   const handleExport = () => {
@@ -1276,7 +1416,7 @@ function App() {
     const file = e.target.files[0];
     if (!file) return;
     const reader = new FileReader();
-    reader.onload = (event) => {
+    reader.onload = async (event) => {
       try {
         const lines = event.target.result.split('\n').filter(l => l.trim());
         const newClients = [];
@@ -1308,9 +1448,14 @@ function App() {
             });
           }
         }
-        setClients([...clients, ...newClients]);
+        // Save all new clients to Firestore
+        for (const client of newClients) {
+          const { id, ...clientData } = client;
+          await db.collection('clients').doc(id).set(clientData);
+        }
         showToast(`Imported ${newClients.length} clients`);
       } catch (err) {
+        console.error('Import error:', err);
         showToast('Failed to import CSV', 'error');
       }
       e.target.value = '';
@@ -1418,6 +1563,19 @@ function App() {
     return <span className="text-purple-600 ml-1">{referralSortConfig.direction === 'asc' ? '↑' : '↓'}</span>;
   };
 
+  // Show loading screen while fetching initial data
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-teal-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-600 font-medium">Loading data...</p>
+          <p className="text-gray-400 text-sm mt-1">Syncing with team database</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gray-100">
       <style>{`
@@ -1457,6 +1615,11 @@ function App() {
             </div>
           </div>
           <div className="flex items-center gap-3">
+            {/* Real-time sync indicator */}
+            <div className="flex items-center gap-2 text-gray-400 text-sm bg-gray-800 px-3 py-1.5 rounded-lg">
+              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+              <span>Live Sync</span>
+            </div>
             {viewMode === 'clients' ? (
               <>
                 <button
