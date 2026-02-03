@@ -1,4 +1,4 @@
-<!DOCTYPE html> <!-- v3 -->
+<!DOCTYPE html> <!-- v4 - Full Redesign -->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -7,10 +7,39 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              brand: {
+                50: '#eff6ff',
+                100: '#dbeafe',
+                200: '#bfdbfe',
+                300: '#93c5fd',
+                400: '#60a5fa',
+                500: '#3b82f6',
+                600: '#1e3a5f',
+                700: '#1e3a8a',
+                800: '#1e2d4d',
+                900: '#0f172a',
+              }
+            },
+            fontFamily: {
+              sans: ['Inter', 'system-ui', 'sans-serif'],
+              mono: ['JetBrains Mono', 'monospace'],
+            }
+          }
+        }
+      }
+    </script>
     <style>
-        body { font-family: 'DM Sans', sans-serif; }
+        body { font-family: 'Inter', system-ui, sans-serif; }
         .font-mono { font-family: 'JetBrains Mono', monospace; }
+        .stat-card:hover { transform: translateY(-2px); box-shadow: 0 8px 25px -5px rgba(0,0,0,0.1); }
+        .stat-card { transition: all 0.2s ease; }
+        html { scroll-behavior: smooth; }
     </style>
 </head>
 <body>
@@ -43,9 +72,63 @@
       window.googleProvider.setCustomParameters({
         hd: 'spherepay.co'
       });
+
+      // ============================================
+      // GOOGLE SHEETS BACKUP INTEGRATION
+      // ============================================
+      // To enable: paste your Apps Script Web App URL below
+      const GOOGLE_SHEETS_WEBHOOK_URL = '';
+
+      window.syncToGoogleSheets = async function(action, sheetTab, rowData) {
+        if (!GOOGLE_SHEETS_WEBHOOK_URL) return { success: false, reason: 'not_configured' };
+        try {
+          await fetch(GOOGLE_SHEETS_WEBHOOK_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action, sheet: sheetTab, data: rowData, timestamp: new Date().toISOString() })
+          });
+          return { success: true };
+        } catch (err) {
+          console.warn('Google Sheets sync failed:', err);
+          return { success: false, error: err };
+        }
+      };
+      window.isGoogleSheetsConfigured = () => !!GOOGLE_SHEETS_WEBHOOK_URL;
+
+      /*
+      GOOGLE APPS SCRIPT CODE - Deploy as Web App:
+
+      function doPost(e) {
+        var sheet = SpreadsheetApp.getActiveSpreadsheet();
+        var data = JSON.parse(e.postData.contents);
+        var tab = sheet.getSheetByName(data.sheet) || sheet.insertSheet(data.sheet);
+        if (tab.getLastRow() === 0) {
+          if (data.sheet === 'Clients') tab.appendRow(['Timestamp','Action','Name','Type','KYB Status','Flow of Funds','Corridors','Volume','Sumsub','Notes','Parent','ID']);
+          else if (data.sheet === 'Referrals') tab.appendRow(['Timestamp','Action','Client','Referrer','Status','Currencies','Notes','ID']);
+          else if (data.sheet === 'Partners') tab.appendRow(['Timestamp','Action','Name','Type','Email','Fee Split','Notes','ID']);
+        }
+        var d = data.data, t = data.timestamp, a = data.action;
+        if (data.sheet === 'Clients') tab.appendRow([t,a,d.name||'',d.type||'',d.kybStatus||'',d.inFlowOfFunds?'Yes':'No',JSON.stringify(d.corridors||[]),d.totalVolume||'',d.sumsubLink||'',d.notes||'',d.parentAggregatorId||'',d.id||'']);
+        else if (data.sheet === 'Referrals') tab.appendRow([t,a,d.referredCompany||'',d.referrerName||'',d.status||'',JSON.stringify(d.currencies||[]),d.notes||'',d.id||'']);
+        else if (data.sheet === 'Partners') tab.appendRow([t,a,d.name||'',d.type||'',d.contactEmail||'',(d.feeSplitPercentage||0)+'%',d.notes||'',d.id||'']);
+        return ContentService.createTextOutput(JSON.stringify({status:'ok'})).setMimeType(ContentService.MimeType.JSON);
+      }
+      function doGet(e) { return ContentService.createTextOutput('Google Sheets Sync is running.'); }
+      */
     </script>
     <script type="text/babel">
-const { useState, useEffect, useMemo, useCallback } = React;
+const { useState, useEffect, useMemo, useCallback, useRef } = React;
+
+// Debounce hook
+function useDebounce(value, delay) {
+  const [debouncedValue, setDebouncedValue] = useState(value);
+  useEffect(() => {
+    const handler = setTimeout(() => setDebouncedValue(value), delay);
+    return () => clearTimeout(handler);
+  }, [value, delay]);
+  return debouncedValue;
+}
 const { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } = window.Recharts;
 
 // Firebase references
@@ -291,36 +374,52 @@ const generateId = () => Math.random().toString(36).substr(2, 9);
 // Toast Component
 function Toast({ message, type, onClose }) {
   useEffect(() => {
-    const timer = setTimeout(onClose, 3000);
+    const timer = setTimeout(onClose, 4000);
     return () => clearTimeout(timer);
   }, [onClose]);
 
-  const bgColor = type === 'success' ? 'bg-blue-600' : type === 'error' ? 'bg-red-600' : 'bg-gray-700';
+  const styles = {
+    success: 'bg-gradient-to-r from-green-500 to-emerald-600',
+    error: 'bg-gradient-to-r from-red-500 to-rose-600',
+    info: 'bg-gradient-to-r from-blue-500 to-indigo-600'
+  };
+  const icons = {
+    success: <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>,
+    error: <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>,
+    info: <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+  };
 
   return (
-    <div className={`fixed bottom-4 right-4 ${bgColor} text-white px-6 py-3 rounded-lg shadow-lg z-50 animate-slide-up`}>
-      {message}
+    <div className={`fixed top-4 right-4 ${styles[type] || styles.info} text-white px-5 py-3 rounded-xl shadow-2xl z-50 animate-slide-up flex items-center gap-3`}>
+      <div className="flex-shrink-0">{icons[type] || icons.info}</div>
+      <span className="font-medium">{message}</span>
     </div>
   );
 }
 
 // Modal Component
 function Modal({ isOpen, onClose, title, children }) {
+  useEffect(() => {
+    const handleEscape = (e) => { if (e.key === 'Escape' && isOpen) onClose(); };
+    document.addEventListener('keydown', handleEscape);
+    return () => document.removeEventListener('keydown', handleEscape);
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-40 flex items-center justify-center">
-      <div className="fixed inset-0 bg-black/50 animate-fade-in" onClick={onClose}></div>
-      <div className="relative bg-white rounded-xl shadow-2xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto animate-scale-in">
-        <div className="sticky top-0 bg-white border-b px-6 py-4 flex items-center justify-between rounded-t-xl">
-          <h2 className="text-xl font-semibold text-gray-800">{title}</h2>
-          <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-full transition-colors">
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div className="fixed inset-0 bg-black/60 backdrop-blur-sm animate-fade-in" onClick={onClose}></div>
+      <div className="relative bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden animate-scale-in">
+        <div className="sticky top-0 bg-white/95 backdrop-blur border-b px-6 py-4 flex items-center justify-between z-10">
+          <h2 className="text-xl font-bold text-gray-900">{title}</h2>
+          <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-xl transition-all" title="Close (Esc)">
+            <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
         </div>
-        <div className="p-6">{children}</div>
+        <div className="p-6 overflow-y-auto max-h-[calc(90vh-70px)]">{children}</div>
       </div>
     </div>
   );
@@ -1449,13 +1548,13 @@ function App({ currentUser }) {
   const handleSave = async (client) => {
     try {
       if (editingClient) {
-        // Update existing client in Firestore
         await firestoreUtils.save('clients', client);
+        window.syncToGoogleSheets('edit', 'Clients', { ...client });
         showToast('Client updated successfully');
       } else {
-        // Add new client to Firestore (will get ID from Firestore)
         const { id, ...clientData } = client;
         await db.collection('clients').doc(id).set(clientData);
+        window.syncToGoogleSheets('add', 'Clients', { id, ...clientData });
         showToast('Client added successfully');
       }
       setShowModal(false);
@@ -1467,10 +1566,9 @@ function App({ currentUser }) {
 
   const handleDelete = async () => {
     try {
-      // Delete the client from Firestore
       await firestoreUtils.delete('clients', deleteTarget.id);
+      window.syncToGoogleSheets('delete', 'Clients', { id: deleteTarget.id, name: deleteTarget.name });
 
-      // Clear parentAggregatorId from any sub-merchants that reference this client
       const affectedSubMerchants = clients.filter(c => c.parentAggregatorId === deleteTarget.id);
       for (const subMerchant of affectedSubMerchants) {
         const { id, ...data } = subMerchant;
@@ -1489,45 +1587,49 @@ function App({ currentUser }) {
     try {
       if (editingReferrer) {
         await firestoreUtils.save('referrers', referrer);
-        showToast('Referrer updated successfully');
+        window.syncToGoogleSheets('edit', 'Partners', { ...referrer });
+        showToast('Partner updated successfully');
       } else {
         const { id, ...referrerData } = referrer;
         await db.collection('referrers').doc(id).set(referrerData);
-        showToast('Referrer added successfully');
+        window.syncToGoogleSheets('add', 'Partners', { id, ...referrerData });
+        showToast('Partner added successfully');
       }
       setShowReferrerModal(false);
       setEditingReferrer(null);
     } catch (error) {
-      showToast('Error saving referrer: ' + error.message, 'error');
+      showToast('Error saving partner: ' + error.message, 'error');
     }
   };
 
   const handleDeleteReferrer = async () => {
     try {
-      // Delete all referrals for this referrer
       const referralsToDelete = referrals.filter(r => r.referrerId === deleteReferrerTarget.id);
       for (const referral of referralsToDelete) {
         await firestoreUtils.delete('referrals', referral.id);
+        window.syncToGoogleSheets('delete', 'Referrals', { id: referral.id, clientName: referral.referredCompany });
       }
-
-      // Delete the referrer
       await firestoreUtils.delete('referrers', deleteReferrerTarget.id);
-      showToast('Referrer deleted successfully');
+      window.syncToGoogleSheets('delete', 'Partners', { id: deleteReferrerTarget.id, name: deleteReferrerTarget.name });
+      showToast('Partner deleted successfully');
       setDeleteReferrerTarget(null);
     } catch (error) {
-      showToast('Error deleting referrer: ' + error.message, 'error');
+      showToast('Error deleting partner: ' + error.message, 'error');
     }
   };
 
   // Referral handlers
   const handleSaveReferral = async (referral) => {
     try {
+      const referrer = referrers.find(r => r.id === referral.referrerId);
       if (editingReferral) {
         await firestoreUtils.save('referrals', referral);
+        window.syncToGoogleSheets('edit', 'Referrals', { ...referral, referrerName: referrer?.name });
         showToast('Referral updated successfully');
       } else {
         const { id, ...referralData } = referral;
         await db.collection('referrals').doc(id).set(referralData);
+        window.syncToGoogleSheets('add', 'Referrals', { id, ...referralData, referrerName: referrer?.name });
         showToast('Referral added successfully');
       }
       setShowReferralModal(false);
@@ -1540,6 +1642,7 @@ function App({ currentUser }) {
   const handleDeleteReferral = async () => {
     try {
       await firestoreUtils.delete('referrals', deleteReferralTarget.id);
+      window.syncToGoogleSheets('delete', 'Referrals', { id: deleteReferralTarget.id, clientName: deleteReferralTarget.referredCompany });
       showToast('Referral deleted successfully');
       setDeleteReferralTarget(null);
     } catch (error) {
@@ -1778,6 +1881,17 @@ function App({ currentUser }) {
               <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
               <span>Live Sync</span>
             </div>
+            {/* Google Sheets backup indicator */}
+            {window.isGoogleSheetsConfigured() ? (
+              <div className="flex items-center gap-2 text-green-400 text-sm bg-gray-800 px-3 py-1.5 rounded-lg" title="Backup enabled">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                <span className="hidden sm:inline">Backed up</span>
+              </div>
+            ) : (
+              <div className="flex items-center gap-2 text-amber-400 text-sm bg-gray-800 px-3 py-1.5 rounded-lg cursor-help" title="Backup not configured">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+              </div>
+            )}
             {/* User info and logout */}
             <div className="flex items-center gap-2 text-gray-300 text-sm">
               <img
