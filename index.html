@@ -608,7 +608,7 @@ function ReferralNetworkModal({ isOpen, onClose, referrer, referrals }) {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
               </svg>
               <p className="text-lg font-medium">No referrals yet</p>
-              <p className="text-sm">Add referrals linked to this referring client</p>
+              <p className="text-sm">Add New Clients linked to this referring client</p>
             </div>
           ) : (
             <svg viewBox="0 0 500 400" className="w-full h-auto">
@@ -755,7 +755,7 @@ function ReferrerForm({ referrer, onSave, onClose }) {
       <div className="flex justify-end gap-3 pt-4 border-t">
         <button type="button" onClick={onClose} className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">Cancel</button>
         <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
-          {referrer ? 'Update Referrer' : 'Add Referrer'}
+          {referrer ? 'Update Partner' : 'Add Partner'}
         </button>
       </div>
     </form>
@@ -898,7 +898,7 @@ function ReferralForm({ referral, onSave, onClose, allReferrers }) {
       <div className="flex justify-end gap-3 pt-4 border-t">
         <button type="button" onClick={onClose} className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">Cancel</button>
         <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
-          {referral ? 'Update Referral' : 'Add Referral'}
+          {referral ? 'Update Client' : 'Add New Client'}
         </button>
       </div>
     </form>
@@ -1813,7 +1813,7 @@ function App({ currentUser }) {
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                   </svg>
-                  Add Referrer
+                  Add Partner
                 </button>
                 <button
                   onClick={() => { setEditingReferral(null); setShowReferralModal(true); }}
@@ -1822,7 +1822,7 @@ function App({ currentUser }) {
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                   </svg>
-                  Add Referral
+                  Add New Client
                 </button>
               </>
             )}
@@ -2210,7 +2210,7 @@ function App({ currentUser }) {
       <Modal
         isOpen={showReferrerModal}
         onClose={() => { setShowReferrerModal(false); setEditingReferrer(null); }}
-        title={editingReferrer ? 'Edit Referrer' : 'Add Referrer (Who brings clients)'}
+        title={editingReferrer ? 'Edit Referrer' : 'Add Partner (Who brings clients)'}
       >
         <ReferrerForm
           referrer={editingReferrer}
