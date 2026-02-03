@@ -1366,7 +1366,7 @@ function ClientForm({ client, onSave, onClose, allClients }) {
 }
 
 // Stats Bar Component
-function StatsBar({ clients }) {
+function StatsBar({ clients, onFilterClick, activeFilter }) {
   const stats = useMemo(() => {
     const kybCounts = KYB_STATUSES.reduce((acc, s) => ({ ...acc, [s]: 0 }), {});
     let totalVolume = 0;
@@ -1391,10 +1391,35 @@ function StatsBar({ clients }) {
     return `$${v}`;
   };
 
+  // Helper to determine if a card is active
+  const isActive = (filterType, filterValue) => {
+    if (filterType === 'all') return !activeFilter;
+    if (filterType === 'missing') return activeFilter === 'missing';
+    return activeFilter === filterValue;
+  };
+
+  // Card wrapper component for consistent clickable styling
+  const StatCard = ({ onClick, isActive, children, className = '', colorClass = '' }) => (
+    <button
+      onClick={onClick}
+      className={`stat-card rounded-xl shadow-sm p-4 text-left transition-all duration-200 cursor-pointer hover:shadow-md hover:scale-[1.02] active:scale-[0.98] ${className} ${
+        isActive
+          ? 'ring-2 ring-blue-500 ring-offset-2'
+          : ''
+      }`}
+    >
+      {children}
+    </button>
+  );
+
   return (
     <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-8 gap-4 mb-6 animate-fade-in">
       {/* Total Clients */}
-      <div className="stat-card bg-white rounded-xl shadow-sm border p-4">
+      <StatCard
+        onClick={() => onFilterClick('all')}
+        isActive={isActive('all')}
+        className="bg-white border"
+      >
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-slate-500 to-slate-700 flex items-center justify-center">
             <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1406,9 +1431,9 @@ function StatsBar({ clients }) {
             <p className="text-2xl font-bold font-mono text-gray-800">{stats.total}</p>
           </div>
         </div>
-      </div>
+      </StatCard>
 
-      {/* Pipeline Volume - Prominent */}
+      {/* Pipeline Volume - Prominent (non-clickable, just informational) */}
       <div className="stat-card bg-gradient-to-br from-teal-500 to-teal-700 rounded-xl shadow-lg p-4 col-span-2 sm:col-span-1 lg:col-span-2">
         <div className="flex items-center gap-3">
           <div className="w-12 h-12 rounded-lg bg-white/20 flex items-center justify-center">
@@ -1424,7 +1449,11 @@ function StatsBar({ clients }) {
       </div>
 
       {/* Pending */}
-      <div className="stat-card bg-white rounded-xl shadow-sm border p-4">
+      <StatCard
+        onClick={() => onFilterClick('Pending')}
+        isActive={isActive('kyb', 'Pending')}
+        className="bg-white border"
+      >
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-yellow-400 to-yellow-600 flex items-center justify-center">
             <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1436,10 +1465,14 @@ function StatsBar({ clients }) {
             <p className="text-2xl font-bold font-mono text-yellow-600">{stats.kybCounts['Pending']}</p>
           </div>
         </div>
-      </div>
+      </StatCard>
 
       {/* In Review */}
-      <div className="stat-card bg-white rounded-xl shadow-sm border p-4">
+      <StatCard
+        onClick={() => onFilterClick('In Review')}
+        isActive={isActive('kyb', 'In Review')}
+        className="bg-white border"
+      >
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center">
             <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1451,10 +1484,14 @@ function StatsBar({ clients }) {
             <p className="text-2xl font-bold font-mono text-blue-600">{stats.kybCounts['In Review']}</p>
           </div>
         </div>
-      </div>
+      </StatCard>
 
       {/* Approved */}
-      <div className="stat-card bg-white rounded-xl shadow-sm border p-4">
+      <StatCard
+        onClick={() => onFilterClick('Approved')}
+        isActive={isActive('kyb', 'Approved')}
+        className="bg-white border"
+      >
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center">
             <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1466,10 +1503,14 @@ function StatsBar({ clients }) {
             <p className="text-2xl font-bold font-mono text-green-600">{stats.kybCounts['Approved']}</p>
           </div>
         </div>
-      </div>
+      </StatCard>
 
       {/* Rejected */}
-      <div className="stat-card bg-white rounded-xl shadow-sm border p-4">
+      <StatCard
+        onClick={() => onFilterClick('Rejected')}
+        isActive={isActive('kyb', 'Rejected')}
+        className="bg-white border"
+      >
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-red-400 to-red-600 flex items-center justify-center">
             <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1481,10 +1522,14 @@ function StatsBar({ clients }) {
             <p className="text-2xl font-bold font-mono text-red-600">{stats.kybCounts['Rejected']}</p>
           </div>
         </div>
-      </div>
+      </StatCard>
 
       {/* Missing KYB */}
-      <div className="stat-card bg-white rounded-xl shadow-sm border p-4">
+      <StatCard
+        onClick={() => onFilterClick('missing')}
+        isActive={isActive('missing')}
+        className="bg-white border"
+      >
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center">
             <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1496,7 +1541,7 @@ function StatsBar({ clients }) {
             <p className="text-2xl font-bold font-mono text-amber-600">{stats.missingKyb}</p>
           </div>
         </div>
-      </div>
+      </StatCard>
     </div>
   );
 }
@@ -1627,6 +1672,7 @@ function App({ currentUser }) {
   const [toast, setToast] = useState(null);
   const [search, setSearch] = useState('');
   const [filters, setFilters] = useState({ kybStatus: '', type: '', priority: '' });
+  const [activeStatFilter, setActiveStatFilter] = useState(null); // Track which stat card is active
   const [sortConfig, setSortConfig] = useState({ key: 'name', direction: 'asc' });
   const [networkViewAggregator, setNetworkViewAggregator] = useState(null);
 
@@ -1724,6 +1770,32 @@ function App({ currentUser }) {
 
   const showToast = (message, type = 'success') => {
     setToast({ message, type });
+  };
+
+  // Handle stat card filter clicks
+  const handleStatFilterClick = (filterType) => {
+    if (filterType === 'all') {
+      // Clear all filters
+      setFilters({ kybStatus: '', type: '', priority: '' });
+      setActiveStatFilter(null);
+    } else if (filterType === 'missing') {
+      // Show clients without 'Approved' status (Pending, In Review, or Rejected)
+      // This uses a special state that will be handled in filteredClients
+      setFilters({ kybStatus: '', type: '', priority: '' });
+      setActiveStatFilter('missing');
+    } else {
+      // Filter by specific KYB status
+      if (activeStatFilter === filterType) {
+        // Clicking same filter toggles it off
+        setFilters({ ...filters, kybStatus: '' });
+        setActiveStatFilter(null);
+      } else {
+        setFilters({ ...filters, kybStatus: filterType });
+        setActiveStatFilter(filterType);
+      }
+    }
+    // Switch to table view when filtering
+    setShowDashboard(false);
   };
 
   const handleSave = async (client) => {
@@ -1914,9 +1986,11 @@ function App({ currentUser }) {
       const matchesKyb = !filters.kybStatus || c.kybStatus === filters.kybStatus;
       const matchesType = !filters.type || c.type === filters.type;
       const matchesPriority = !filters.priority || c.corridors.some(cor => cor.priority === filters.priority);
-      return matchesSearch && matchesKyb && matchesType && matchesPriority;
+      // Handle special 'missing' filter (all non-Approved clients)
+      const matchesMissing = activeStatFilter !== 'missing' || c.kybStatus !== 'Approved';
+      return matchesSearch && matchesKyb && matchesType && matchesPriority && matchesMissing;
     });
-  }, [clients, search, filters]);
+  }, [clients, search, filters, activeStatFilter]);
 
   const sortedClients = useMemo(() => {
     const sorted = [...filteredClients];
@@ -2136,7 +2210,7 @@ function App({ currentUser }) {
       </header>
 
       <main className="max-w-7xl mx-auto px-4 py-6">
-        {viewMode === 'clients' && <StatsBar clients={clients} />}
+        {viewMode === 'clients' && <StatsBar clients={clients} onFilterClick={handleStatFilterClick} activeFilter={activeStatFilter} />}
         {viewMode === 'referrals' && <ReferralStatsBar referrers={referrers} referrals={referrals} />}
 
         {viewMode === 'clients' && showDashboard && (
@@ -2145,6 +2219,27 @@ function App({ currentUser }) {
 
         {viewMode === 'clients' && !showDashboard && (
           <div className="bg-white rounded-xl shadow-sm border animate-fade-in">
+            {/* Active filter indicator */}
+            {activeStatFilter && (
+              <div className="px-4 py-2 bg-blue-50 border-b flex items-center justify-between">
+                <div className="flex items-center gap-2 text-sm text-blue-700">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                  </svg>
+                  <span>Filtering by: <strong>{activeStatFilter === 'missing' ? 'Missing KYB (Not Approved)' : activeStatFilter}</strong></span>
+                  <span className="text-blue-500">({sortedClients.length} client{sortedClients.length !== 1 ? 's' : ''})</span>
+                </div>
+                <button
+                  onClick={() => handleStatFilterClick('all')}
+                  className="text-blue-600 hover:text-blue-800 text-sm font-medium flex items-center gap-1"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                  Clear filter
+                </button>
+              </div>
+            )}
             <div className="p-4 border-b flex flex-wrap gap-4 items-center">
               <div className="flex-1 min-w-[200px]">
                 <div className="relative">
@@ -2162,7 +2257,10 @@ function App({ currentUser }) {
               </div>
               <select
                 value={filters.kybStatus}
-                onChange={(e) => setFilters({ ...filters, kybStatus: e.target.value })}
+                onChange={(e) => {
+                  setFilters({ ...filters, kybStatus: e.target.value });
+                  setActiveStatFilter(e.target.value || null);
+                }}
                 className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
               >
                 <option value="">All KYB Status</option>
