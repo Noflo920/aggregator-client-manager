@@ -1995,7 +1995,7 @@ function App({ currentUser }) {
                           </div>
                         </td>
                         <td className="px-4 py-3 font-mono text-gray-700">
-                          {formatVolume(getClientVolume(client))}
+                          {formatVolume(client.type === 'Aggregator' ? clients.filter(c => c.parentAggregatorId === client.id).reduce((sum, sm) => sum + sm.corridors.reduce((s, c) => s + (c.expectedVolume || 0), 0), 0) : client.corridors.reduce((sum, c) => sum + (c.expectedVolume || 0), 0))}
                         </td>
                         <td className="px-4 py-3">
                           <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${KYB_COLORS[client.kybStatus].bg} ${KYB_COLORS[client.kybStatus].text} border ${KYB_COLORS[client.kybStatus].border}`}>
