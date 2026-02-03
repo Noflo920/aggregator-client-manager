@@ -1396,6 +1396,16 @@ function App({ currentUser }) {
   // Get referrals for a referrer
   const getReferralsForReferrer = (referrerId) => {
     return referrals.filter(r => r.referrerId === referrerId);
+
+        // Get total volume for a client (for aggregators, sum of sub-merchant volumes)
+        const getClientVolume = (client) => {
+                if (client.type === 'Aggregator') {
+                          const subMerchants = getSubMerchants(client.id);
+                          return subMerchants.reduce((sum, sm) => 
+                                      sum + sm.corridors.reduce((s, c) => s + (c.expectedVolume || 0), 0), 0);
+                }
+                return client.corridors.reduce((sum, c) => sum + (c.expectedVolume || 0), 0);
+        };
   };
 
   // Subscribe to Firestore collections for real-time sync
@@ -1985,7 +1995,7 @@ function App({ currentUser }) {
                           </div>
                         </td>
                         <td className="px-4 py-3 font-mono text-gray-700">
-                          {formatVolume(client.corridors.reduce((sum, c) => sum + (c.expectedVolume || 0), 0))}
+                          {formatVolume(getClientVolume(client))}
                         </td>
                         <td className="px-4 py-3">
                           <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${KYB_COLORS[client.kybStatus].bg} ${KYB_COLORS[client.kybStatus].text} border ${KYB_COLORS[client.kybStatus].border}`}>
