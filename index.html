@@ -40,6 +40,16 @@
         .stat-card:hover { transform: translateY(-2px); box-shadow: 0 8px 25px -5px rgba(0,0,0,0.1); }
         .stat-card { transition: all 0.2s ease; }
         html { scroll-behavior: smooth; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes scaleIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+        .animate-fade-in { animation: fadeIn 0.3s ease-out; }
+        .animate-slide-up { animation: slideUp 0.3s ease-out; }
+        .animate-scale-in { animation: scaleIn 0.2s ease-out; }
+        .table-row { animation: fadeIn 0.2s ease-out backwards; }
+        tbody tr:nth-child(even) { background-color: rgba(249, 250, 251, 0.5); }
+        tbody tr:hover { background-color: rgba(20, 184, 166, 0.05); }
+        thead { position: sticky; top: 0; z-index: 10; background: white; }
     </style>
 </head>
 <body>
@@ -1008,14 +1018,12 @@ function ReferralForm({ referral, onSave, onClose, allReferrers }) {
 function ReferralStatsBar({ referrers, referrals }) {
   const stats = useMemo(() => {
     const statusCounts = REFERRAL_STATUSES.reduce((acc, s) => ({ ...acc, [s]: 0 }), {});
-    let totalCurrencies = 0;
     let avgCostPercent = 0;
     let costCount = 0;
 
     referrals.forEach(r => {
       statusCounts[r.status]++;
       r.currencies.forEach(c => {
-        totalCurrencies++;
         if (c.costPercentage > 0) {
           avgCostPercent += c.costPercentage;
           costCount++;
@@ -1032,25 +1040,94 @@ function ReferralStatsBar({ referrers, referrals }) {
   }, [referrers, referrals]);
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border p-4 mb-6 animate-fade-in">
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4">
-        <div className="text-center p-3 bg-blue-50 rounded-lg">
-          <p className="text-xs text-blue-500 uppercase tracking-wide">Referrers</p>
-          <p className="text-2xl font-semibold font-mono text-blue-700">{stats.totalReferrers}</p>
-        </div>
-        <div className="text-center p-3 bg-gray-50 rounded-lg">
-          <p className="text-xs text-gray-500 uppercase tracking-wide">Total Referrals</p>
-          <p className="text-2xl font-semibold font-mono text-gray-800">{stats.totalReferrals}</p>
-        </div>
-        {REFERRAL_STATUSES.map(status => (
-          <div key={status} className="text-center p-3 bg-gray-50 rounded-lg">
-            <p className="text-xs text-gray-500 uppercase tracking-wide">{status}</p>
-            <p className={`text-2xl font-semibold font-mono ${REFERRAL_STATUS_COLORS[status].text}`}>{stats.statusCounts[status]}</p>
+    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 mb-6 animate-fade-in">
+      {/* Partners */}
+      <div className="stat-card bg-gradient-to-br from-purple-500 to-purple-700 rounded-xl shadow-lg p-4">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
+            </svg>
           </div>
-        ))}
-        <div className="text-center p-3 bg-gray-50 rounded-lg">
-          <p className="text-xs text-gray-500 uppercase tracking-wide">Avg Cost %</p>
-          <p className="text-2xl font-semibold font-mono text-orange-600">{stats.avgCost}%</p>
+          <div>
+            <p className="text-xs text-purple-200 uppercase tracking-wide font-medium">Partners</p>
+            <p className="text-2xl font-bold font-mono text-white">{stats.totalReferrers}</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Referrals */}
+      <div className="stat-card bg-white rounded-xl shadow-sm border p-4">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-slate-500 to-slate-700 flex items-center justify-center">
+            <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+            </svg>
+          </div>
+          <div>
+            <p className="text-xs text-gray-500 uppercase tracking-wide font-medium">Referrals</p>
+            <p className="text-2xl font-bold font-mono text-gray-800">{stats.totalReferrals}</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Active */}
+      <div className="stat-card bg-white rounded-xl shadow-sm border p-4">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center">
+            <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+            </svg>
+          </div>
+          <div>
+            <p className="text-xs text-gray-500 uppercase tracking-wide font-medium">Active</p>
+            <p className="text-2xl font-bold font-mono text-green-600">{stats.statusCounts['Active']}</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Pending */}
+      <div className="stat-card bg-white rounded-xl shadow-sm border p-4">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-yellow-400 to-yellow-600 flex items-center justify-center">
+            <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <div>
+            <p className="text-xs text-gray-500 uppercase tracking-wide font-medium">Pending</p>
+            <p className="text-2xl font-bold font-mono text-yellow-600">{stats.statusCounts['Pending']}</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Inactive */}
+      <div className="stat-card bg-white rounded-xl shadow-sm border p-4">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-gray-400 to-gray-600 flex items-center justify-center">
+            <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+            </svg>
+          </div>
+          <div>
+            <p className="text-xs text-gray-500 uppercase tracking-wide font-medium">Inactive</p>
+            <p className="text-2xl font-bold font-mono text-gray-600">{stats.statusCounts['Inactive']}</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Avg Cost */}
+      <div className="stat-card bg-white rounded-xl shadow-sm border p-4">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center">
+            <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+            </svg>
+          </div>
+          <div>
+            <p className="text-xs text-gray-500 uppercase tracking-wide font-medium">Avg Cost</p>
+            <p className="text-2xl font-bold font-mono text-orange-600">{stats.avgCost}%</p>
+          </div>
         </div>
       </div>
     </div>
@@ -1315,29 +1392,109 @@ function StatsBar({ clients }) {
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border p-4 mb-6 animate-fade-in">
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4">
-        <div className="text-center p-3 bg-gray-50 rounded-lg">
-          <p className="text-xs text-gray-500 uppercase tracking-wide">Total Clients</p>
-          <p className="text-2xl font-semibold font-mono text-gray-800">{stats.total}</p>
-        </div>
-        {KYB_STATUSES.map(status => (
-          <div key={status} className="text-center p-3 bg-gray-50 rounded-lg">
-            <p className="text-xs text-gray-500 uppercase tracking-wide">{status}</p>
-            <p className={`text-2xl font-semibold font-mono ${KYB_COLORS[status].text}`}>{stats.kybCounts[status]}</p>
+    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-8 gap-4 mb-6 animate-fade-in">
+      {/* Total Clients */}
+      <div className="stat-card bg-white rounded-xl shadow-sm border p-4">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-slate-500 to-slate-700 flex items-center justify-center">
+            <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
           </div>
-        ))}
-        <div className="text-center p-3 bg-gray-50 rounded-lg">
-          <p className="text-xs text-gray-500 uppercase tracking-wide">Pipeline Volume</p>
-          <p className="text-2xl font-semibold font-mono text-blue-600">{formatVolume(stats.totalVolume)}</p>
+          <div>
+            <p className="text-xs text-gray-500 uppercase tracking-wide font-medium">Clients</p>
+            <p className="text-2xl font-bold font-mono text-gray-800">{stats.total}</p>
+          </div>
         </div>
-        <div className="text-center p-3 bg-gray-50 rounded-lg">
-          <p className="text-xs text-gray-500 uppercase tracking-wide">High Priority</p>
-          <p className="text-2xl font-semibold font-mono text-red-600">{stats.highPriority}</p>
+      </div>
+
+      {/* Pipeline Volume - Prominent */}
+      <div className="stat-card bg-gradient-to-br from-teal-500 to-teal-700 rounded-xl shadow-lg p-4 col-span-2 sm:col-span-1 lg:col-span-2">
+        <div className="flex items-center gap-3">
+          <div className="w-12 h-12 rounded-lg bg-white/20 flex items-center justify-center">
+            <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <div>
+            <p className="text-xs text-teal-100 uppercase tracking-wide font-medium">Pipeline</p>
+            <p className="text-3xl font-bold font-mono text-white">{formatVolume(stats.totalVolume)}</p>
+          </div>
         </div>
-        <div className="text-center p-3 bg-gray-50 rounded-lg">
-          <p className="text-xs text-gray-500 uppercase tracking-wide">Missing KYB</p>
-          <p className="text-2xl font-semibold font-mono text-amber-600">{stats.missingKyb}</p>
+      </div>
+
+      {/* Pending */}
+      <div className="stat-card bg-white rounded-xl shadow-sm border p-4">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-yellow-400 to-yellow-600 flex items-center justify-center">
+            <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <div>
+            <p className="text-xs text-gray-500 uppercase tracking-wide font-medium">Pending</p>
+            <p className="text-2xl font-bold font-mono text-yellow-600">{stats.kybCounts['Pending']}</p>
+          </div>
+        </div>
+      </div>
+
+      {/* In Review */}
+      <div className="stat-card bg-white rounded-xl shadow-sm border p-4">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center">
+            <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <div>
+            <p className="text-xs text-gray-500 uppercase tracking-wide font-medium">In Review</p>
+            <p className="text-2xl font-bold font-mono text-blue-600">{stats.kybCounts['In Review']}</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Approved */}
+      <div className="stat-card bg-white rounded-xl shadow-sm border p-4">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center">
+            <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+            </svg>
+          </div>
+          <div>
+            <p className="text-xs text-gray-500 uppercase tracking-wide font-medium">Approved</p>
+            <p className="text-2xl font-bold font-mono text-green-600">{stats.kybCounts['Approved']}</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Rejected */}
+      <div className="stat-card bg-white rounded-xl shadow-sm border p-4">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-red-400 to-red-600 flex items-center justify-center">
+            <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </div>
+          <div>
+            <p className="text-xs text-gray-500 uppercase tracking-wide font-medium">Rejected</p>
+            <p className="text-2xl font-bold font-mono text-red-600">{stats.kybCounts['Rejected']}</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Missing KYB */}
+      <div className="stat-card bg-white rounded-xl shadow-sm border p-4">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center">
+            <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+          </div>
+          <div>
+            <p className="text-xs text-gray-500 uppercase tracking-wide font-medium">Missing</p>
+            <p className="text-2xl font-bold font-mono text-amber-600">{stats.missingKyb}</p>
+          </div>
         </div>
       </div>
     </div>
@@ -1540,6 +1697,30 @@ function App({ currentUser }) {
       unsubReferrals();
     };
   }, []);
+
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handleKeyboard = (e) => {
+      // Ctrl/Cmd + N: Add new
+      if ((e.ctrlKey || e.metaKey) && e.key === 'n') {
+        e.preventDefault();
+        if (viewMode === 'clients') {
+          setEditingClient(null);
+          setShowModal(true);
+        } else {
+          setEditingReferral(null);
+          setShowReferralModal(true);
+        }
+      }
+      // Ctrl/Cmd + D: Toggle dashboard
+      if ((e.ctrlKey || e.metaKey) && e.key === 'd' && viewMode === 'clients') {
+        e.preventDefault();
+        setShowDashboard(prev => !prev);
+      }
+    };
+    document.addEventListener('keydown', handleKeyboard);
+    return () => document.removeEventListener('keydown', handleKeyboard);
+  }, [viewMode]);
 
   const showToast = (message, type = 'success') => {
     setToast({ message, type });
@@ -2045,8 +2226,32 @@ function App({ currentUser }) {
                 <tbody className="divide-y">
                   {sortedClients.length === 0 ? (
                     <tr>
-                      <td colSpan={8} className="px-4 py-12 text-center text-gray-400">
-                        {clients.length === 0 ? 'No clients yet. Add your first client to get started.' : 'No clients match your filters.'}
+                      <td colSpan={8} className="px-4 py-16 text-center">
+                        {clients.length === 0 ? (
+                          <div className="flex flex-col items-center">
+                            <div className="w-20 h-20 bg-gradient-to-br from-teal-100 to-teal-200 rounded-full flex items-center justify-center mb-4">
+                              <svg className="w-10 h-10 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                              </svg>
+                            </div>
+                            <h3 className="text-lg font-semibold text-gray-800 mb-1">No clients yet</h3>
+                            <p className="text-gray-500 mb-4">Add your first client to start tracking your pipeline</p>
+                            <button onClick={() => { setEditingClient(null); setShowModal(true); }} className="px-4 py-2 bg-teal-600 text-white rounded-lg font-medium hover:bg-teal-700 transition-colors flex items-center gap-2">
+                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
+                              Add First Client
+                            </button>
+                          </div>
+                        ) : (
+                          <div className="flex flex-col items-center">
+                            <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-3">
+                              <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                              </svg>
+                            </div>
+                            <h3 className="text-lg font-medium text-gray-700 mb-1">No matching clients</h3>
+                            <p className="text-gray-500">Try adjusting your search or filters</p>
+                          </div>
+                        )}
                       </td>
                     </tr>
                   ) : (
@@ -2213,8 +2418,32 @@ function App({ currentUser }) {
                 <tbody className="divide-y">
                   {sortedReferrals.length === 0 ? (
                     <tr>
-                      <td colSpan={6} className="px-4 py-12 text-center text-gray-400">
-                        {referrals.length === 0 ? 'No referrals yet. Add your first referral to get started.' : 'No referrals match your filters.'}
+                      <td colSpan={6} className="px-4 py-16 text-center">
+                        {referrals.length === 0 ? (
+                          <div className="flex flex-col items-center">
+                            <div className="w-20 h-20 bg-gradient-to-br from-purple-100 to-purple-200 rounded-full flex items-center justify-center mb-4">
+                              <svg className="w-10 h-10 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+                              </svg>
+                            </div>
+                            <h3 className="text-lg font-semibold text-gray-800 mb-1">No referrals yet</h3>
+                            <p className="text-gray-500 mb-4">Add a partner first, then track clients they bring in</p>
+                            <div className="flex gap-3">
+                              <button onClick={() => { setEditingReferrer(null); setShowReferrerModal(true); }} className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors">Add Partner</button>
+                              <button onClick={() => { setEditingReferral(null); setShowReferralModal(true); }} className="px-4 py-2 bg-purple-600 text-white rounded-lg font-medium hover:bg-purple-700 transition-colors">Add Referral</button>
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="flex flex-col items-center">
+                            <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-3">
+                              <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                              </svg>
+                            </div>
+                            <h3 className="text-lg font-medium text-gray-700 mb-1">No matching referrals</h3>
+                            <p className="text-gray-500">Try adjusting your search or filters</p>
+                          </div>
+                        )}
                       </td>
                     </tr>
                   ) : (
