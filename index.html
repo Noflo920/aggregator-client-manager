@@ -387,9 +387,9 @@ function NetworkModal({ isOpen, onClose, aggregator, subMerchants }) {
   };
 
   const nodes = getNodePositions();
-  const aggVolume = aggregator.corridors.reduce((sum, c) => sum + (c.expectedVolume || 0), 0);
   const totalSubVolume = subMerchants.reduce((sum, sm) =>
     sum + sm.corridors.reduce((s, c) => s + (c.expectedVolume || 0), 0), 0);
+      const aggVolume = totalSubVolume;
 
   return (
     <div className="fixed inset-0 z-40 flex items-center justify-center">
