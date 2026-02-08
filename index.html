@@ -107,6 +107,33 @@
         ::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); border-radius: 4px; }
         ::-webkit-scrollbar-thumb { background: rgba(6, 182, 212, 0.5); border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: rgba(6, 182, 212, 0.7); }
+
+        /* Dark Mode Styles */
+        .dark body { background: linear-gradient(135deg, #0a0f1a 0%, #111827 50%, #0a0f1a 100%); }
+        .dark .glass-card { background: rgba(30, 41, 59, 0.95); border-color: rgba(255, 255, 255, 0.1); }
+        .dark .stat-card { background: rgba(30, 41, 59, 0.95); border-color: rgba(255, 255, 255, 0.1); }
+        .dark .bg-white { background: rgb(30, 41, 59) !important; }
+        .dark .text-gray-900 { color: rgb(241, 245, 249) !important; }
+        .dark .text-gray-800 { color: rgb(226, 232, 240) !important; }
+        .dark .text-gray-700 { color: rgb(203, 213, 225) !important; }
+        .dark .text-gray-600 { color: rgb(148, 163, 184) !important; }
+        .dark .text-gray-500 { color: rgb(100, 116, 139) !important; }
+        .dark .border-gray-200 { border-color: rgb(51, 65, 85) !important; }
+        .dark .border-gray-300 { border-color: rgb(51, 65, 85) !important; }
+        .dark .bg-gray-50 { background: rgb(15, 23, 42) !important; }
+        .dark .bg-gray-100 { background: rgb(30, 41, 59) !important; }
+        .dark .hover\:bg-gray-50:hover { background: rgb(51, 65, 85) !important; }
+        .dark .hover\:bg-gray-100:hover { background: rgb(51, 65, 85) !important; }
+        .dark thead { background: rgb(30, 41, 59) !important; }
+        .dark tbody tr:nth-child(even) { background-color: rgba(15, 23, 42, 0.5); }
+        .dark tbody tr:hover { background-color: rgba(6, 182, 212, 0.15) !important; }
+        .dark input, .dark select, .dark textarea { background: rgb(15, 23, 42); border-color: rgb(51, 65, 85); color: rgb(226, 232, 240); }
+        .dark input::placeholder { color: rgb(100, 116, 139); }
+
+        /* Kanban styles */
+        .kanban-column { min-height: 400px; }
+        .kanban-card { cursor: grab; }
+        .kanban-card:active { cursor: grabbing; }
     </style>
 </head>
 <body>
@@ -610,6 +637,400 @@ function ClientDetailSidebar({ client, onClose, onEdit, onDelete, formatVolume }
         .animate-slide-in-right { animation: slideInRight 0.3s ease-out; }
       `}</style>
     </div>
+  );
+}
+
+// Command Palette Component (Cmd+K)
+function CommandPalette({ isOpen, onClose, clients, onSelectClient, onAddClient, onNavigate, onExport }) {
+  const [query, setQuery] = useState('');
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const inputRef = useRef(null);
+
+  const commands = useMemo(() => {
+    const items = [];
+
+    // Action commands
+    items.push({ type: 'action', icon: '➕', label: 'Add New Client', action: () => { onAddClient(); onClose(); } });
+    items.push({ type: 'action', icon: '📊', label: 'View Analytics', action: () => { onNavigate('analytics'); onClose(); } });
+    items.push({ type: 'action', icon: '📋', label: 'View Clients Table', action: () => { onNavigate('clients'); onClose(); } });
+    items.push({ type: 'action', icon: '🤝', label: 'View Referrals', action: () => { onNavigate('referrals'); onClose(); } });
+    items.push({ type: 'action', icon: '👥', label: 'View Partners', action: () => { onNavigate('partners'); onClose(); } });
+    items.push({ type: 'action', icon: '📁', label: 'Export to CSV', action: () => { onExport(); onClose(); } });
+    items.push({ type: 'action', icon: '🌙', label: 'Toggle Dark Mode', action: () => { document.body.classList.toggle('dark-mode'); onClose(); } });
+
+    // Client search
+    clients.forEach(client => {
+      items.push({
+        type: 'client',
+        icon: client.type === 'Aggregator' ? '🏢' : '🏪',
+        label: client.name,
+        subtitle: `${client.type} • ${client.kybStatus}`,
+        action: () => { onSelectClient(client); onClose(); }
+      });
+    });
+
+    return items;
+  }, [clients, onAddClient, onNavigate, onSelectClient, onExport, onClose]);
+
+  const filteredCommands = useMemo(() => {
+    if (!query.trim()) return commands.slice(0, 10);
+    const q = query.toLowerCase();
+    return commands.filter(cmd =>
+      cmd.label.toLowerCase().includes(q) ||
+      (cmd.subtitle && cmd.subtitle.toLowerCase().includes(q))
+    ).slice(0, 10);
+  }, [commands, query]);
+
+  useEffect(() => {
+    if (isOpen && inputRef.current) {
+      inputRef.current.focus();
+      setQuery('');
+      setSelectedIndex(0);
+    }
+  }, [isOpen]);
+
+  useEffect(() => {
+    setSelectedIndex(0);
+  }, [query]);
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      setSelectedIndex(i => Math.min(i + 1, filteredCommands.length - 1));
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      setSelectedIndex(i => Math.max(i - 1, 0));
+    } else if (e.key === 'Enter' && filteredCommands[selectedIndex]) {
+      e.preventDefault();
+      filteredCommands[selectedIndex].action();
+    }
+  };
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-[60] flex items-start justify-center pt-[20vh]">
+      <div className="fixed inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose}></div>
+      <div className="relative w-full max-w-xl bg-white rounded-2xl shadow-2xl overflow-hidden animate-scale-in border border-gray-200">
+        {/* Search Input */}
+        <div className="flex items-center gap-3 px-4 py-4 border-b">
+          <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+          <input
+            ref={inputRef}
+            type="text"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            onKeyDown={handleKeyDown}
+            placeholder="Search commands, clients..."
+            className="flex-1 text-lg outline-none placeholder-gray-400"
+          />
+          <kbd className="px-2 py-1 text-xs font-mono bg-gray-100 text-gray-500 rounded">ESC</kbd>
+        </div>
+
+        {/* Results */}
+        <div className="max-h-80 overflow-y-auto py-2">
+          {filteredCommands.length === 0 ? (
+            <div className="px-4 py-8 text-center text-gray-500">
+              No results found for "{query}"
+            </div>
+          ) : (
+            filteredCommands.map((cmd, index) => (
+              <button
+                key={index}
+                onClick={cmd.action}
+                className={`w-full px-4 py-3 flex items-center gap-3 text-left transition-colors ${
+                  index === selectedIndex ? 'bg-cyan-50 text-cyan-900' : 'hover:bg-gray-50'
+                }`}
+              >
+                <span className="text-xl">{cmd.icon}</span>
+                <div className="flex-1 min-w-0">
+                  <div className={`font-medium truncate ${index === selectedIndex ? 'text-cyan-900' : 'text-gray-800'}`}>
+                    {cmd.label}
+                  </div>
+                  {cmd.subtitle && (
+                    <div className="text-sm text-gray-500 truncate">{cmd.subtitle}</div>
+                  )}
+                </div>
+                {cmd.type === 'action' && (
+                  <span className="text-xs text-gray-400 uppercase font-medium">Action</span>
+                )}
+              </button>
+            ))
+          )}
+        </div>
+
+        {/* Footer */}
+        <div className="border-t px-4 py-2 flex items-center gap-4 text-xs text-gray-500 bg-gray-50">
+          <span className="flex items-center gap-1">
+            <kbd className="px-1.5 py-0.5 bg-gray-200 rounded font-mono">↑↓</kbd> Navigate
+          </span>
+          <span className="flex items-center gap-1">
+            <kbd className="px-1.5 py-0.5 bg-gray-200 rounded font-mono">↵</kbd> Select
+          </span>
+          <span className="flex items-center gap-1">
+            <kbd className="px-1.5 py-0.5 bg-gray-200 rounded font-mono">ESC</kbd> Close
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Kanban Board Component
+function KanbanBoard({ clients, onUpdateStatus, onSelectClient, formatVolume }) {
+  const KYB_STATUSES = ['Pending', 'In Review', 'Approved', 'Rejected'];
+  const COLUMN_COLORS = {
+    'Pending': { bg: 'bg-amber-50', border: 'border-amber-200', header: 'bg-amber-100 text-amber-800', dot: 'bg-amber-400' },
+    'In Review': { bg: 'bg-blue-50', border: 'border-blue-200', header: 'bg-blue-100 text-blue-800', dot: 'bg-blue-400' },
+    'Approved': { bg: 'bg-emerald-50', border: 'border-emerald-200', header: 'bg-emerald-100 text-emerald-800', dot: 'bg-emerald-400' },
+    'Rejected': { bg: 'bg-red-50', border: 'border-red-200', header: 'bg-red-100 text-red-800', dot: 'bg-red-400' }
+  };
+
+  const clientsByStatus = useMemo(() => {
+    const grouped = {};
+    KYB_STATUSES.forEach(status => { grouped[status] = []; });
+    clients.forEach(client => {
+      if (grouped[client.kybStatus]) grouped[client.kybStatus].push(client);
+    });
+    return grouped;
+  }, [clients]);
+
+  const handleDragStart = (e, client) => {
+    e.dataTransfer.setData('clientId', client.id);
+    e.dataTransfer.setData('currentStatus', client.kybStatus);
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    e.currentTarget.classList.add('ring-2', 'ring-cyan-400', 'ring-opacity-50');
+  };
+
+  const handleDragLeave = (e) => {
+    e.currentTarget.classList.remove('ring-2', 'ring-cyan-400', 'ring-opacity-50');
+  };
+
+  const handleDrop = (e, newStatus) => {
+    e.preventDefault();
+    e.currentTarget.classList.remove('ring-2', 'ring-cyan-400', 'ring-opacity-50');
+    const clientId = e.dataTransfer.getData('clientId');
+    const currentStatus = e.dataTransfer.getData('currentStatus');
+    if (currentStatus !== newStatus) {
+      onUpdateStatus(clientId, newStatus);
+    }
+  };
+
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      {KYB_STATUSES.map(status => (
+        <div
+          key={status}
+          className={`rounded-xl ${COLUMN_COLORS[status].bg} ${COLUMN_COLORS[status].border} border-2 kanban-column transition-all`}
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          onDrop={(e) => handleDrop(e, status)}
+        >
+          {/* Column Header */}
+          <div className={`px-4 py-3 rounded-t-lg ${COLUMN_COLORS[status].header} flex items-center justify-between`}>
+            <div className="flex items-center gap-2">
+              <span className={`w-2 h-2 rounded-full ${COLUMN_COLORS[status].dot}`}></span>
+              <span className="font-semibold">{status}</span>
+            </div>
+            <span className="text-sm font-bold bg-white/50 px-2 py-0.5 rounded-full">
+              {clientsByStatus[status].length}
+            </span>
+          </div>
+
+          {/* Cards Container */}
+          <div className="p-3 space-y-3 min-h-[300px]">
+            {clientsByStatus[status].map(client => {
+              const totalVolume = client.corridors.reduce((sum, c) => sum + (c.expectedVolume || 0), 0);
+              return (
+                <div
+                  key={client.id}
+                  draggable
+                  onDragStart={(e) => handleDragStart(e, client)}
+                  onClick={() => onSelectClient(client)}
+                  className="bg-white rounded-xl p-4 shadow-sm border border-gray-100 cursor-pointer hover:shadow-md hover:border-cyan-200 transition-all kanban-card group"
+                >
+                  <div className="flex items-start justify-between mb-2">
+                    <div className="font-semibold text-gray-800 group-hover:text-cyan-700 transition-colors truncate flex-1">
+                      {client.name}
+                    </div>
+                    <span className={`text-xs px-2 py-0.5 rounded-full ${client.type === 'Aggregator' ? 'bg-purple-100 text-purple-700' : 'bg-gray-100 text-gray-600'}`}>
+                      {client.type === 'Aggregator' ? '🏢' : '🏪'}
+                    </span>
+                  </div>
+                  <div className="text-sm text-gray-500 mb-2">
+                    {client.corridors.length} corridor{client.corridors.length !== 1 ? 's' : ''}
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <div className="flex flex-wrap gap-1">
+                      {client.corridors.slice(0, 3).map((cor, i) => (
+                        <span key={i} className="text-xs px-1.5 py-0.5 bg-gray-100 rounded text-gray-600">
+                          {cor.currency}
+                        </span>
+                      ))}
+                      {client.corridors.length > 3 && (
+                        <span className="text-xs px-1.5 py-0.5 bg-gray-100 rounded text-gray-500">
+                          +{client.corridors.length - 3}
+                        </span>
+                      )}
+                    </div>
+                    <span className="text-sm font-mono font-semibold text-gray-700">
+                      {formatVolume(totalVolume)}
+                    </span>
+                  </div>
+                  {client.tags && client.tags.length > 0 && (
+                    <div className="flex flex-wrap gap-1 mt-2 pt-2 border-t">
+                      {client.tags.slice(0, 2).map((tag, i) => (
+                        <span key={i} className="text-xs px-2 py-0.5 bg-cyan-50 text-cyan-700 rounded-full">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+            {clientsByStatus[status].length === 0 && (
+              <div className="text-center py-8 text-gray-400">
+                <div className="text-3xl mb-2">📭</div>
+                <div className="text-sm">No clients</div>
+              </div>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// Context Menu Component (Right-click menu)
+function ContextMenu({ x, y, client, onClose, onChangeStatus, onEdit, onDelete }) {
+  const menuRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target)) onClose();
+    };
+    const handleEsc = (e) => { if (e.key === 'Escape') onClose(); };
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('keydown', handleEsc);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleEsc);
+    };
+  }, [onClose]);
+
+  const KYB_STATUSES = ['Pending', 'In Review', 'Approved', 'Rejected'];
+
+  return (
+    <div
+      ref={menuRef}
+      className="fixed z-[70] bg-white rounded-xl shadow-2xl border border-gray-200 py-2 min-w-[200px] animate-scale-in"
+      style={{ left: Math.min(x, window.innerWidth - 220), top: Math.min(y, window.innerHeight - 300) }}
+    >
+      <div className="px-3 py-2 border-b mb-1">
+        <p className="text-sm font-semibold text-gray-800 truncate">{client.name}</p>
+        <p className="text-xs text-gray-500">{client.type}</p>
+      </div>
+
+      {/* Status Change Submenu */}
+      <div className="px-1">
+        <p className="px-3 py-1 text-xs font-semibold text-gray-400 uppercase">Change Status</p>
+        {KYB_STATUSES.map(status => (
+          <button
+            key={status}
+            onClick={() => { onChangeStatus(client.id, status); onClose(); }}
+            disabled={client.kybStatus === status}
+            className={`w-full px-3 py-2 text-left text-sm flex items-center gap-2 rounded-lg transition-colors ${
+              client.kybStatus === status ? 'bg-gray-100 text-gray-400' : 'hover:bg-gray-50 text-gray-700'
+            }`}
+          >
+            <span className={`w-2 h-2 rounded-full ${
+              status === 'Pending' ? 'bg-amber-400' :
+              status === 'In Review' ? 'bg-blue-400' :
+              status === 'Approved' ? 'bg-emerald-400' : 'bg-red-400'
+            }`}></span>
+            {status}
+            {client.kybStatus === status && <span className="ml-auto text-xs">✓</span>}
+          </button>
+        ))}
+      </div>
+
+      <div className="border-t mt-1 pt-1 px-1">
+        <button
+          onClick={() => { onEdit(client); onClose(); }}
+          className="w-full px-3 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 rounded-lg flex items-center gap-2"
+        >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+          </svg>
+          Edit Client
+        </button>
+        <button
+          onClick={() => { onDelete(client); onClose(); }}
+          className="w-full px-3 py-2 text-left text-sm text-red-600 hover:bg-red-50 rounded-lg flex items-center gap-2"
+        >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+          </svg>
+          Delete
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// Inline Edit Component
+function InlineEdit({ value, onSave, className }) {
+  const [isEditing, setIsEditing] = useState(false);
+  const [editValue, setEditValue] = useState(value);
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    if (isEditing && inputRef.current) {
+      inputRef.current.focus();
+      inputRef.current.select();
+    }
+  }, [isEditing]);
+
+  const handleSave = () => {
+    if (editValue.trim() && editValue !== value) {
+      onSave(editValue.trim());
+    }
+    setIsEditing(false);
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') handleSave();
+    if (e.key === 'Escape') { setEditValue(value); setIsEditing(false); }
+  };
+
+  if (isEditing) {
+    return (
+      <input
+        ref={inputRef}
+        type="text"
+        value={editValue}
+        onChange={(e) => setEditValue(e.target.value)}
+        onBlur={handleSave}
+        onKeyDown={handleKeyDown}
+        className={`px-2 py-1 border border-cyan-400 rounded-lg focus:ring-2 focus:ring-cyan-500 outline-none ${className}`}
+      />
+    );
+  }
+
+  return (
+    <span
+      onDoubleClick={(e) => { e.stopPropagation(); setIsEditing(true); }}
+      className={`cursor-text hover:bg-cyan-50 px-1 -mx-1 rounded transition-colors ${className}`}
+      title="Double-click to edit"
+    >
+      {value}
+    </span>
   );
 }
 
@@ -1350,9 +1771,25 @@ function ClientForm({ client, onSave, onClose, allClients }) {
     sumsubLink: '',
     kybStatus: 'Pending',
     notes: '',
-    parentAggregatorId: ''
+    parentAggregatorId: '',
+    tags: []
   });
   const [errors, setErrors] = useState({});
+  const [tagInput, setTagInput] = useState('');
+
+  const SUGGESTED_TAGS = ['Priority', 'Enterprise', 'Q1 Launch', 'High Volume', 'New', 'VIP', 'At Risk', 'Upsell'];
+
+  const addTag = (tag) => {
+    const trimmedTag = tag.trim();
+    if (trimmedTag && !(formData.tags || []).includes(trimmedTag)) {
+      setFormData({ ...formData, tags: [...(formData.tags || []), trimmedTag] });
+    }
+    setTagInput('');
+  };
+
+  const removeTag = (tagToRemove) => {
+    setFormData({ ...formData, tags: (formData.tags || []).filter(t => t !== tagToRemove) });
+  };
 
   // Get list of aggregators (excluding self if editing)
   const availableAggregators = useMemo(() => {
@@ -1546,6 +1983,53 @@ function ClientForm({ client, onSave, onClose, allClients }) {
           placeholder="https://..."
         />
         {errors.sumsubLink && <p className="text-red-500 text-sm mt-1">{errors.sumsubLink}</p>}
+      </div>
+
+      {/* Tags */}
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">Tags</label>
+        <div className="space-y-2">
+          {/* Current Tags */}
+          {(formData.tags || []).length > 0 && (
+            <div className="flex flex-wrap gap-2">
+              {(formData.tags || []).map((tag, i) => (
+                <span key={i} className="inline-flex items-center gap-1 px-2.5 py-1 bg-cyan-50 text-cyan-700 rounded-full text-sm font-medium">
+                  {tag}
+                  <button type="button" onClick={() => removeTag(tag)} className="hover:bg-cyan-100 rounded-full p-0.5">
+                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </span>
+              ))}
+            </div>
+          )}
+          {/* Tag Input */}
+          <div className="flex gap-2">
+            <input
+              type="text"
+              value={tagInput}
+              onChange={(e) => setTagInput(e.target.value)}
+              onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); addTag(tagInput); } }}
+              className="flex-1 px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 outline-none"
+              placeholder="Type a tag and press Enter..."
+            />
+          </div>
+          {/* Suggested Tags */}
+          <div className="flex flex-wrap gap-1">
+            <span className="text-xs text-gray-400 mr-1">Suggestions:</span>
+            {SUGGESTED_TAGS.filter(t => !(formData.tags || []).includes(t)).slice(0, 5).map(tag => (
+              <button
+                key={tag}
+                type="button"
+                onClick={() => addTag(tag)}
+                className="px-2 py-0.5 text-xs bg-gray-100 hover:bg-gray-200 text-gray-600 rounded-full transition-colors"
+              >
+                + {tag}
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
 
       <div>
@@ -1838,6 +2322,11 @@ function App({ currentUser }) {
   const [activeStatFilter, setActiveStatFilter] = useState(null);
   const [selectedClient, setSelectedClient] = useState(null); // For detail sidebar
   const [deletedClient, setDeletedClient] = useState(null); // For undo functionality
+  const [showCommandPalette, setShowCommandPalette] = useState(false); // Cmd+K palette
+  const [selectedClients, setSelectedClients] = useState([]); // For bulk actions
+  const [darkMode, setDarkMode] = useState(false); // Dark mode toggle
+  const [showKanban, setShowKanban] = useState(false); // Kanban board view
+  const [contextMenu, setContextMenu] = useState(null); // Right-click context menu
   const [sortConfig, setSortConfig] = useState({ key: 'name', direction: 'asc' });
   const [networkViewAggregator, setNetworkViewAggregator] = useState(null);
 
@@ -1936,12 +2425,18 @@ function App({ currentUser }) {
         setSelectedClient(null);
         setNetworkViewAggregator(null);
         setNetworkViewReferrer(null);
+        setShowCommandPalette(false);
       }
       // Ctrl/Cmd + F: Focus search
       if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
         e.preventDefault();
         const searchInput = document.querySelector('input[placeholder*="Search"]');
         if (searchInput) searchInput.focus();
+      }
+      // Ctrl/Cmd + K: Open command palette
+      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault();
+        setShowCommandPalette(true);
       }
     };
     document.addEventListener('keydown', handleKeyboard);
@@ -1970,6 +2465,124 @@ function App({ currentUser }) {
       }
     }
     setShowDashboard(false);
+  };
+
+  // Export to CSV function
+  const exportToCSV = () => {
+    const headers = ['Name', 'Type', 'KYB Status', 'In Flow of Funds', 'Corridors', 'Total Volume', 'Sumsub Link', 'Notes', 'Tags'];
+    const rows = sortedClients.map(client => [
+      client.name,
+      client.type,
+      client.kybStatus,
+      client.inFlowOfFunds ? 'Yes' : 'No',
+      client.corridors.map(c => `${c.currency} (${c.priority})`).join('; '),
+      client.corridors.reduce((sum, c) => sum + (c.expectedVolume || 0), 0),
+      client.sumsubLink || '',
+      client.notes || '',
+      (client.tags || []).join('; ')
+    ]);
+
+    const csvContent = [
+      headers.join(','),
+      ...rows.map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(','))
+    ].join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.setAttribute('href', url);
+    link.setAttribute('download', `clients-export-${new Date().toISOString().split('T')[0]}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    showToast('Exported ' + sortedClients.length + ' clients to CSV');
+  };
+
+  // Toggle dark mode
+  const toggleDarkMode = () => {
+    setDarkMode(!darkMode);
+    document.documentElement.classList.toggle('dark');
+  };
+
+  // Update KYB status (for Kanban drag-drop)
+  const handleUpdateKybStatus = async (clientId, newStatus) => {
+    try {
+      const client = clients.find(c => c.id === clientId);
+      if (!client) return;
+      const updatedClient = { ...client, kybStatus: newStatus };
+      await firestoreUtils.save('clients', updatedClient);
+      window.syncToGoogleSheets('edit', 'Clients', { ...updatedClient });
+      showToast(`Moved to ${newStatus}`);
+    } catch (error) {
+      showToast('Error updating status: ' + error.message, 'error');
+    }
+  };
+
+  // Bulk actions handlers
+  const handleBulkDelete = async () => {
+    if (selectedClients.length === 0) return;
+    try {
+      for (const clientId of selectedClients) {
+        await firestoreUtils.delete('clients', clientId);
+      }
+      showToast(`Deleted ${selectedClients.length} clients`);
+      setSelectedClients([]);
+    } catch (error) {
+      showToast('Error deleting clients: ' + error.message, 'error');
+    }
+  };
+
+  const handleBulkStatusChange = async (newStatus) => {
+    if (selectedClients.length === 0) return;
+    try {
+      for (const clientId of selectedClients) {
+        const client = clients.find(c => c.id === clientId);
+        if (client) {
+          await firestoreUtils.save('clients', { ...client, kybStatus: newStatus });
+        }
+      }
+      showToast(`Updated ${selectedClients.length} clients to ${newStatus}`);
+      setSelectedClients([]);
+    } catch (error) {
+      showToast('Error updating clients: ' + error.message, 'error');
+    }
+  };
+
+  const toggleClientSelection = (clientId) => {
+    setSelectedClients(prev =>
+      prev.includes(clientId)
+        ? prev.filter(id => id !== clientId)
+        : [...prev, clientId]
+    );
+  };
+
+  const toggleSelectAll = () => {
+    if (selectedClients.length === sortedClients.length) {
+      setSelectedClients([]);
+    } else {
+      setSelectedClients(sortedClients.map(c => c.id));
+    }
+  };
+
+  // Inline edit handler
+  const handleInlineEdit = async (clientId, field, newValue) => {
+    try {
+      const client = clients.find(c => c.id === clientId);
+      if (!client) return;
+      const updatedClient = { ...client, [field]: newValue };
+      await firestoreUtils.save('clients', updatedClient);
+      window.syncToGoogleSheets('edit', 'Clients', { ...updatedClient });
+      showToast('Updated successfully');
+    } catch (error) {
+      showToast('Error updating: ' + error.message, 'error');
+    }
+  };
+
+  // Right-click context menu handler
+  const handleContextMenu = (e, client) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setContextMenu({ x: e.clientX, y: e.clientY, client });
   };
 
   const handleSave = async (client) => {
@@ -2362,12 +2975,36 @@ function App({ currentUser }) {
             </div>
             {viewMode === 'clients' ? (
               <>
-                <button
-                  onClick={() => setShowDashboard(!showDashboard)}
-                  className={`hidden sm:flex px-4 py-2 rounded-xl font-medium transition-all duration-300 items-center gap-2 ${showDashboard ? 'bg-white/10 text-white border border-white/20' : 'bg-white/5 text-gray-400 border border-white/10 hover:bg-white/10 hover:text-white'}`}
-                >
-                  {showDashboard ? 'Table' : 'Charts'}
-                </button>
+                {/* View Toggle Buttons */}
+                <div className="hidden sm:flex bg-white/5 rounded-xl p-1 border border-white/10">
+                  <button
+                    onClick={() => { setShowDashboard(false); setShowKanban && setShowKanban(false); }}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${!showDashboard && !showKanban ? 'bg-white/10 text-white' : 'text-gray-400 hover:text-white'}`}
+                    title="Table View"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+                    </svg>
+                  </button>
+                  <button
+                    onClick={() => { setShowKanban(true); setShowDashboard(false); }}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${showKanban ? 'bg-white/10 text-white' : 'text-gray-400 hover:text-white'}`}
+                    title="Kanban Board"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2" />
+                    </svg>
+                  </button>
+                  <button
+                    onClick={() => { setShowDashboard(true); setShowKanban(false); }}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${showDashboard ? 'bg-white/10 text-white' : 'text-gray-400 hover:text-white'}`}
+                    title="Analytics"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                    </svg>
+                  </button>
+                </div>
                 <button
                   onClick={() => { setEditingClient(null); setShowModal(true); }}
                   className="btn-primary px-4 py-2 text-white rounded-xl font-semibold flex items-center gap-2"
@@ -2412,7 +3049,28 @@ function App({ currentUser }) {
           <Dashboard clients={clients} />
         )}
 
-        {viewMode === 'clients' && !showDashboard && (
+        {/* Kanban Board View */}
+        {viewMode === 'clients' && showKanban && !showDashboard && (
+          <div className="animate-fade-in">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-xl font-bold text-white flex items-center gap-2">
+                <svg className="w-6 h-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2" />
+                </svg>
+                KYB Pipeline
+              </h2>
+              <p className="text-gray-400 text-sm">Drag clients between columns to update status</p>
+            </div>
+            <KanbanBoard
+              clients={clients}
+              onUpdateStatus={handleUpdateKybStatus}
+              onSelectClient={(client) => setSelectedClient(client)}
+              formatVolume={formatVolume}
+            />
+          </div>
+        )}
+
+        {viewMode === 'clients' && !showDashboard && !showKanban && (
           <div className="glass-card rounded-2xl shadow-xl animate-fade-in overflow-hidden">
             {/* Active filter indicator */}
             {activeStatFilter && (
@@ -2496,10 +3154,51 @@ function App({ currentUser }) {
               </div>
             </div>
 
+            {/* Bulk Actions Bar */}
+            {selectedClients.length > 0 && (
+              <div className="px-4 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 flex items-center justify-between">
+                <div className="flex items-center gap-3 text-white">
+                  <span className="font-semibold">{selectedClients.length} selected</span>
+                  <button
+                    onClick={() => setSelectedClients([])}
+                    className="text-cyan-100 hover:text-white text-sm underline"
+                  >
+                    Clear selection
+                  </button>
+                </div>
+                <div className="flex items-center gap-2">
+                  <select
+                    onChange={(e) => { if (e.target.value) { handleBulkStatusChange(e.target.value); e.target.value = ''; } }}
+                    className="px-3 py-1.5 rounded-lg text-sm bg-white/20 text-white border border-white/30 focus:outline-none"
+                  >
+                    <option value="">Change Status...</option>
+                    {KYB_STATUSES.map(s => <option key={s} value={s}>{s}</option>)}
+                  </select>
+                  <button
+                    onClick={handleBulkDelete}
+                    className="px-3 py-1.5 bg-red-500 hover:bg-red-600 text-white rounded-lg text-sm font-medium flex items-center gap-1"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                    Delete
+                  </button>
+                </div>
+              </div>
+            )}
+
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead className="bg-gray-50 border-b">
                   <tr>
+                    <th className="px-3 py-3 text-left">
+                      <input
+                        type="checkbox"
+                        checked={selectedClients.length === sortedClients.length && sortedClients.length > 0}
+                        onChange={toggleSelectAll}
+                        className="w-4 h-4 rounded border-gray-300 text-cyan-600 focus:ring-cyan-500"
+                      />
+                    </th>
                     <th onClick={() => handleSort('name')} className="px-4 py-3 text-left text-sm font-semibold text-gray-700 cursor-pointer hover:bg-gray-100">
                       Client Name <SortIcon columnKey="name" />
                     </th>
@@ -2521,7 +3220,7 @@ function App({ currentUser }) {
                 <tbody className="divide-y">
                   {sortedClients.length === 0 ? (
                     <tr>
-                      <td colSpan={8} className="px-4 py-20 text-center">
+                      <td colSpan={9} className="px-4 py-20 text-center">
                         {clients.length === 0 ? (
                           <div className="flex flex-col items-center max-w-sm mx-auto">
                             <div className="relative mb-6">
@@ -2566,7 +3265,15 @@ function App({ currentUser }) {
                       const parentAggregator = client.parentAggregatorId ? clients.find(c => c.id === client.parentAggregatorId) : null;
                       const subMerchantCount = client.type === 'Aggregator' ? clients.filter(c => c.parentAggregatorId === client.id).length : 0;
                       return (
-                      <tr key={client.id} className="hover:bg-cyan-50/50 transition-colors cursor-pointer" onClick={() => setSelectedClient(client)}>
+                      <tr key={client.id} className={`hover:bg-cyan-50/50 transition-colors cursor-pointer ${selectedClients.includes(client.id) ? 'bg-cyan-50' : ''}`} onClick={() => setSelectedClient(client)} onContextMenu={(e) => handleContextMenu(e, client)}>
+                        <td className="px-3 py-3" onClick={(e) => e.stopPropagation()}>
+                          <input
+                            type="checkbox"
+                            checked={selectedClients.includes(client.id)}
+                            onChange={() => toggleClientSelection(client.id)}
+                            className="w-4 h-4 rounded border-gray-300 text-cyan-600 focus:ring-cyan-500"
+                          />
+                        </td>
                         <td className="px-4 py-3">
                           {client.type === 'Aggregator' ? (
                             <button
@@ -2580,7 +3287,13 @@ function App({ currentUser }) {
                               </svg>
                             </button>
                           ) : (
-                            <div className="font-medium text-gray-800">{client.name}</div>
+                            <div className="font-medium text-gray-800">
+                              <InlineEdit
+                                value={client.name}
+                                onSave={(newValue) => handleInlineEdit(client.id, 'name', newValue)}
+                                className="font-medium"
+                              />
+                            </div>
                           )}
                           {parentAggregator && (
                             <button
@@ -2594,6 +3307,16 @@ function App({ currentUser }) {
                             </button>
                           )}
                           {client.notes && <div className="text-xs text-gray-400 truncate max-w-[200px]">{client.notes}</div>}
+                          {client.tags && client.tags.length > 0 && (
+                            <div className="flex flex-wrap gap-1 mt-1">
+                              {client.tags.slice(0, 3).map((tag, i) => (
+                                <span key={i} className="text-xs px-1.5 py-0.5 bg-cyan-50 text-cyan-700 rounded-full">{tag}</span>
+                              ))}
+                              {client.tags.length > 3 && (
+                                <span className="text-xs px-1.5 py-0.5 bg-gray-100 text-gray-500 rounded-full">+{client.tags.length - 3}</span>
+                              )}
+                            </div>
+                          )}
                         </td>
                         <td className="px-4 py-3">
                           <div className="text-gray-600">{client.type}</div>
@@ -2926,12 +3649,41 @@ function App({ currentUser }) {
         formatVolume={formatVolume}
       />
 
+      {/* Command Palette */}
+      <CommandPalette
+        isOpen={showCommandPalette}
+        onClose={() => setShowCommandPalette(false)}
+        clients={clients}
+        onSelectClient={(client) => setSelectedClient(client)}
+        onAddClient={() => { setEditingClient(null); setShowModal(true); }}
+        onNavigate={(view) => {
+          if (view === 'analytics') setShowDashboard(true);
+          else if (view === 'clients') { setViewMode('clients'); setShowDashboard(false); }
+          else if (view === 'referrals') setViewMode('referrals');
+          else if (view === 'partners') setViewMode('partners');
+        }}
+        onExport={exportToCSV}
+      />
+
       {toast && (
         <Toast
           message={toast.message}
           type={toast.type}
           onClose={() => setToast(null)}
           onUndo={toast.type === 'undo' ? handleUndoDelete : null}
+        />
+      )}
+
+      {/* Right-click Context Menu */}
+      {contextMenu && (
+        <ContextMenu
+          x={contextMenu.x}
+          y={contextMenu.y}
+          client={contextMenu.client}
+          onClose={() => setContextMenu(null)}
+          onChangeStatus={handleUpdateKybStatus}
+          onEdit={(client) => { setEditingClient(client); setShowModal(true); }}
+          onDelete={(client) => setDeleteTarget(client)}
         />
       )}
     </div>
