@@ -20,7 +20,7 @@
                 200: '#a5f3fc',
                 300: '#67e8f9',
                 400: '#22d3ee',
-                500: '#06b6d4',
+                500: '#3b82f6',
                 600: '#0891b2',
                 700: '#0e7490',
                 800: '#155e75',
@@ -59,7 +59,7 @@
 
         /* Gradient text */
         .gradient-text {
-          background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 50%, #8b5cf6 100%);
+          background: linear-gradient(135deg, #3b82f6 0%, #3b82f6 50%, #3b82f6 100%);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           background-clip: text;
@@ -67,7 +67,7 @@
 
         /* Premium buttons */
         .btn-primary {
-          background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
+          background: linear-gradient(135deg, #3b82f6 0%, #3b82f6 100%);
           box-shadow: 0 4px 15px rgba(6, 182, 212, 0.4);
           transition: all 0.3s ease;
         }
@@ -742,12 +742,12 @@ function CommandPalette({ isOpen, onClose, clients, onSelectClient, onAddClient,
                 key={index}
                 onClick={cmd.action}
                 className={`w-full px-4 py-3 flex items-center gap-3 text-left transition-colors ${
-                  index === selectedIndex ? 'bg-cyan-50 text-cyan-900' : 'hover:bg-gray-50'
+                  index === selectedIndex ? 'bg-blue-50 text-blue-900' : 'hover:bg-gray-50'
                 }`}
               >
                 <span className="text-xl">{cmd.icon}</span>
                 <div className="flex-1 min-w-0">
-                  <div className={`font-medium truncate ${index === selectedIndex ? 'text-cyan-900' : 'text-gray-800'}`}>
+                  <div className={`font-medium truncate ${index === selectedIndex ? 'text-blue-900' : 'text-gray-800'}`}>
                     {cmd.label}
                   </div>
                   {cmd.subtitle && (
@@ -853,10 +853,10 @@ function KanbanBoard({ clients, onUpdateStatus, onSelectClient, formatVolume }) 
                   draggable
                   onDragStart={(e) => handleDragStart(e, client)}
                   onClick={() => onSelectClient(client)}
-                  className="bg-white rounded-xl p-4 shadow-sm border border-gray-100 cursor-pointer hover:shadow-md hover:border-cyan-200 transition-all kanban-card group"
+                  className="bg-white rounded-xl p-4 shadow-sm border border-gray-100 cursor-pointer hover:shadow-md hover:border-blue-200 transition-all kanban-card group"
                 >
                   <div className="flex items-start justify-between mb-2">
-                    <div className="font-semibold text-gray-800 group-hover:text-cyan-700 transition-colors truncate flex-1">
+                    <div className="font-semibold text-gray-800 group-hover:text-blue-700 transition-colors truncate flex-1">
                       {client.name}
                     </div>
                     <span className={`text-xs px-2 py-0.5 rounded-full ${client.type === 'Aggregator' ? 'bg-purple-100 text-purple-700' : 'bg-gray-100 text-gray-600'}`}>
@@ -886,7 +886,7 @@ function KanbanBoard({ clients, onUpdateStatus, onSelectClient, formatVolume }) 
                   {client.tags && client.tags.length > 0 && (
                     <div className="flex flex-wrap gap-1 mt-2 pt-2 border-t">
                       {client.tags.slice(0, 2).map((tag, i) => (
-                        <span key={i} className="text-xs px-2 py-0.5 bg-cyan-50 text-cyan-700 rounded-full">
+                        <span key={i} className="text-xs px-2 py-0.5 bg-blue-50 text-blue-700 rounded-full">
                           {tag}
                         </span>
                       ))}
@@ -914,7 +914,7 @@ function BulkConfirmModal({ isOpen, onClose, onConfirm, action, count }) {
 
   const actionConfig = {
     delete: { title: 'Delete Items', message: `Are you sure you want to delete ${count} item${count !== 1 ? 's' : ''}? This action cannot be undone.`, confirmText: 'Delete All', confirmClass: 'bg-red-600 hover:bg-red-700' },
-    status: { title: 'Change Status', message: `Update status for ${count} item${count !== 1 ? 's' : ''}?`, confirmText: 'Update All', confirmClass: 'bg-cyan-600 hover:bg-cyan-700' }
+    status: { title: 'Change Status', message: `Update status for ${count} item${count !== 1 ? 's' : ''}?`, confirmText: 'Update All', confirmClass: 'bg-blue-600 hover:bg-blue-700' }
   };
 
   const config = actionConfig[action] || actionConfig.delete;
@@ -960,7 +960,7 @@ function ColumnSettings({ columns, visibleColumns, onToggle, onClose }) {
             checked={visibleColumns.includes(col.key)}
             onChange={() => onToggle(col.key)}
             disabled={col.key === 'name' || col.key === 'actions'}
-            className="w-4 h-4 rounded border-gray-300 text-cyan-600 focus:ring-cyan-500"
+            className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-cyan-500"
           />
           <span className={`text-sm ${visibleColumns.includes(col.key) ? 'text-gray-700' : 'text-gray-400'}`}>{col.label}</span>
         </label>
@@ -1179,7 +1179,7 @@ function InlineEdit({ value, onSave, className }) {
         onChange={(e) => setEditValue(e.target.value)}
         onBlur={handleSave}
         onKeyDown={handleKeyDown}
-        className={`px-2 py-1 border border-cyan-400 rounded-lg focus:ring-2 focus:ring-cyan-500 outline-none ${className}`}
+        className={`px-2 py-1 border border-blue-400 rounded-lg focus:ring-2 focus:ring-cyan-500 outline-none ${className}`}
       />
     );
   }
@@ -1187,7 +1187,7 @@ function InlineEdit({ value, onSave, className }) {
   return (
     <span
       onDoubleClick={(e) => { e.stopPropagation(); setIsEditing(true); }}
-      className={`cursor-text hover:bg-cyan-50 px-1 -mx-1 rounded transition-colors ${className}`}
+      className={`cursor-text hover:bg-blue-50 px-1 -mx-1 rounded transition-colors ${className}`}
       title="Double-click to edit"
     >
       {value}
@@ -2154,9 +2154,9 @@ function ClientForm({ client, onSave, onClose, allClients }) {
           {(formData.tags || []).length > 0 && (
             <div className="flex flex-wrap gap-2">
               {(formData.tags || []).map((tag, i) => (
-                <span key={i} className="inline-flex items-center gap-1 px-2.5 py-1 bg-cyan-50 text-cyan-700 rounded-full text-sm font-medium">
+                <span key={i} className="inline-flex items-center gap-1 px-2.5 py-1 bg-blue-50 text-blue-700 rounded-full text-sm font-medium">
                   {tag}
-                  <button type="button" onClick={() => removeTag(tag)} className="hover:bg-cyan-100 rounded-full p-0.5">
+                  <button type="button" onClick={() => removeTag(tag)} className="hover:bg-blue-100 rounded-full p-0.5">
                     <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                     </svg>
@@ -2172,7 +2172,7 @@ function ClientForm({ client, onSave, onClose, allClients }) {
               value={tagInput}
               onChange={(e) => setTagInput(e.target.value)}
               onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); addTag(tagInput); } }}
-              className="flex-1 px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 outline-none"
+              className="flex-1 px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-cyan-500 focus:border-blue-500 outline-none"
               placeholder="Type a tag and press Enter..."
             />
           </div>
@@ -3404,7 +3404,7 @@ function App({ currentUser }) {
           <div className="animate-fade-in">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-xl font-bold text-white flex items-center gap-2">
-                <svg className="w-6 h-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2" />
                 </svg>
                 KYB Pipeline
@@ -3424,19 +3424,19 @@ function App({ currentUser }) {
           <div className="glass-card rounded-2xl shadow-xl animate-fade-in overflow-hidden">
             {/* Active filter indicator */}
             {activeStatFilter && (
-              <div className="px-4 py-3 bg-gradient-to-r from-cyan-50 to-blue-50 border-b border-cyan-100 flex items-center justify-between">
-                <div className="flex items-center gap-2 text-sm text-cyan-700">
-                  <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-cyan-500 to-blue-500 flex items-center justify-center">
+              <div className="px-4 py-3 bg-gradient-to-r from-blue-50 to-blue-50 border-b border-blue-100 flex items-center justify-between">
+                <div className="flex items-center gap-2 text-sm text-blue-700">
+                  <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-blue-500 to-blue-500 flex items-center justify-center">
                     <svg className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
                     </svg>
                   </div>
                   <span>Filtering: <strong className="font-semibold">{activeStatFilter === 'missing' ? 'Needs KYB Approval' : activeStatFilter}</strong></span>
-                  <span className="px-2 py-0.5 bg-cyan-100 text-cyan-700 rounded-full text-xs font-semibold">{sortedClients.length} results</span>
+                  <span className="px-2 py-0.5 bg-blue-100 text-blue-700 rounded-full text-xs font-semibold">{sortedClients.length} results</span>
                 </div>
                 <button
                   onClick={() => handleStatFilterClick('all')}
-                  className="text-cyan-600 hover:text-cyan-800 text-sm font-medium flex items-center gap-1 hover:bg-cyan-100 px-2 py-1 rounded-lg transition-colors"
+                  className="text-blue-600 hover:text-blue-800 text-sm font-medium flex items-center gap-1 hover:bg-blue-100 px-2 py-1 rounded-lg transition-colors"
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -3493,7 +3493,7 @@ function App({ currentUser }) {
                   setFilters({ ...filters, kybStatus: e.target.value });
                   setActiveStatFilter(e.target.value || null);
                 }}
-                className="px-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 outline-none"
+                className="px-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-blue-500 outline-none"
               >
                 <option value="">All Status</option>
                 {KYB_STATUSES.map(s => <option key={s} value={s}>{s}</option>)}
@@ -3552,7 +3552,7 @@ function App({ currentUser }) {
 
             {/* Bulk Actions Bar */}
             {selectedClients.length > 0 && (
-              <div className="px-4 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 flex items-center justify-between">
+              <div className="px-4 py-3 bg-gradient-to-r from-blue-600 to-blue-600 flex items-center justify-between">
                 <div className="flex items-center gap-3 text-white">
                   <span className="font-semibold">{selectedClients.length} selected</span>
                   <button
@@ -3592,7 +3592,7 @@ function App({ currentUser }) {
                         type="checkbox"
                         checked={selectedClients.length === sortedClients.length && sortedClients.length > 0}
                         onChange={toggleSelectAll}
-                        className="w-4 h-4 rounded border-gray-300 text-cyan-600 focus:ring-cyan-500"
+                        className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-cyan-500"
                       />
                     </th>
                     <th onClick={() => handleSort('name')} className="px-4 py-3 text-left text-sm font-semibold text-gray-700 cursor-pointer hover:bg-gray-100">
@@ -3620,12 +3620,12 @@ function App({ currentUser }) {
                         {clients.length === 0 ? (
                           <div className="flex flex-col items-center max-w-sm mx-auto">
                             <div className="relative mb-6">
-                              <div className="w-24 h-24 bg-gradient-to-br from-cyan-100 to-blue-100 rounded-2xl flex items-center justify-center rotate-3 shadow-lg">
-                                <svg className="w-12 h-12 text-cyan-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <div className="w-24 h-24 bg-gradient-to-br from-blue-100 to-blue-100 rounded-2xl flex items-center justify-center rotate-3 shadow-lg">
+                                <svg className="w-12 h-12 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                                 </svg>
                               </div>
-                              <div className="absolute -bottom-2 -right-2 w-10 h-10 bg-gradient-to-br from-cyan-500 to-blue-500 rounded-xl flex items-center justify-center shadow-lg">
+                              <div className="absolute -bottom-2 -right-2 w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-500 rounded-xl flex items-center justify-center shadow-lg">
                                 <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
                                 </svg>
@@ -3661,13 +3661,13 @@ function App({ currentUser }) {
                       const parentAggregator = client.parentAggregatorId ? clients.find(c => c.id === client.parentAggregatorId) : null;
                       const subMerchantCount = client.type === 'Aggregator' ? clients.filter(c => c.parentAggregatorId === client.id).length : 0;
                       return (
-                      <tr key={client.id} className={`hover:bg-cyan-50/50 transition-colors cursor-pointer ${selectedClients.includes(client.id) ? 'bg-cyan-50' : ''}`} onClick={() => setSelectedClient(client)} onContextMenu={(e) => handleContextMenu(e, client)}>
+                      <tr key={client.id} className={`hover:bg-blue-50/50 transition-colors cursor-pointer ${selectedClients.includes(client.id) ? 'bg-blue-50' : ''}`} onClick={() => setSelectedClient(client)} onContextMenu={(e) => handleContextMenu(e, client)}>
                         <td className="px-3 py-3" onClick={(e) => e.stopPropagation()}>
                           <input
                             type="checkbox"
                             checked={selectedClients.includes(client.id)}
                             onChange={() => toggleClientSelection(client.id)}
-                            className="w-4 h-4 rounded border-gray-300 text-cyan-600 focus:ring-cyan-500"
+                            className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-cyan-500"
                           />
                         </td>
                         <td className="px-4 py-3">
@@ -3710,7 +3710,7 @@ function App({ currentUser }) {
                           {client.tags && client.tags.length > 0 && (
                             <div className="flex flex-wrap gap-1 mt-1">
                               {client.tags.slice(0, 3).map((tag, i) => (
-                                <span key={i} className="text-xs px-1.5 py-0.5 bg-cyan-50 text-cyan-700 rounded-full">{tag}</span>
+                                <span key={i} className="text-xs px-1.5 py-0.5 bg-blue-50 text-blue-700 rounded-full">{tag}</span>
                               ))}
                               {client.tags.length > 3 && (
                                 <span className="text-xs px-1.5 py-0.5 bg-gray-100 text-gray-500 rounded-full">+{client.tags.length - 3}</span>
