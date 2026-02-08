@@ -908,8 +908,69 @@ function KanbanBoard({ clients, onUpdateStatus, onSelectClient, formatVolume }) 
   );
 }
 
+// Bulk Confirm Modal
+function BulkConfirmModal({ isOpen, onClose, onConfirm, action, count }) {
+  if (!isOpen) return null;
+
+  const actionConfig = {
+    delete: { title: 'Delete Items', message: `Are you sure you want to delete ${count} item${count !== 1 ? 's' : ''}? This action cannot be undone.`, confirmText: 'Delete All', confirmClass: 'bg-red-600 hover:bg-red-700' },
+    status: { title: 'Change Status', message: `Update status for ${count} item${count !== 1 ? 's' : ''}?`, confirmText: 'Update All', confirmClass: 'bg-cyan-600 hover:bg-cyan-700' }
+  };
+
+  const config = actionConfig[action] || actionConfig.delete;
+
+  return (
+    <div className="fixed inset-0 z-[80] flex items-center justify-center p-4">
+      <div className="fixed inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose}></div>
+      <div className="relative bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 animate-scale-in">
+        <h3 className="text-lg font-bold text-gray-900 mb-2">{config.title}</h3>
+        <p className="text-gray-600 mb-6">{config.message}</p>
+        <div className="flex justify-end gap-3">
+          <button onClick={onClose} className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+            Cancel
+          </button>
+          <button onClick={onConfirm} className={`px-4 py-2 text-white rounded-lg transition-colors ${config.confirmClass}`}>
+            {config.confirmText}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Column Settings Dropdown
+function ColumnSettings({ columns, visibleColumns, onToggle, onClose }) {
+  const menuRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target)) onClose();
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [onClose]);
+
+  return (
+    <div ref={menuRef} className="absolute right-0 top-full mt-2 bg-white rounded-xl shadow-2xl border border-gray-200 py-2 min-w-[200px] z-50 animate-scale-in">
+      <p className="px-4 py-2 text-xs font-semibold text-gray-400 uppercase border-b">Show Columns</p>
+      {columns.map(col => (
+        <label key={col.key} className="flex items-center gap-3 px-4 py-2 hover:bg-gray-50 cursor-pointer">
+          <input
+            type="checkbox"
+            checked={visibleColumns.includes(col.key)}
+            onChange={() => onToggle(col.key)}
+            disabled={col.key === 'name' || col.key === 'actions'}
+            className="w-4 h-4 rounded border-gray-300 text-cyan-600 focus:ring-cyan-500"
+          />
+          <span className={`text-sm ${visibleColumns.includes(col.key) ? 'text-gray-700' : 'text-gray-400'}`}>{col.label}</span>
+        </label>
+      ))}
+    </div>
+  );
+}
+
 // Context Menu Component (Right-click menu)
-function ContextMenu({ x, y, client, onClose, onChangeStatus, onEdit, onDelete }) {
+function ContextMenu({ x, y, client, onClose, onChangeStatus, onEdit, onDelete, onPin, isPinned }) {
   const menuRef = useRef(null);
 
   useEffect(() => {
@@ -962,6 +1023,26 @@ function ContextMenu({ x, y, client, onClose, onChangeStatus, onEdit, onDelete }
       </div>
 
       <div className="border-t mt-1 pt-1 px-1">
+        <button
+          onClick={() => { onPin(client.id); onClose(); }}
+          className="w-full px-3 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 rounded-lg flex items-center gap-2"
+        >
+          {isPinned ? (
+            <>
+              <svg className="w-4 h-4 text-amber-500" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+              </svg>
+              Unpin
+            </>
+          ) : (
+            <>
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+              </svg>
+              Pin to Top
+            </>
+          )}
+        </button>
         <button
           onClick={() => { onEdit(client); onClose(); }}
           className="w-full px-3 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 rounded-lg flex items-center gap-2"
@@ -2409,6 +2490,15 @@ function App({ currentUser }) {
   const [contextMenu, setContextMenu] = useState(null); // Right-click context menu
   const [selectedReferrals, setSelectedReferrals] = useState([]); // For bulk actions on referrals
   const [referralContextMenu, setReferralContextMenu] = useState(null); // Right-click for referrals
+  const [pinnedClients, setPinnedClients] = useState(() => {
+    try { return JSON.parse(localStorage.getItem('pinnedClients')) || []; } catch { return []; }
+  }); // Pinned/favorite clients
+  const [quickFilter, setQuickFilter] = useState(null); // Quick filter: 'recent', 'highPriority', 'needsAttention', 'pinned'
+  const [showBulkConfirm, setShowBulkConfirm] = useState(null); // Bulk action confirmation modal
+  const [visibleColumns, setVisibleColumns] = useState(() => {
+    try { return JSON.parse(localStorage.getItem('visibleColumns')) || ['name', 'type', 'flowOfFunds', 'corridors', 'volume', 'kybStatus', 'sumsub', 'actions']; } catch { return ['name', 'type', 'flowOfFunds', 'corridors', 'volume', 'kybStatus', 'sumsub', 'actions']; }
+  }); // Column visibility
+  const [showColumnSettings, setShowColumnSettings] = useState(false);
   const [sortConfig, setSortConfig] = useState({ key: 'name', direction: 'asc' });
   const [networkViewAggregator, setNetworkViewAggregator] = useState(null);
 
@@ -2763,6 +2853,65 @@ function App({ currentUser }) {
     }
   };
 
+  // Pin/Unpin client
+  const togglePinClient = (clientId) => {
+    const newPinned = pinnedClients.includes(clientId)
+      ? pinnedClients.filter(id => id !== clientId)
+      : [...pinnedClients, clientId];
+    setPinnedClients(newPinned);
+    localStorage.setItem('pinnedClients', JSON.stringify(newPinned));
+    showToast(pinnedClients.includes(clientId) ? 'Client unpinned' : 'Client pinned ⭐');
+  };
+
+  // Toggle column visibility
+  const toggleColumn = (column) => {
+    const newColumns = visibleColumns.includes(column)
+      ? visibleColumns.filter(c => c !== column)
+      : [...visibleColumns, column];
+    setVisibleColumns(newColumns);
+    localStorage.setItem('visibleColumns', JSON.stringify(newColumns));
+  };
+
+  // Check for duplicate clients
+  const checkDuplicates = (name) => {
+    const normalized = name.toLowerCase().trim();
+    return clients.filter(c =>
+      c.name.toLowerCase().trim() === normalized ||
+      c.name.toLowerCase().includes(normalized) ||
+      normalized.includes(c.name.toLowerCase())
+    );
+  };
+
+  // Get quick filtered clients
+  const getQuickFilteredClients = useMemo(() => {
+    let filtered = [...clients];
+
+    if (quickFilter === 'pinned') {
+      filtered = filtered.filter(c => pinnedClients.includes(c.id));
+    } else if (quickFilter === 'recent') {
+      // Sort by createdAt or id (which has timestamp)
+      filtered = filtered.slice().sort((a, b) => (b.id || '').localeCompare(a.id || '')).slice(0, 10);
+    } else if (quickFilter === 'highPriority') {
+      filtered = filtered.filter(c => c.corridors.some(cor => cor.priority === 'High'));
+    } else if (quickFilter === 'needsAttention') {
+      filtered = filtered.filter(c => c.kybStatus === 'Pending' || c.kybStatus === 'In Review');
+    }
+
+    return filtered;
+  }, [clients, quickFilter, pinnedClients]);
+
+  // Column definitions
+  const ALL_COLUMNS = [
+    { key: 'name', label: 'Client Name' },
+    { key: 'type', label: 'Type' },
+    { key: 'flowOfFunds', label: 'Flow of Funds' },
+    { key: 'corridors', label: 'Corridors' },
+    { key: 'volume', label: 'Volume' },
+    { key: 'kybStatus', label: 'KYB Status' },
+    { key: 'sumsub', label: 'Sumsub' },
+    { key: 'actions', label: 'Actions' }
+  ];
+
   const handleSave = async (client) => {
     try {
       if (editingClient) {
@@ -2979,8 +3128,29 @@ function App({ currentUser }) {
   }, [clients, search, filters, activeStatFilter]);
 
   const sortedClients = useMemo(() => {
-    const sorted = [...filteredClients];
+    // Apply quick filter first
+    let baseClients = [...filteredClients];
+    if (quickFilter === 'pinned') {
+      baseClients = baseClients.filter(c => pinnedClients.includes(c.id));
+    } else if (quickFilter === 'recent') {
+      baseClients = baseClients.slice().sort((a, b) => (b.id || '').localeCompare(a.id || '')).slice(0, 10);
+    } else if (quickFilter === 'highPriority') {
+      baseClients = baseClients.filter(c => c.corridors.some(cor => cor.priority === 'High'));
+    } else if (quickFilter === 'needsAttention') {
+      baseClients = baseClients.filter(c => c.kybStatus === 'Pending' || c.kybStatus === 'In Review');
+    }
+
+    // Sort pinned clients to top
+    const sorted = [...baseClients];
     sorted.sort((a, b) => {
+      // Pinned items first (if not already filtered to pinned only)
+      if (quickFilter !== 'pinned') {
+        const aPinned = pinnedClients.includes(a.id);
+        const bPinned = pinnedClients.includes(b.id);
+        if (aPinned && !bPinned) return -1;
+        if (!aPinned && bPinned) return 1;
+      }
+
       let aVal, bVal;
       switch (sortConfig.key) {
         case 'name': aVal = a.name.toLowerCase(); bVal = b.name.toLowerCase(); break;
@@ -2997,7 +3167,7 @@ function App({ currentUser }) {
       return 0;
     });
     return sorted;
-  }, [filteredClients, sortConfig]);
+  }, [filteredClients, sortConfig, quickFilter, pinnedClients]);
 
   const handleSort = (key) => {
     setSortConfig(prev => ({
@@ -3112,15 +3282,17 @@ function App({ currentUser }) {
             <div className="flex bg-white/5 rounded-xl p-1 border border-white/10">
               <button
                 onClick={() => setViewMode('clients')}
-                className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300 ${viewMode === 'clients' ? 'bg-gradient-to-r from-cyan-500 to-blue-500 text-white shadow-lg' : 'text-gray-400 hover:text-white hover:bg-white/5'}`}
+                className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300 flex items-center gap-2 ${viewMode === 'clients' ? 'bg-gradient-to-r from-cyan-500 to-blue-500 text-white shadow-lg' : 'text-gray-400 hover:text-white hover:bg-white/5'}`}
               >
                 Clients
+                <span className={`text-xs px-1.5 py-0.5 rounded-full ${viewMode === 'clients' ? 'bg-white/20' : 'bg-white/10'}`}>{clients.length}</span>
               </button>
               <button
                 onClick={() => setViewMode('referrals')}
-                className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300 ${viewMode === 'referrals' ? 'bg-gradient-to-r from-cyan-500 to-blue-500 text-white shadow-lg' : 'text-gray-400 hover:text-white hover:bg-white/5'}`}
+                className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300 flex items-center gap-2 ${viewMode === 'referrals' ? 'bg-gradient-to-r from-cyan-500 to-blue-500 text-white shadow-lg' : 'text-gray-400 hover:text-white hover:bg-white/5'}`}
               >
                 Referrals
+                <span className={`text-xs px-1.5 py-0.5 rounded-full ${viewMode === 'referrals' ? 'bg-white/20' : 'bg-white/10'}`}>{referrals.length}</span>
               </button>
             </div>
           </div>
@@ -3283,10 +3455,37 @@ function App({ currentUser }) {
                     type="text"
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
-                    placeholder="Search by name or currency..."
+                    placeholder="Search by name or currency... (⌘F)"
                     className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
                   />
                 </div>
+              </div>
+              {/* Quick Filters */}
+              <div className="flex gap-1">
+                <button
+                  onClick={() => setQuickFilter(quickFilter === 'pinned' ? null : 'pinned')}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-medium flex items-center gap-1 transition-colors ${quickFilter === 'pinned' ? 'bg-amber-100 text-amber-700 border border-amber-200' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+                >
+                  ⭐ Pinned {pinnedClients.length > 0 && `(${pinnedClients.length})`}
+                </button>
+                <button
+                  onClick={() => setQuickFilter(quickFilter === 'recent' ? null : 'recent')}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-medium flex items-center gap-1 transition-colors ${quickFilter === 'recent' ? 'bg-blue-100 text-blue-700 border border-blue-200' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+                >
+                  🕐 Recent
+                </button>
+                <button
+                  onClick={() => setQuickFilter(quickFilter === 'highPriority' ? null : 'highPriority')}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-medium flex items-center gap-1 transition-colors ${quickFilter === 'highPriority' ? 'bg-red-100 text-red-700 border border-red-200' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+                >
+                  🔥 High Priority
+                </button>
+                <button
+                  onClick={() => setQuickFilter(quickFilter === 'needsAttention' ? null : 'needsAttention')}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-medium flex items-center gap-1 transition-colors ${quickFilter === 'needsAttention' ? 'bg-purple-100 text-purple-700 border border-purple-200' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+                >
+                  👀 Needs KYB
+                </button>
               </div>
               <select
                 value={filters.kybStatus}
@@ -3329,6 +3528,25 @@ function App({ currentUser }) {
                   Import
                   <input type="file" accept=".csv" onChange={handleImport} className="hidden" />
                 </label>
+                <div className="relative">
+                  <button
+                    onClick={() => setShowColumnSettings(!showColumnSettings)}
+                    className="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors flex items-center gap-2 text-gray-700"
+                    title="Column settings"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+                    </svg>
+                  </button>
+                  {showColumnSettings && (
+                    <ColumnSettings
+                      columns={ALL_COLUMNS}
+                      visibleColumns={visibleColumns}
+                      onToggle={toggleColumn}
+                      onClose={() => setShowColumnSettings(false)}
+                    />
+                  )}
+                </div>
               </div>
             </div>
 
@@ -3458,6 +3676,7 @@ function App({ currentUser }) {
                               onClick={(e) => { e.stopPropagation(); setNetworkViewAggregator(client); }}
                               className="font-medium text-gray-800 hover:text-blue-600 transition-colors text-left flex items-center gap-1.5 group"
                             >
+                              {pinnedClients.includes(client.id) && <span className="text-amber-400">⭐</span>}
                               {client.name}
                               <svg className="w-4 h-4 text-gray-400 group-hover:text-blue-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -3465,7 +3684,10 @@ function App({ currentUser }) {
                               </svg>
                             </button>
                           ) : (
-                            <div className="font-medium text-gray-800">
+                            <div className="font-medium text-gray-800 flex items-center gap-1.5">
+                              {pinnedClients.includes(client.id) && (
+                                <span className="text-amber-400" title="Pinned">⭐</span>
+                              )}
                               <InlineEdit
                                 value={client.name}
                                 onSave={(newValue) => handleInlineEdit(client.id, 'name', newValue)}
@@ -3918,6 +4140,23 @@ function App({ currentUser }) {
           onChangeStatus={handleUpdateKybStatus}
           onEdit={(client) => { setEditingClient(client); setShowModal(true); }}
           onDelete={(client) => setDeleteTarget(client)}
+          onPin={togglePinClient}
+          isPinned={pinnedClients.includes(contextMenu.client.id)}
+        />
+      )}
+
+      {/* Bulk Confirm Modal */}
+      {showBulkConfirm && (
+        <BulkConfirmModal
+          isOpen={true}
+          onClose={() => setShowBulkConfirm(null)}
+          onConfirm={() => {
+            if (showBulkConfirm.action === 'deleteClients') handleBulkDelete();
+            else if (showBulkConfirm.action === 'deleteReferrals') handleBulkDeleteReferrals();
+            setShowBulkConfirm(null);
+          }}
+          action="delete"
+          count={showBulkConfirm.count}
         />
       )}
 
