@@ -1233,7 +1233,7 @@ function InlineEdit({ value, onSave, className }) {
   return (
     <span
       onDoubleClick={(e) => { e.stopPropagation(); setIsEditing(true); }}
-      className={`cursor-text hover:bg-blue-50 px-1 -mx-1 rounded transition-colors ${className}`}
+      className={`cursor-text hover:bg-blue-50 dark:hover:bg-zinc-700 px-1 -mx-1 rounded transition-colors ${className}`}
       title="Double-click to edit"
     >
       {value}
