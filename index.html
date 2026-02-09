@@ -35,87 +35,86 @@
     </script>
     <style>
         * { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+
+        /* ============================================ */
+        /* BASE / LIGHT MODE */
+        /* ============================================ */
         body {
           font-family: 'Inter', system-ui, sans-serif;
-          background: #09090b;
+          background: #f8fafc;
           min-height: 100vh;
+          color: #1e293b;
         }
         .font-mono { font-family: 'JetBrains Mono', monospace; }
+        .geo-bg { background: #f8fafc; }
 
-        /* SpherePay brand background */
-        .geo-bg {
-          background:
-            linear-gradient(135deg, transparent 40%, rgba(41, 112, 255, 0.03) 100%),
-            linear-gradient(to bottom, #09090b 0%, #0c0c0e 100%);
-          background-attachment: fixed;
-        }
+        /* Header - Light */
+        .glass-header { background: white; border-bottom: 1px solid #e2e8f0; }
 
-        /* Stat cards with SpherePay blue */
+        /* Cards - Light */
+        .glass-card { background: white; border: 1px solid #e2e8f0; border-radius: 8px; }
         .stat-card {
+          background: white;
+          border: 1px solid #e2e8f0;
+          border-radius: 8px;
           transition: all 0.2s ease;
-          background: linear-gradient(135deg, #18181b 0%, #1c1c1f 100%);
-          border: 1px solid #27272a;
-          border-radius: 0;
         }
         .stat-card:hover {
-          transform: translateY(-2px);
           border-color: #2970FF;
-          box-shadow: 0 0 30px rgba(41, 112, 255, 0.15);
+          box-shadow: 0 4px 12px rgba(41, 112, 255, 0.1);
         }
 
-        /* Gradient text - SpherePay blue */
-        .gradient-text {
-          background: linear-gradient(135deg, #2970FF 0%, #84ADFF 100%);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
-        }
-
-        /* Primary buttons - SpherePay blue */
+        /* Primary button */
         .btn-primary {
           background: #2970FF;
           color: #fff;
-          font-weight: 700;
-          text-transform: uppercase;
-          letter-spacing: 0.05em;
-          border-radius: 0;
+          font-weight: 600;
+          border-radius: 6px;
           transition: all 0.2s ease;
         }
         .btn-primary:hover {
           background: #1a5fe6;
-          box-shadow: 0 0 30px rgba(41, 112, 255, 0.4);
-          transform: translateY(-1px);
+          box-shadow: 0 4px 12px rgba(41, 112, 255, 0.3);
         }
 
-        /* Header */
-        .glass-header {
-          background: #0c0c0e;
-          border-bottom: 1px solid #27272a;
-        }
-
-        /* Cards */
-        .glass-card {
-          background: #18181b;
-          border: 1px solid #27272a;
-          border-radius: 0;
-        }
-
-        /* Filter pills - SpherePay style */
+        /* Filter pills - Light */
         .filter-pill {
-          background: #18181b;
-          border: 1px solid #27272a;
-          border-radius: 0;
+          background: white;
+          border: 1px solid #e2e8f0;
+          border-radius: 6px;
           transition: all 0.15s ease;
+          color: #64748b;
         }
-        .filter-pill:hover {
-          border-color: #3f3f46;
+        .filter-pill:hover { border-color: #cbd5e1; background: #f8fafc; }
+        .filter-pill.active { background: #2970FF; border-color: #2970FF; color: white; }
+
+        /* Table - Light */
+        tbody tr { background: white; border-bottom: 1px solid #f1f5f9; }
+        tbody tr:hover { background: #f8fafc !important; }
+        thead { position: sticky; top: 0; z-index: 10; background: white; }
+        thead th { border-bottom: 1px solid #e2e8f0; color: #64748b; font-weight: 500; }
+
+        /* Inputs - Light */
+        input, select, textarea {
+          background: white;
+          border: 1px solid #e2e8f0;
+          color: #1e293b;
+          border-radius: 6px;
         }
-        .filter-pill.active {
-          background: #2970FF;
+        input::placeholder { color: #94a3b8; }
+        input:focus, select:focus, textarea:focus {
           border-color: #2970FF;
-          color: #fff;
+          outline: none;
+          box-shadow: 0 0 0 3px rgba(41, 112, 255, 0.1);
         }
 
+        /* Scrollbar - Light */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #2970FF; }
+
+        /* Animations */
         html { scroll-behavior: smooth; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
@@ -123,81 +122,42 @@
         .animate-fade-in { animation: fadeIn 0.2s ease-out; }
         .animate-slide-up { animation: slideUp 0.2s ease-out; }
         .animate-scale-in { animation: scaleIn 0.15s ease-out; }
-        .table-row { animation: fadeIn 0.15s ease-out backwards; }
 
-        /* Table styling - SpherePay blue accent */
-        tbody tr { background: #18181b; border-bottom: 1px solid #27272a; }
-        tbody tr:hover { background: #1f1f23 !important; }
-        thead { position: sticky; top: 0; z-index: 10; background: #0c0c0e; }
-        thead th { border-bottom: 2px solid #2970FF; }
-
-        /* Custom scrollbar */
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: #18181b; }
-        ::-webkit-scrollbar-thumb { background: #3f3f46; }
-        ::-webkit-scrollbar-thumb:hover { background: #2970FF; }
-
-        /* ============================================ */
-        /* LIGHT MODE (default) */
-        /* ============================================ */
-        body { background: #f8fafc; }
-        .geo-bg { background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); }
-        .glass-header { background: white; border-bottom: 1px solid #e2e8f0; }
-        .glass-card { background: white; border: 1px solid #e2e8f0; }
-        .stat-card { background: white; border: 1px solid #e2e8f0; }
-        .stat-card:hover { border-color: #2970FF; box-shadow: 0 4px 20px rgba(41, 112, 255, 0.15); }
-        tbody tr { background: white; border-bottom: 1px solid #e2e8f0; }
-        tbody tr:hover { background: #f8fafc !important; }
-        thead { background: #f8fafc; }
-        thead th { border-bottom: 2px solid #2970FF; color: #334155; }
-        .filter-pill { background: #f1f5f9; border: 1px solid #e2e8f0; }
-        .filter-pill:hover { border-color: #cbd5e1; }
-        .filter-pill.active { background: #2970FF; border-color: #2970FF; color: white; }
-        .accent-line { background: linear-gradient(90deg, transparent, #2970FF, #84ADFF, transparent); }
-        input, select, textarea { background: white; border: 1px solid #e2e8f0; color: #1e293b; }
-        input::placeholder { color: #94a3b8; }
-        input:focus, select:focus, textarea:focus { border-color: #2970FF; outline: none; box-shadow: 0 0 0 2px rgba(41, 112, 255, 0.2); }
-        ::-webkit-scrollbar-track { background: #f1f5f9; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; }
-        ::-webkit-scrollbar-thumb:hover { background: #2970FF; }
-
-        /* Light mode logo visibility */
-        .logo-dark { display: block; }
-        .logo-light { display: none; }
+        /* Accent line */
+        .accent-line { height: 3px; background: linear-gradient(90deg, #2970FF, #84ADFF); }
 
         /* ============================================ */
         /* DARK MODE */
         /* ============================================ */
-        .dark body { background: #09090b; }
-        .dark .geo-bg { background: linear-gradient(135deg, transparent 40%, rgba(41, 112, 255, 0.03) 100%), linear-gradient(to bottom, #09090b 0%, #0c0c0e 100%); }
-        .dark .glass-header { background: #0c0c0e; border-bottom: 1px solid #27272a; }
+        .dark { background: #09090b; color: #e4e4e7; }
+        .dark body { background: #09090b; color: #e4e4e7; }
+        .dark .geo-bg { background: #09090b; }
+        .dark .glass-header { background: #0f0f11; border-color: #27272a; }
         .dark .glass-card { background: #18181b; border-color: #27272a; }
-        .dark .stat-card { background: linear-gradient(135deg, #18181b 0%, #1c1c1f 100%); border-color: #27272a; }
-        .dark .stat-card:hover { border-color: #2970FF; box-shadow: 0 0 30px rgba(41, 112, 255, 0.15); }
-        .dark .bg-white { background: #18181b !important; }
-        .dark .text-gray-900 { color: #fafafa !important; }
-        .dark .text-gray-800 { color: #e4e4e7 !important; }
-        .dark .text-gray-700 { color: #d4d4d8 !important; }
-        .dark .text-gray-600 { color: #a1a1aa !important; }
-        .dark .text-slate-400, .dark .text-slate-300 { color: #a1a1aa !important; }
-        .dark .border-gray-200, .dark .border-gray-300 { border-color: #27272a !important; }
-        .dark .bg-gray-50 { background: #0c0c0e !important; }
-        .dark .bg-gray-100 { background: #18181b !important; }
-        .dark .hover\:bg-gray-50:hover { background: #27272a !important; }
-        .dark .hover\:bg-gray-100:hover { background: #27272a !important; }
-        .dark thead { background: #0c0c0e !important; }
-        .dark thead th { color: #a1a1aa; }
-        .dark tbody tr { background: #18181b; border-bottom: 1px solid #27272a; }
-        .dark tbody tr:hover { background: #1f1f23 !important; }
-        .dark input, .dark select, .dark textarea { background: #0c0c0e; border: 1px solid #27272a; color: #fafafa; }
-        .dark input::placeholder { color: #71717a; }
-        .dark input:focus, .dark select:focus, .dark textarea:focus { border-color: #2970FF; outline: none; box-shadow: 0 0 0 1px #2970FF; }
-        .dark .filter-pill { background: #18181b; border: 1px solid #27272a; }
-        .dark .filter-pill:hover { border-color: #3f3f46; }
+        .dark .stat-card { background: #18181b; border-color: #27272a; }
+        .dark .stat-card:hover { border-color: #2970FF; box-shadow: 0 4px 20px rgba(41, 112, 255, 0.15); }
+        .dark .filter-pill { background: #18181b; border-color: #27272a; color: #a1a1aa; }
+        .dark .filter-pill:hover { border-color: #3f3f46; background: #27272a; }
+        .dark tbody tr { background: #18181b; border-color: #27272a; }
+        .dark tbody tr:hover { background: #27272a !important; }
+        .dark thead { background: #0f0f11; }
+        .dark thead th { color: #71717a; border-color: #27272a; }
+        .dark input, .dark select, .dark textarea { background: #18181b; border-color: #27272a; color: #fafafa; }
+        .dark input::placeholder { color: #52525b; }
         .dark ::-webkit-scrollbar-track { background: #18181b; }
         .dark ::-webkit-scrollbar-thumb { background: #3f3f46; }
 
-        /* Dark mode logo visibility */
+        /* Dark mode text overrides */
+        .dark .text-gray-900, .dark .text-slate-900 { color: #fafafa !important; }
+        .dark .text-gray-800, .dark .text-slate-800 { color: #e4e4e7 !important; }
+        .dark .text-gray-700, .dark .text-slate-700 { color: #d4d4d8 !important; }
+        .dark .text-gray-600, .dark .text-slate-600 { color: #a1a1aa !important; }
+        .dark .text-gray-500, .dark .text-slate-500 { color: #71717a !important; }
+        .dark .bg-white { background: #18181b !important; }
+        .dark .bg-gray-50, .dark .bg-slate-50 { background: #0f0f11 !important; }
+        .dark .bg-gray-100, .dark .bg-slate-100 { background: #18181b !important; }
+        .dark .border-gray-200, .dark .border-slate-200 { border-color: #27272a !important; }
+        .dark .border-gray-300, .dark .border-slate-300 { border-color: #3f3f46 !important; }
         .dark .logo-dark { display: none; }
         .dark .logo-light { display: block; }
 
@@ -828,7 +788,7 @@ function CommandPalette({ isOpen, onClose, clients, onSelectClient, onAddClient,
         {/* Results */}
         <div className="max-h-80 overflow-y-auto py-2">
           {filteredCommands.length === 0 ? (
-            <div className="px-4 py-8 text-center text-slate-400">
+            <div className="px-4 py-8 text-center text-[#71717a]">
               No results found for "{query}"
             </div>
           ) : (
@@ -837,20 +797,20 @@ function CommandPalette({ isOpen, onClose, clients, onSelectClient, onAddClient,
                 key={index}
                 onClick={cmd.action}
                 className={`w-full px-4 py-3 flex items-center gap-3 text-left transition-colors ${
-                  index === selectedIndex ? 'bg-blue-50 text-blue-900' : 'hover:bg-gray-50'
+                  index === selectedIndex ? 'bg-[#2970FF]/10 text-white' : 'hover:bg-[#27272a]'
                 }`}
               >
                 <span className="text-xl">{cmd.icon}</span>
                 <div className="flex-1 min-w-0">
-                  <div className={`font-medium truncate ${index === selectedIndex ? 'text-blue-900' : 'text-gray-800'}`}>
+                  <div className={`font-medium truncate ${index === selectedIndex ? 'text-[#2970FF]' : 'text-white'}`}>
                     {cmd.label}
                   </div>
                   {cmd.subtitle && (
-                    <div className="text-sm text-slate-400 truncate">{cmd.subtitle}</div>
+                    <div className="text-sm text-[#71717a] truncate">{cmd.subtitle}</div>
                   )}
                 </div>
                 {cmd.type === 'action' && (
-                  <span className="text-xs text-slate-300 uppercase font-medium">Action</span>
+                  <span className="text-xs text-[#52525b] uppercase font-medium">Action</span>
                 )}
               </button>
             ))
@@ -858,15 +818,15 @@ function CommandPalette({ isOpen, onClose, clients, onSelectClient, onAddClient,
         </div>
 
         {/* Footer */}
-        <div className="border-t px-4 py-2 flex items-center gap-4 text-xs text-slate-400 bg-gray-50">
+        <div className="border-t border-[#27272a] px-4 py-2 flex items-center gap-4 text-xs text-[#71717a] bg-[#0c0c0e]">
           <span className="flex items-center gap-1">
-            <kbd className="px-1.5 py-0.5 bg-gray-200 rounded font-mono">↑↓</kbd> Navigate
+            <kbd className="px-1.5 py-0.5 bg-[#27272a] rounded font-mono text-[#a1a1aa]">↑↓</kbd> Navigate
           </span>
           <span className="flex items-center gap-1">
-            <kbd className="px-1.5 py-0.5 bg-gray-200 rounded font-mono">↵</kbd> Select
+            <kbd className="px-1.5 py-0.5 bg-[#27272a] rounded font-mono text-[#a1a1aa]">↵</kbd> Select
           </span>
           <span className="flex items-center gap-1">
-            <kbd className="px-1.5 py-0.5 bg-gray-200 rounded font-mono">ESC</kbd> Close
+            <kbd className="px-1.5 py-0.5 bg-[#27272a] rounded font-mono text-[#a1a1aa]">ESC</kbd> Close
           </span>
         </div>
       </div>
@@ -878,10 +838,10 @@ function CommandPalette({ isOpen, onClose, clients, onSelectClient, onAddClient,
 function KanbanBoard({ clients, onUpdateStatus, onSelectClient, formatVolume }) {
   const KYB_STATUSES = ['Pending', 'In Review', 'Approved', 'Rejected'];
   const COLUMN_COLORS = {
-    'Pending': { bg: 'bg-gray-50', border: 'border-amber-200', header: 'bg-amber-100 text-amber-800', dot: 'bg-amber-400' },
-    'In Review': { bg: 'bg-gray-50', border: 'border-blue-200', header: 'bg-blue-100 text-blue-800', dot: 'bg-blue-400' },
-    'Approved': { bg: 'bg-emerald-50', border: 'border-emerald-200', header: 'bg-emerald-100 text-emerald-800', dot: 'bg-emerald-400' },
-    'Rejected': { bg: 'bg-red-50', border: 'border-red-200', header: 'bg-red-100 text-red-800', dot: 'bg-red-400' }
+    'Pending': { bg: 'bg-gray-50 dark:bg-zinc-900', border: 'border-amber-200 dark:border-amber-900', header: 'bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-400', dot: 'bg-amber-400' },
+    'In Review': { bg: 'bg-gray-50 dark:bg-zinc-900', border: 'border-blue-200 dark:border-blue-900', header: 'bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-400', dot: 'bg-blue-400' },
+    'Approved': { bg: 'bg-emerald-50 dark:bg-zinc-900', border: 'border-emerald-200 dark:border-emerald-900', header: 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-800 dark:text-emerald-400', dot: 'bg-emerald-400' },
+    'Rejected': { bg: 'bg-red-50 dark:bg-zinc-900', border: 'border-red-200 dark:border-red-900', header: 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-400', dot: 'bg-red-400' }
   };
 
   const clientsByStatus = useMemo(() => {
@@ -948,40 +908,40 @@ function KanbanBoard({ clients, onUpdateStatus, onSelectClient, formatVolume }) 
                   draggable
                   onDragStart={(e) => handleDragStart(e, client)}
                   onClick={() => onSelectClient(client)}
-                  className="bg-white rounded-xl p-4 shadow-sm border border-gray-100 cursor-pointer hover:shadow-md hover:border-blue-200 transition-all kanban-card group"
+                  className="bg-white dark:bg-zinc-800 rounded-xl p-4 shadow-sm border border-gray-100 dark:border-zinc-700 cursor-pointer hover:shadow-md hover:border-[#2970FF] transition-all kanban-card group"
                 >
                   <div className="flex items-start justify-between mb-2">
-                    <div className="font-semibold text-gray-800 group-hover:text-blue-700 transition-colors truncate flex-1">
+                    <div className="font-semibold text-gray-800 dark:text-white group-hover:text-[#2970FF] transition-colors truncate flex-1">
                       {client.name}
                     </div>
-                    <span className={`text-xs px-2 py-0.5 rounded-full ${client.type === 'Aggregator' ? 'bg-purple-100 text-purple-700' : 'bg-gray-100 text-gray-600'}`}>
+                    <span className={`text-xs px-2 py-0.5 rounded-full ${client.type === 'Aggregator' ? 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400' : 'bg-gray-100 dark:bg-zinc-700 text-gray-600 dark:text-zinc-400'}`}>
                       {client.type === 'Aggregator' ? '🏢' : '🏪'}
                     </span>
                   </div>
-                  <div className="text-sm text-slate-400 mb-2">
+                  <div className="text-sm text-gray-500 dark:text-zinc-400 mb-2">
                     {client.corridors.length} corridor{client.corridors.length !== 1 ? 's' : ''}
                   </div>
                   <div className="flex items-center justify-between">
                     <div className="flex flex-wrap gap-1">
                       {client.corridors.slice(0, 3).map((cor, i) => (
-                        <span key={i} className="text-xs px-1.5 py-0.5 bg-gray-100 rounded text-gray-600">
+                        <span key={i} className="text-xs px-1.5 py-0.5 bg-gray-100 dark:bg-zinc-700 rounded text-gray-600 dark:text-zinc-300">
                           {cor.currency}
                         </span>
                       ))}
                       {client.corridors.length > 3 && (
-                        <span className="text-xs px-1.5 py-0.5 bg-gray-100 rounded text-slate-400">
+                        <span className="text-xs px-1.5 py-0.5 bg-gray-100 dark:bg-zinc-700 rounded text-gray-500 dark:text-zinc-400">
                           +{client.corridors.length - 3}
                         </span>
                       )}
                     </div>
-                    <span className="text-sm font-mono font-semibold text-gray-700">
+                    <span className="text-sm font-mono font-semibold text-gray-700 dark:text-zinc-300">
                       {formatVolume(totalVolume)}
                     </span>
                   </div>
                   {client.tags && client.tags.length > 0 && (
-                    <div className="flex flex-wrap gap-1 mt-2 pt-2 border-t">
+                    <div className="flex flex-wrap gap-1 mt-2 pt-2 border-t dark:border-zinc-700">
                       {client.tags.slice(0, 2).map((tag, i) => (
-                        <span key={i} className="text-xs px-2 py-0.5 bg-blue-50 text-blue-700 rounded-full">
+                        <span key={i} className="text-xs px-2 py-0.5 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 rounded-full">
                           {tag}
                         </span>
                       ))}
@@ -991,7 +951,7 @@ function KanbanBoard({ clients, onUpdateStatus, onSelectClient, formatVolume }) 
               );
             })}
             {clientsByStatus[status].length === 0 && (
-              <div className="text-center py-8 text-slate-300">
+              <div className="text-center py-8 text-gray-400 dark:text-zinc-500">
                 <div className="text-3xl mb-2">📭</div>
                 <div className="text-sm">No clients</div>
               </div>
@@ -2343,107 +2303,107 @@ function StatsBar({ clients, onFilterClick, activeFilter }) {
   const isActive = (filterValue) => activeFilter === filterValue;
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-8 gap-3 mb-6 animate-slide-up">
+    <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-4 mb-6 animate-slide-up">
       {/* Total Clients */}
-      <button onClick={() => onFilterClick('all')} className={`stat-card p-4 text-left cursor-pointer transition-all ${!activeFilter ? 'border-[#2970FF] bg-[#2970FF]/5' : 'hover:border-[#3f3f46]'}`}>
+      <button onClick={() => onFilterClick('all')} className={`stat-card p-4 text-left cursor-pointer ${!activeFilter ? 'ring-2 ring-[#2970FF] ring-offset-2' : ''}`}>
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-gray-100 dark:bg-[#27272a] flex items-center justify-center">
-            <svg className="w-5 h-5 text-[#84ADFF]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-              <path strokeLinecap="square" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+          <div className="w-10 h-10 rounded-lg bg-slate-100 dark:bg-zinc-800 flex items-center justify-center">
+            <svg className="w-5 h-5 text-slate-600 dark:text-zinc-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" />
             </svg>
           </div>
           <div>
-            <p className="text-[10px] text-gray-500 dark:text-[#71717a] uppercase tracking-[0.15em] font-bold">Clients</p>
-            <p className="text-2xl font-black font-mono text-gray-900 dark:text-white">{stats.total}</p>
+            <p className="text-xs text-slate-500 dark:text-zinc-500 font-medium">Clients</p>
+            <p className="text-2xl font-bold text-slate-900 dark:text-white">{stats.total}</p>
           </div>
         </div>
       </button>
 
-      {/* Pipeline Volume - Prominent (not clickable) */}
-      <div className="stat-card p-4 col-span-2 sm:col-span-1 lg:col-span-2 border-[#2970FF] bg-[#2970FF]/5">
+      {/* Pipeline Volume */}
+      <div className="stat-card p-4 col-span-2 bg-gradient-to-br from-[#2970FF] to-[#1a5fe6] border-0">
         <div className="flex items-center gap-3">
-          <div className="w-11 h-11 bg-[#2970FF] flex items-center justify-center">
-            <svg className="w-6 h-6 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
-              <path strokeLinecap="square" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
           <div>
-            <p className="text-[10px] text-[#84ADFF] uppercase tracking-[0.15em] font-bold">Pipeline</p>
-            <p className="text-3xl font-black font-mono text-gray-900 dark:text-white">{formatVolume(stats.totalVolume)}</p>
+            <p className="text-xs text-white/70 font-medium">Pipeline</p>
+            <p className="text-2xl font-bold text-white">{formatVolume(stats.totalVolume)}</p>
           </div>
         </div>
       </div>
 
       {/* Pending */}
-      <button onClick={() => onFilterClick('Pending')} className={`stat-card p-4 text-left cursor-pointer transition-all ${isActive('Pending') ? 'border-amber-500 bg-amber-500/10' : 'hover:border-[#3f3f46]'}`}>
+      <button onClick={() => onFilterClick('Pending')} className={`stat-card p-4 text-left cursor-pointer ${isActive('Pending') ? 'ring-2 ring-amber-500 ring-offset-2' : ''}`}>
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-gray-100 dark:bg-[#27272a] flex items-center justify-center">
-            <svg className="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-              <path strokeLinecap="square" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+          <div className="w-10 h-10 rounded-lg bg-amber-50 dark:bg-amber-900/20 flex items-center justify-center">
+            <svg className="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
           <div>
-            <p className="text-[10px] text-gray-500 dark:text-[#71717a] uppercase tracking-[0.15em] font-bold">Pending</p>
-            <p className="text-2xl font-black font-mono text-amber-500">{stats.kybCounts['Pending']}</p>
+            <p className="text-xs text-slate-500 dark:text-zinc-500 font-medium">Pending</p>
+            <p className="text-2xl font-bold text-amber-500">{stats.kybCounts['Pending']}</p>
           </div>
         </div>
       </button>
 
       {/* In Review */}
-      <button onClick={() => onFilterClick('In Review')} className={`stat-card p-4 text-left cursor-pointer transition-all ${isActive('In Review') ? 'border-blue-500 bg-blue-500/10' : 'hover:border-[#3f3f46]'}`}>
+      <button onClick={() => onFilterClick('In Review')} className={`stat-card p-4 text-left cursor-pointer ${isActive('In Review') ? 'ring-2 ring-blue-500 ring-offset-2' : ''}`}>
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-gray-100 dark:bg-[#27272a] flex items-center justify-center">
-            <svg className="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-              <path strokeLinecap="square" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+          <div className="w-10 h-10 rounded-lg bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center">
+            <svg className="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25z" />
             </svg>
           </div>
           <div>
-            <p className="text-[10px] text-gray-500 dark:text-[#71717a] uppercase tracking-[0.15em] font-bold">In Review</p>
-            <p className="text-2xl font-black font-mono text-blue-500">{stats.kybCounts['In Review']}</p>
+            <p className="text-xs text-slate-500 dark:text-zinc-500 font-medium">In Review</p>
+            <p className="text-2xl font-bold text-blue-500">{stats.kybCounts['In Review']}</p>
           </div>
         </div>
       </button>
 
       {/* Approved */}
-      <button onClick={() => onFilterClick('Approved')} className={`stat-card p-4 text-left cursor-pointer transition-all ${isActive('Approved') ? 'border-emerald-500 bg-emerald-500/10' : 'hover:border-[#3f3f46]'}`}>
+      <button onClick={() => onFilterClick('Approved')} className={`stat-card p-4 text-left cursor-pointer ${isActive('Approved') ? 'ring-2 ring-emerald-500 ring-offset-2' : ''}`}>
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-gray-100 dark:bg-[#27272a] flex items-center justify-center">
-            <svg className="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
-              <path strokeLinecap="square" d="M5 13l4 4L19 7" />
+          <div className="w-10 h-10 rounded-lg bg-emerald-50 dark:bg-emerald-900/20 flex items-center justify-center">
+            <svg className="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
           <div>
-            <p className="text-[10px] text-gray-500 dark:text-[#71717a] uppercase tracking-[0.15em] font-bold">Approved</p>
-            <p className="text-2xl font-black font-mono text-emerald-500">{stats.kybCounts['Approved']}</p>
+            <p className="text-xs text-slate-500 dark:text-zinc-500 font-medium">Approved</p>
+            <p className="text-2xl font-bold text-emerald-500">{stats.kybCounts['Approved']}</p>
           </div>
         </div>
       </button>
 
       {/* Rejected */}
-      <button onClick={() => onFilterClick('Rejected')} className={`stat-card p-4 text-left cursor-pointer transition-all ${isActive('Rejected') ? 'border-red-500 bg-red-500/10' : 'hover:border-[#3f3f46]'}`}>
+      <button onClick={() => onFilterClick('Rejected')} className={`stat-card p-4 text-left cursor-pointer ${isActive('Rejected') ? 'ring-2 ring-red-500 ring-offset-2' : ''}`}>
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-gray-100 dark:bg-[#27272a] flex items-center justify-center">
-            <svg className="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
-              <path strokeLinecap="square" d="M6 18L18 6M6 6l12 12" />
+          <div className="w-10 h-10 rounded-lg bg-red-50 dark:bg-red-900/20 flex items-center justify-center">
+            <svg className="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
           <div>
-            <p className="text-[10px] text-gray-500 dark:text-[#71717a] uppercase tracking-[0.15em] font-bold">Rejected</p>
-            <p className="text-2xl font-black font-mono text-red-500">{stats.kybCounts['Rejected']}</p>
+            <p className="text-xs text-slate-500 dark:text-zinc-500 font-medium">Rejected</p>
+            <p className="text-2xl font-bold text-red-500">{stats.kybCounts['Rejected']}</p>
           </div>
         </div>
       </button>
 
-      {/* Missing KYB */}
-      <button onClick={() => onFilterClick('missing')} className={`stat-card p-4 text-left cursor-pointer transition-all ${isActive('missing') ? 'border-violet-500 bg-violet-500/10' : 'hover:border-[#3f3f46]'}`}>
+      {/* Needs KYB */}
+      <button onClick={() => onFilterClick('missing')} className={`stat-card p-4 text-left cursor-pointer ${isActive('missing') ? 'ring-2 ring-orange-500 ring-offset-2' : ''}`}>
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-gray-100 dark:bg-[#27272a] flex items-center justify-center">
-            <svg className="w-5 h-5 text-violet-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-              <path strokeLinecap="square" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+          <div className="w-10 h-10 rounded-lg bg-orange-50 dark:bg-orange-900/20 flex items-center justify-center">
+            <svg className="w-5 h-5 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
             </svg>
           </div>
           <div>
-            <p className="text-[10px] text-gray-500 dark:text-[#71717a] uppercase tracking-[0.15em] font-bold">Needs KYB</p>
+            <p className="text-xs text-slate-500 dark:text-zinc-500 font-medium">Needs KYB</p>
             <p className="text-2xl font-black font-mono text-violet-500">{stats.missingKyb}</p>
           </div>
         </div>
@@ -2491,8 +2451,8 @@ function Dashboard({ clients }) {
 
   return (
     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 animate-fade-in">
-      <div className="bg-white rounded-xl shadow-sm border p-6">
-        <h3 className="text-lg font-semibold text-gray-800 mb-4">KYB Status Breakdown</h3>
+      <div className="glass-card p-6">
+        <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">KYB Status Breakdown</h3>
         {kybData.length > 0 ? (
           <ResponsiveContainer width="100%" height={250}>
             <PieChart>
@@ -2514,39 +2474,39 @@ function Dashboard({ clients }) {
             </PieChart>
           </ResponsiveContainer>
         ) : (
-          <div className="h-[250px] flex items-center justify-center text-slate-300">No data available</div>
+          <div className="h-[250px] flex items-center justify-center text-gray-400 dark:text-zinc-500">No data available</div>
         )}
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm border p-6">
-        <h3 className="text-lg font-semibold text-gray-800 mb-4">Top Corridors by Volume</h3>
+      <div className="glass-card p-6">
+        <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">Top Corridors by Volume</h3>
         {corridorData.length > 0 ? (
           <ResponsiveContainer width="100%" height={250}>
             <BarChart data={corridorData} layout="vertical">
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis type="number" tickFormatter={formatVolume} />
-              <YAxis type="category" dataKey="currency" width={100} />
+              <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" className="dark:stroke-zinc-700" />
+              <XAxis type="number" tickFormatter={formatVolume} stroke="#64748b" className="dark:stroke-zinc-400" />
+              <YAxis type="category" dataKey="currency" width={100} stroke="#64748b" className="dark:stroke-zinc-400" />
               <Tooltip formatter={(value) => formatVolume(value)} />
-              <Bar dataKey="volume" fill="#3b82f6" radius={[0, 4, 4, 0]} />
+              <Bar dataKey="volume" fill="#2970FF" radius={[0, 4, 4, 0]} />
             </BarChart>
           </ResponsiveContainer>
         ) : (
-          <div className="h-[250px] flex items-center justify-center text-slate-300">No data available</div>
+          <div className="h-[250px] flex items-center justify-center text-gray-400 dark:text-zinc-500">No data available</div>
         )}
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm border p-6 md:col-span-2 lg:col-span-1">
-        <h3 className="text-lg font-semibold text-gray-800 mb-4">Missing KYB Approval ({missingKyb.length})</h3>
+      <div className="glass-card p-6 md:col-span-2 lg:col-span-1">
+        <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">Missing KYB Approval ({missingKyb.length})</h3>
         <div className="space-y-2 max-h-[220px] overflow-y-auto">
           {missingKyb.length > 0 ? missingKyb.map(client => (
-            <div key={client.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-              <span className="font-medium text-gray-700 truncate">{client.name}</span>
+            <div key={client.id} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-zinc-800 rounded-lg">
+              <span className="font-medium text-gray-700 dark:text-zinc-300 truncate">{client.name}</span>
               <span className={`px-2 py-1 text-xs rounded-full ${KYB_COLORS[client.kybStatus].bg} ${KYB_COLORS[client.kybStatus].text}`}>
                 {client.kybStatus}
               </span>
             </div>
           )) : (
-            <div className="text-center py-8 text-slate-300">All clients approved!</div>
+            <div className="text-center py-8 text-gray-400 dark:text-zinc-500">All clients approved!</div>
           )}
         </div>
       </div>
@@ -3420,16 +3380,15 @@ function App({ currentUser }) {
         .animate-draw-line { stroke-dasharray: 200; animation: drawLine 0.4s ease-out forwards; }
       `}</style>
 
-      <header className={`glass-header sticky top-0 z-30 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+      <header className="glass-header sticky top-0 z-30">
         {/* Accent line at top */}
         <div className="accent-line"></div>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-6">
-            {/* SpherePay Logo - SVG inline for color control */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            {/* SpherePay Logo */}
             <div className="flex items-center gap-3">
-              <svg className="h-8" viewBox="0 0 200 38" fill="none" xmlns="http://www.w3.org/2000/svg">
-                {/* Sphere icon */}
-                <circle cx="19" cy="19" r="17.5" fill="white" stroke={darkMode ? "#27272a" : "#e2e8f0"} strokeWidth="1"/>
+              <svg className="h-7" viewBox="0 0 200 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="19" cy="19" r="17.5" fill="white" stroke="#e2e8f0" strokeWidth="1"/>
                 <defs>
                   <linearGradient id="sphereGrad" x1="6" y1="8" x2="32" y2="36" gradientUnits="userSpaceOnUse">
                     <stop stopColor="#2970FF"/>
@@ -3437,46 +3396,42 @@ function App({ currentUser }) {
                   </linearGradient>
                 </defs>
                 <path d="M19 2C9.06 2 1 10.06 1 20s8.06 18 18 18 18-8.06 18-18S28.94 2 19 2zm16.8 18.8c-.5.9-1.2 1.9-2.2 2.9-2.8 3-7 5.6-11.8 7.3-3.8 1.4-7.6 2.1-11.1 2.1-2.4 0-4.6-.4-6.5-1.4 3.3 4 8.3 6.5 13.8 6.5 10.1 0 18.3-8 18.3-18.1 0-.1 0-.2 0-.3zM19 4c9.9 0 17.9 7.9 17.9 17.7 0 2.1-.4 4.1-1 5.9-.5 1.4-1.6 2.4-3.3 3.2-1.6.7-3.7 1.1-6 1.1-3.1 0-6.7-.6-10.4-2.4-4.6-1.7-8.5-4.2-11-6.8-2.3-2.6-3.4-5.4-2.5-8.4C5.2 7.2 11.7 4.2 19.3 4H19z" fill="url(#sphereGrad)"/>
-                {/* "sphere" text */}
-                <text x="44" y="26" fontFamily="Inter, sans-serif" fontSize="22" fontWeight="800" fill={darkMode ? "white" : "#0f172a"}>sphere</text>
-                {/* "PAY" text */}
+                <text x="44" y="26" fontFamily="Inter, sans-serif" fontSize="22" fontWeight="800" className="fill-gray-900 dark:fill-white">sphere</text>
                 <text x="138" y="26" fontFamily="Inter, sans-serif" fontSize="22" fontWeight="800" fill="#84ADFF">PAY</text>
               </svg>
-              <div className={`hidden sm:block border-l pl-3 ${darkMode ? 'border-[#27272a]' : 'border-gray-200'}`}>
-                <p className="text-[10px] text-[#2970FF] font-bold tracking-[0.15em] uppercase">Client Manager</p>
-              </div>
+              <span className="hidden sm:inline text-xs font-semibold text-[#2970FF] border-l border-gray-200 dark:border-zinc-700 pl-3">Client Manager</span>
             </div>
             {/* Navigation Tabs */}
-            <div className={`flex border ${darkMode ? 'border-[#27272a]' : 'border-gray-200'}`}>
+            <div className="flex bg-gray-100 dark:bg-zinc-800 rounded-lg p-1">
               <button
                 onClick={() => setViewMode('clients')}
-                className={`px-5 py-2.5 text-xs font-bold uppercase tracking-wider transition-all duration-150 flex items-center gap-2 ${viewMode === 'clients' ? 'bg-[#2970FF] text-white' : darkMode ? 'text-[#71717a] hover:text-white hover:bg-[#27272a]' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-100'}`}
+                className={`px-4 py-2 text-sm font-semibold rounded-md transition-all flex items-center gap-2 ${viewMode === 'clients' ? 'bg-[#2970FF] text-white shadow-sm' : 'text-gray-600 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-white'}`}
               >
                 Clients
-                <span className={`font-mono text-xs ${viewMode === 'clients' ? 'text-white/70' : 'text-[#2970FF]'}`}>{clients.length}</span>
+                <span className={`text-xs font-mono ${viewMode === 'clients' ? 'text-white/70' : 'text-[#2970FF]'}`}>{clients.length}</span>
               </button>
               <button
                 onClick={() => setViewMode('referrals')}
-                className={`px-5 py-2.5 text-xs font-bold uppercase tracking-wider transition-all duration-150 flex items-center gap-2 border-l ${darkMode ? 'border-[#27272a]' : 'border-gray-200'} ${viewMode === 'referrals' ? 'bg-[#2970FF] text-white' : darkMode ? 'text-[#71717a] hover:text-white hover:bg-[#27272a]' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-100'}`}
+                className={`px-4 py-2 text-sm font-semibold rounded-md transition-all flex items-center gap-2 ${viewMode === 'referrals' ? 'bg-[#2970FF] text-white shadow-sm' : 'text-gray-600 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-white'}`}
               >
                 Referrals
-                <span className={`font-mono text-xs ${viewMode === 'referrals' ? 'text-white/70' : 'text-[#2970FF]'}`}>{referrals.length}</span>
+                <span className={`text-xs font-mono ${viewMode === 'referrals' ? 'text-white/70' : 'text-[#2970FF]'}`}>{referrals.length}</span>
               </button>
             </div>
           </div>
-          <div className="flex items-center gap-3">
-            {/* Real-time sync indicator */}
-            <div className={`hidden md:flex items-center gap-2 text-xs px-3 py-2 border ${darkMode ? 'text-[#a1a1aa] bg-[#18181b] border-[#27272a]' : 'text-gray-500 bg-gray-50 border-gray-200'}`}>
+          <div className="flex items-center gap-2">
+            {/* Live indicator */}
+            <div className="hidden md:flex items-center gap-2 text-xs text-gray-500 dark:text-zinc-400 px-3 py-1.5 bg-gray-50 dark:bg-zinc-800 rounded-full border border-gray-200 dark:border-zinc-700">
               <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#2970FF] opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#2970FF]"></span>
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
               </span>
-              <span className="font-bold uppercase tracking-wider">Live</span>
+              <span className="font-medium">Live</span>
             </div>
             {/* Dark mode toggle */}
             <button
               onClick={() => setDarkMode(!darkMode)}
-              className={`p-2 border border-transparent transition-all duration-150 ${darkMode ? 'hover:bg-[#27272a] hover:border-[#27272a] text-[#71717a] hover:text-white' : 'hover:bg-gray-100 hover:border-gray-200 text-gray-500 hover:text-gray-900'}`}
+              className="p-2 rounded-lg text-gray-500 dark:text-zinc-400 hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors"
               title={darkMode ? "Switch to light mode" : "Switch to dark mode"}
             >
               {darkMode ? (
@@ -3490,16 +3445,16 @@ function App({ currentUser }) {
               )}
             </button>
             {/* User info and logout */}
-            <div className={`flex items-center gap-2 px-3 py-2 border ${darkMode ? 'bg-[#18181b] border-[#27272a]' : 'bg-gray-50 border-gray-200'}`}>
+            <div className="flex items-center gap-2 pl-2 border-l border-gray-200 dark:border-zinc-700">
               <img
                 src={currentUser?.photoURL || 'https://www.gravatar.com/avatar/?d=mp'}
                 alt={currentUser?.displayName || 'User'}
-                className={`w-7 h-7 rounded border ${darkMode ? 'border-[#27272a]' : 'border-gray-200'}`}
+                className="w-8 h-8 rounded-full border-2 border-gray-200 dark:border-zinc-700"
               />
-              <span className={`hidden sm:inline text-xs font-bold uppercase tracking-wider ${darkMode ? 'text-[#a1a1aa]' : 'text-gray-500'}`}>{currentUser?.email?.split('@')[0]}</span>
+              <span className="hidden sm:inline text-sm font-medium text-gray-700 dark:text-zinc-300">{currentUser?.email?.split('@')[0]}</span>
               <button
                 onClick={handleLogout}
-                className={`p-1.5 transition-all duration-150 hover:text-red-500 ${darkMode ? 'hover:bg-[#27272a] text-[#71717a]' : 'hover:bg-gray-200 text-gray-400'}`}
+                className="p-1.5 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
                 title="Sign out"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -3609,21 +3564,21 @@ function App({ currentUser }) {
             {/* Active filter indicator - sharp style */}
             {activeStatFilter && (
               <div className="px-4 py-3 bg-[#2970FF]/10 border-b border-[#2970FF]/30 flex items-center justify-between">
-                <div className="flex items-center gap-2 text-sm text-[#84ADFF]">
-                  <div className="w-6 h-6 bg-[#2970FF] flex items-center justify-center">
-                    <svg className="w-3.5 h-3.5 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="square" strokeLinejoin="miter" strokeWidth={2.5} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                <div className="flex items-center gap-2 text-sm text-[#2970FF] dark:text-[#84ADFF]">
+                  <div className="w-6 h-6 bg-[#2970FF] rounded-md flex items-center justify-center">
+                    <svg className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
                     </svg>
                   </div>
-                  <span className="uppercase tracking-wider text-xs font-bold">Filtering: <strong className="text-white">{activeStatFilter === 'missing' ? 'Needs KYB Approval' : activeStatFilter}</strong></span>
-                  <span className="px-2 py-1 bg-[#27272a] text-[#84ADFF] text-[10px] font-bold uppercase tracking-wider">{sortedClients.length} results</span>
+                  <span className="text-xs font-semibold">Filtering: <strong className="text-gray-900 dark:text-white">{activeStatFilter === 'missing' ? 'Needs KYB Approval' : activeStatFilter}</strong></span>
+                  <span className="px-2 py-1 bg-[#2970FF]/20 text-[#2970FF] dark:text-[#84ADFF] text-[10px] font-bold rounded-md">{sortedClients.length} results</span>
                 </div>
                 <button
                   onClick={() => handleStatFilterClick('all')}
-                  className="text-[#71717a] hover:text-white text-xs font-bold uppercase tracking-wider flex items-center gap-1 hover:bg-[#27272a] px-3 py-1.5 transition-colors"
+                  className="text-gray-500 dark:text-[#71717a] hover:text-gray-900 dark:hover:text-white text-xs font-semibold flex items-center gap-1 hover:bg-gray-100 dark:hover:bg-[#27272a] px-3 py-1.5 rounded-md transition-colors"
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="square" strokeLinejoin="miter" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                   </svg>
                   Clear
                 </button>
@@ -3644,31 +3599,31 @@ function App({ currentUser }) {
                   />
                 </div>
               </div>
-              {/* Quick Filters - Sharp style */}
+              {/* Quick Filters */}
               <div className="flex gap-1">
                 <button
                   onClick={() => setQuickFilter(quickFilter === 'pinned' ? null : 'pinned')}
-                  className={`filter-pill px-3 py-2 text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5 ${quickFilter === 'pinned' ? 'active' : 'text-[#71717a] hover:text-white hover:border-[#3f3f46]'}`}
+                  className={`filter-pill px-3 py-2 text-xs font-semibold flex items-center gap-1.5 ${quickFilter === 'pinned' ? 'active' : ''}`}
                 >
-                  ⭐ Pinned {pinnedClients.length > 0 && `(${pinnedClients.length})`}
+                  <span>⭐</span> Pinned {pinnedClients.length > 0 && `(${pinnedClients.length})`}
                 </button>
                 <button
                   onClick={() => setQuickFilter(quickFilter === 'recent' ? null : 'recent')}
-                  className={`filter-pill px-3 py-2 text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5 ${quickFilter === 'recent' ? 'active' : 'text-[#71717a] hover:text-white hover:border-[#3f3f46]'}`}
+                  className={`filter-pill px-3 py-2 text-xs font-semibold flex items-center gap-1.5 ${quickFilter === 'recent' ? 'active' : ''}`}
                 >
-                  🕐 Recent
+                  <span>🕐</span> Recent
                 </button>
                 <button
                   onClick={() => setQuickFilter(quickFilter === 'highPriority' ? null : 'highPriority')}
-                  className={`filter-pill px-3 py-2 text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5 ${quickFilter === 'highPriority' ? 'active' : 'text-[#71717a] hover:text-white hover:border-[#3f3f46]'}`}
+                  className={`filter-pill px-3 py-2 text-xs font-semibold flex items-center gap-1.5 ${quickFilter === 'highPriority' ? 'active' : ''}`}
                 >
-                  🔥 High Priority
+                  <span>🔥</span> High Priority
                 </button>
                 <button
                   onClick={() => setQuickFilter(quickFilter === 'needsAttention' ? null : 'needsAttention')}
-                  className={`filter-pill px-3 py-2 text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5 ${quickFilter === 'needsAttention' ? 'active' : 'text-[#71717a] hover:text-white hover:border-[#3f3f46]'}`}
+                  className={`filter-pill px-3 py-2 text-xs font-semibold flex items-center gap-1.5 ${quickFilter === 'needsAttention' ? 'active' : ''}`}
                 >
-                  👀 Needs KYB
+                  <span>👀</span> Needs KYB
                 </button>
               </div>
               <select
@@ -3715,7 +3670,7 @@ function App({ currentUser }) {
                 <div className="relative">
                   <button
                     onClick={() => setShowColumnSettings(!showColumnSettings)}
-                    className="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors flex items-center gap-2 text-gray-700"
+                    className="px-3 py-2.5 bg-white dark:bg-[#18181b] border border-gray-200 dark:border-[#27272a] text-gray-500 dark:text-[#a1a1aa] rounded-md hover:border-[#2970FF] hover:text-[#2970FF] transition-colors flex items-center gap-2"
                     title="Column settings"
                   >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -3734,7 +3689,7 @@ function App({ currentUser }) {
                 {/* Grouped View Toggle */}
                 <button
                   onClick={() => setClientsGroupedView(!clientsGroupedView)}
-                  className={`px-3 py-2 border rounded-lg transition-colors flex items-center gap-2 ${clientsGroupedView ? 'bg-blue-50 border-blue-300 text-blue-700' : 'border-gray-300 hover:bg-gray-50 text-gray-700'}`}
+                  className={`px-3 py-2.5 rounded-md transition-colors flex items-center gap-2 text-xs font-semibold ${clientsGroupedView ? 'bg-[#2970FF] text-white' : 'bg-white dark:bg-[#18181b] border border-gray-200 dark:border-[#27272a] text-gray-500 dark:text-[#a1a1aa] hover:border-[#2970FF] hover:text-[#2970FF]'}`}
                   title={clientsGroupedView ? "Switch to flat view" : "Group by Aggregator"}
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
