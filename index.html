@@ -2485,7 +2485,7 @@ function App({ currentUser }) {
   const [deletedClient, setDeletedClient] = useState(null); // For undo functionality
   const [showCommandPalette, setShowCommandPalette] = useState(false); // Cmd+K palette
   const [selectedClients, setSelectedClients] = useState([]); // For bulk actions
-  const [darkMode, setDarkMode] = useState(false); // Dark mode toggle
+  const [darkMode, setDarkMode] = useState(() => { try { return JSON.parse(localStorage.getItem('darkMode')) || false; } catch { return false; } }); // Dark mode toggle
   const [showKanban, setShowKanban] = useState(false); // Kanban board view
   const [contextMenu, setContextMenu] = useState(null); // Right-click context menu
   const [selectedReferrals, setSelectedReferrals] = useState([]); // For bulk actions on referrals
@@ -2536,7 +2536,7 @@ function App({ currentUser }) {
         };
   };
 
-  // Subscribe to Firestore collections for real-time sync
+  // Persist dark mode preference  useEffect(() => { localStorage.setItem('darkMode', JSON.stringify(darkMode)); }, [darkMode]);  // Subscribe to Firestore collections for real-time sync  useEffect(() => { localStorage.setItem('darkMode', JSON.stringify(darkMode)); }, [darkMode]);
   useEffect(() => {
     let loadedCount = 0;
     const checkLoaded = () => {
@@ -3249,7 +3249,7 @@ function App({ currentUser }) {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className={`min-h-screen transition-colors duration-300 ${darkMode ? 'dark bg-gray-900' : 'bg-gray-100'}`}>
       <style>{`
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes scaleIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
@@ -3305,7 +3305,7 @@ function App({ currentUser }) {
               </span>
               <span className="font-medium">Live</span>
             </div>
-            {/* User info and logout */}
+            {/* Dark mode toggle */}<button onClick={() => setDarkMode(!darkMode)} className="p-2 hover:bg-white/10 rounded-lg transition-all duration-200 text-gray-400 hover:text-white" title={darkMode ? "Switch to light mode" : "Switch to dark mode"}>{darkMode ? (<svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>) : (<svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>)}</button>{/* User info and logout */}
             <div className="flex items-center gap-2 bg-white/5 rounded-xl px-2 py-1.5 border border-white/10">
               <img
                 src={currentUser?.photoURL || 'https://www.gravatar.com/avatar/?d=mp'}
