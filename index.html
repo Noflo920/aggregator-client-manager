@@ -3802,7 +3802,7 @@ function App({ currentUser }) {
                     <th className="px-4 py-3 text-right text-sm font-semibold text-gray-600 dark:text-zinc-400">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y">
+                <tbody className="divide-y divide-gray-200 dark:divide-zinc-700">
                   {sortedClients.length === 0 ? (
                     <tr>
                       <td colSpan={9} className="px-4 py-20 text-center">
@@ -3887,7 +3887,7 @@ function App({ currentUser }) {
                             <td className="px-4 py-3"><div className="flex flex-wrap gap-1">{aggregator.corridors.map(cor => (<span key={cor.id} className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs ${PRIORITY_COLORS[cor.priority].bg} ${PRIORITY_COLORS[cor.priority].text}`}>{cor.currency}</span>))}</div></td>
                             <td className="px-4 py-3 font-mono text-blue-700 font-semibold">{formatVolume(aggregatorVolume)}</td>
                             <td className="px-4 py-3"><span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${KYB_COLORS[aggregator.kybStatus].bg} ${KYB_COLORS[aggregator.kybStatus].text} border ${KYB_COLORS[aggregator.kybStatus].border}`}>{aggregator.kybStatus}</span></td>
-                            <td className="px-4 py-3">{aggregator.sumsubLink ? (<a href={aggregator.sumsubLink} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()} className="text-blue-600 hover:underline text-sm">View Link</a>) : (<span className="text-slate-300 text-sm">—</span>)}</td>
+                            <td className="px-4 py-3">{aggregator.sumsubLink ? (<a href={aggregator.sumsubLink} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()} className="text-blue-600 hover:underline text-sm">View Link</a>) : (<span className="text-slate-400 dark:text-zinc-600 text-sm">—</span>)}</td>
                             <td className="px-4 py-3"><div className="flex justify-end gap-2"><button onClick={(e) => { e.stopPropagation(); setEditingClient(aggregator); setShowModal(true); }} className="p-1.5 text-slate-400 hover:text-blue-600 hover:bg-blue-100 rounded transition-colors" title="Edit"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg></button><button onClick={(e) => { e.stopPropagation(); setDeleteTarget(aggregator); }} className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded transition-colors" title="Delete"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></button></div></td>
                           </tr>
                         );
@@ -3897,20 +3897,20 @@ function App({ currentUser }) {
                           subMerchants.forEach(subMerchant => {
                             const smVolume = subMerchant.corridors.reduce((sum, c) => sum + (c.expectedVolume || 0), 0);
                             rows.push(
-                              <tr key={subMerchant.id} className={`bg-white hover:bg-gray-50 transition-colors cursor-pointer border-l-4 border-l-gray-200 ${selectedClients.includes(subMerchant.id) ? 'bg-blue-50' : ''}`} onClick={() => setSelectedClient(subMerchant)} onContextMenu={(e) => handleContextMenu(e, subMerchant)}>
+                              <tr key={subMerchant.id} className={`bg-white dark:bg-zinc-900 hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors cursor-pointer border-l-4 border-l-gray-200 dark:border-l-zinc-700 ${selectedClients.includes(subMerchant.id) ? 'bg-blue-50 dark:bg-blue-950' : ''}`} onClick={() => setSelectedClient(subMerchant)} onContextMenu={(e) => handleContextMenu(e, subMerchant)}>
                                 <td className="px-3 py-2 pl-10" onClick={(e) => e.stopPropagation()}><input type="checkbox" checked={selectedClients.includes(subMerchant.id)} onChange={() => toggleClientSelection(subMerchant.id)} className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500" /></td>
                                 <td className="px-4 py-2 pl-8">
                                   <div className="flex items-center gap-2">
                                     <span className="text-gray-300">└</span>
-                                    <div className="font-medium text-gray-700 flex items-center gap-1.5">{pinnedClients.includes(subMerchant.id) && <span className="text-amber-400">⭐</span>}<InlineEdit value={subMerchant.name} onSave={(newValue) => handleInlineEdit(subMerchant.id, 'name', newValue)} className="font-medium" /></div>
+                                    <div className="font-medium text-gray-700 dark:text-zinc-200 flex items-center gap-1.5">{pinnedClients.includes(subMerchant.id) && <span className="text-amber-400">⭐</span>}<InlineEdit value={subMerchant.name} onSave={(newValue) => handleInlineEdit(subMerchant.id, 'name', newValue)} className="font-medium" /></div>
                                   </div>
                                 </td>
-                                <td className="px-4 py-2"><span className="text-slate-400 text-sm">Sub-merchant</span></td>
+                                <td className="px-4 py-2"><span className="text-slate-500 dark:text-zinc-400 text-sm">Sub-merchant</span></td>
                                 <td className="px-4 py-2"><span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${subMerchant.inFlowOfFunds ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'}`}>{subMerchant.inFlowOfFunds ? 'Yes' : 'No'}</span></td>
                                 <td className="px-4 py-2"><div className="flex flex-wrap gap-1">{subMerchant.corridors.map(cor => (<span key={cor.id} className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs ${PRIORITY_COLORS[cor.priority].bg} ${PRIORITY_COLORS[cor.priority].text}`}>{cor.currency}</span>))}</div></td>
-                                <td className="px-4 py-2 font-mono text-gray-600">{formatVolume(smVolume)}</td>
+                                <td className="px-4 py-2 font-mono text-gray-600 dark:text-zinc-300">{formatVolume(smVolume)}</td>
                                 <td className="px-4 py-2"><span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${KYB_COLORS[subMerchant.kybStatus].bg} ${KYB_COLORS[subMerchant.kybStatus].text} border ${KYB_COLORS[subMerchant.kybStatus].border}`}>{subMerchant.kybStatus}</span></td>
-                                <td className="px-4 py-2">{subMerchant.sumsubLink ? (<a href={subMerchant.sumsubLink} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()} className="text-blue-600 hover:underline text-sm">View Link</a>) : (<span className="text-slate-300 text-sm">—</span>)}</td>
+                                <td className="px-4 py-2">{subMerchant.sumsubLink ? (<a href={subMerchant.sumsubLink} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()} className="text-blue-600 hover:underline text-sm">View Link</a>) : (<span className="text-slate-400 dark:text-zinc-600 text-sm">—</span>)}</td>
                                 <td className="px-4 py-2"><div className="flex justify-end gap-2"><button onClick={(e) => { e.stopPropagation(); setEditingClient(subMerchant); setShowModal(true); }} className="p-1.5 text-slate-400 hover:text-blue-600 hover:bg-gray-100 rounded transition-colors" title="Edit"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg></button><button onClick={(e) => { e.stopPropagation(); setDeleteTarget(subMerchant); }} className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded transition-colors" title="Delete"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></button></div></td>
                               </tr>
                             );
@@ -3921,22 +3921,22 @@ function App({ currentUser }) {
                       // Standalone sub-merchants (no parent)
                       if (standaloneSubMerchants.length > 0) {
                         rows.push(
-                          <tr key="standalone-header" className="bg-gray-100">
+                          <tr key="standalone-header" className="bg-gray-100 dark:bg-zinc-800">
                             <td colSpan={9} className="px-4 py-2 text-xs font-semibold text-slate-400 uppercase tracking-wider">Standalone Sub-merchants ({standaloneSubMerchants.length})</td>
                           </tr>
                         );
                         standaloneSubMerchants.forEach(sm => {
                           const smVolume = sm.corridors.reduce((sum, c) => sum + (c.expectedVolume || 0), 0);
                           rows.push(
-                            <tr key={sm.id} className={`bg-white hover:bg-gray-50 transition-colors cursor-pointer ${selectedClients.includes(sm.id) ? 'bg-blue-50' : ''}`} onClick={() => setSelectedClient(sm)} onContextMenu={(e) => handleContextMenu(e, sm)}>
+                            <tr key={sm.id} className={`bg-white dark:bg-zinc-900 hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors cursor-pointer ${selectedClients.includes(sm.id) ? 'bg-blue-50 dark:bg-blue-950' : ''}`} onClick={() => setSelectedClient(sm)} onContextMenu={(e) => handleContextMenu(e, sm)}>
                               <td className="px-3 py-3" onClick={(e) => e.stopPropagation()}><input type="checkbox" checked={selectedClients.includes(sm.id)} onChange={() => toggleClientSelection(sm.id)} className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500" /></td>
-                              <td className="px-4 py-3"><div className="font-medium text-gray-800 flex items-center gap-1.5">{pinnedClients.includes(sm.id) && <span className="text-amber-400">⭐</span>}<InlineEdit value={sm.name} onSave={(newValue) => handleInlineEdit(sm.id, 'name', newValue)} className="font-medium" /></div></td>
-                              <td className="px-4 py-3"><span className="text-slate-400">Sub-merchant</span></td>
+                              <td className="px-4 py-3"><div className="font-medium text-gray-800 dark:text-zinc-200 flex items-center gap-1.5">{pinnedClients.includes(sm.id) && <span className="text-amber-400">⭐</span>}<InlineEdit value={sm.name} onSave={(newValue) => handleInlineEdit(sm.id, 'name', newValue)} className="font-medium" /></div></td>
+                              <td className="px-4 py-3"><span className="text-slate-500 dark:text-zinc-400">Sub-merchant</span></td>
                               <td className="px-4 py-3"><span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${sm.inFlowOfFunds ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'}`}>{sm.inFlowOfFunds ? 'Yes' : 'No'}</span></td>
                               <td className="px-4 py-3"><div className="flex flex-wrap gap-1">{sm.corridors.map(cor => (<span key={cor.id} className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs ${PRIORITY_COLORS[cor.priority].bg} ${PRIORITY_COLORS[cor.priority].text}`}>{cor.currency}</span>))}</div></td>
-                              <td className="px-4 py-3 font-mono text-gray-700">{formatVolume(smVolume)}</td>
+                              <td className="px-4 py-3 font-mono text-gray-700 dark:text-zinc-300">{formatVolume(smVolume)}</td>
                               <td className="px-4 py-3"><span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${KYB_COLORS[sm.kybStatus].bg} ${KYB_COLORS[sm.kybStatus].text} border ${KYB_COLORS[sm.kybStatus].border}`}>{sm.kybStatus}</span></td>
-                              <td className="px-4 py-3">{sm.sumsubLink ? (<a href={sm.sumsubLink} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()} className="text-blue-600 hover:underline text-sm">View Link</a>) : (<span className="text-slate-300 text-sm">—</span>)}</td>
+                              <td className="px-4 py-3">{sm.sumsubLink ? (<a href={sm.sumsubLink} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()} className="text-blue-600 hover:underline text-sm">View Link</a>) : (<span className="text-slate-400 dark:text-zinc-600 text-sm">—</span>)}</td>
                               <td className="px-4 py-3"><div className="flex justify-end gap-2"><button onClick={(e) => { e.stopPropagation(); setEditingClient(sm); setShowModal(true); }} className="p-1.5 text-slate-400 hover:text-blue-600 hover:bg-gray-100 rounded transition-colors" title="Edit"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg></button><button onClick={(e) => { e.stopPropagation(); setDeleteTarget(sm); }} className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded transition-colors" title="Delete"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></button></div></td>
                             </tr>
                           );
@@ -3951,7 +3951,7 @@ function App({ currentUser }) {
                       const parentAggregator = client.parentAggregatorId ? clients.find(c => c.id === client.parentAggregatorId) : null;
                       const subMerchantCount = client.type === 'Aggregator' ? clients.filter(c => c.parentAggregatorId === client.id).length : 0;
                       return (
-                      <tr key={client.id} className={`hover:bg-blue-50/50 transition-colors cursor-pointer ${selectedClients.includes(client.id) ? 'bg-blue-50' : ''}`} onClick={() => setSelectedClient(client)} onContextMenu={(e) => handleContextMenu(e, client)}>
+                      <tr key={client.id} className={`hover:bg-blue-50/50 dark:hover:bg-zinc-800 transition-colors cursor-pointer ${selectedClients.includes(client.id) ? 'bg-blue-50 dark:bg-blue-950' : ''}`} onClick={() => setSelectedClient(client)} onContextMenu={(e) => handleContextMenu(e, client)}>
                         <td className="px-3 py-3" onClick={(e) => e.stopPropagation()}>
                           <input
                             type="checkbox"
@@ -3964,7 +3964,7 @@ function App({ currentUser }) {
                           {client.type === 'Aggregator' ? (
                             <button
                               onClick={(e) => { e.stopPropagation(); setNetworkViewAggregator(client); }}
-                              className="font-medium text-gray-800 hover:text-blue-600 transition-colors text-left flex items-center gap-1.5 group"
+                              className="font-medium text-gray-800 dark:text-zinc-200 hover:text-blue-600 dark:hover:text-blue-400 transition-colors text-left flex items-center gap-1.5 group"
                             >
                               {pinnedClients.includes(client.id) && <span className="text-amber-400">⭐</span>}
                               {client.name}
@@ -3974,7 +3974,7 @@ function App({ currentUser }) {
                               </svg>
                             </button>
                           ) : (
-                            <div className="font-medium text-gray-800 flex items-center gap-1.5">
+                            <div className="font-medium text-gray-800 dark:text-zinc-200 flex items-center gap-1.5">
                               {pinnedClients.includes(client.id) && (
                                 <span className="text-amber-400" title="Pinned">⭐</span>
                               )}
@@ -4009,7 +4009,7 @@ function App({ currentUser }) {
                           )}
                         </td>
                         <td className="px-4 py-3">
-                          <div className="text-gray-600">{client.type}</div>
+                          <div className="text-gray-600 dark:text-zinc-400">{client.type}</div>
                           {subMerchantCount > 0 && (
                             <button
                               onClick={(e) => { e.stopPropagation(); setNetworkViewAggregator(client); }}
@@ -4033,7 +4033,7 @@ function App({ currentUser }) {
                             ))}
                           </div>
                         </td>
-                        <td className="px-4 py-3 font-mono text-gray-700">
+                        <td className="px-4 py-3 font-mono text-gray-700 dark:text-zinc-300">
                           {formatVolume(client.type === 'Aggregator' ? clients.filter(c => c.parentAggregatorId === client.id).reduce((sum, sm) => sum + sm.corridors.reduce((s, c) => s + (c.expectedVolume || 0), 0), 0) : client.corridors.reduce((sum, c) => sum + (c.expectedVolume || 0), 0))}
                         </td>
                         <td className="px-4 py-3">
@@ -4047,14 +4047,14 @@ function App({ currentUser }) {
                               View Link
                             </a>
                           ) : (
-                            <span className="text-slate-300 text-sm">—</span>
+                            <span className="text-slate-400 dark:text-zinc-600 text-sm">—</span>
                           )}
                         </td>
                         <td className="px-4 py-3">
                           <div className="flex justify-end gap-2">
                             <button
                               onClick={(e) => { e.stopPropagation(); setEditingClient(client); setShowModal(true); }}
-                              className="p-1.5 text-slate-400 hover:text-blue-600 hover:bg-gray-50 rounded transition-colors"
+                              className="p-1.5 text-slate-400 dark:text-zinc-500 hover:text-blue-600 hover:bg-gray-50 dark:hover:bg-zinc-800 rounded transition-colors"
                               title="Edit"
                             >
                               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -4210,18 +4210,18 @@ function App({ currentUser }) {
                     <th onClick={() => handleReferralSort('referredCompany')} className="px-4 py-3 text-left text-sm font-semibold text-gray-600 dark:text-zinc-400 cursor-pointer hover:bg-gray-100 dark:hover:bg-zinc-800">
                       New Client (Referred) <ReferralSortIcon columnKey="referredCompany" />
                     </th>
-                    <th onClick={() => handleReferralSort('referrer')} className="px-4 py-3 text-left text-sm font-semibold text-gray-700 cursor-pointer hover:bg-gray-100">
+                    <th onClick={() => handleReferralSort('referrer')} className="px-4 py-3 text-left text-sm font-semibold text-gray-600 dark:text-zinc-400 cursor-pointer hover:bg-gray-100 dark:hover:bg-zinc-800">
                       Brought By (Referrer) <ReferralSortIcon columnKey="referrer" />
                     </th>
-                    <th onClick={() => handleReferralSort('status')} className="px-4 py-3 text-left text-sm font-semibold text-gray-700 cursor-pointer hover:bg-gray-100">
+                    <th onClick={() => handleReferralSort('status')} className="px-4 py-3 text-left text-sm font-semibold text-gray-600 dark:text-zinc-400 cursor-pointer hover:bg-gray-100 dark:hover:bg-zinc-800">
                       Status <ReferralSortIcon columnKey="status" />
                     </th>
-                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Currencies & Cost %</th>
-                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Fee Split</th>
-                    <th className="px-4 py-3 text-right text-sm font-semibold text-gray-700">Actions</th>
+                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-600 dark:text-zinc-400">Currencies & Cost %</th>
+                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-600 dark:text-zinc-400">Fee Split</th>
+                    <th className="px-4 py-3 text-right text-sm font-semibold text-gray-600 dark:text-zinc-400">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y">
+                <tbody className="divide-y divide-gray-200 dark:divide-zinc-700">
                   {sortedReferrals.length === 0 ? (
                     <tr>
                       <td colSpan={7} className="px-4 py-16 text-center">
@@ -4295,14 +4295,14 @@ function App({ currentUser }) {
                                 {referrerReferrals.length - activeCount > 0 && <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600">{referrerReferrals.length - activeCount} Other</span>}
                               </div>
                             </td>
-                            <td className="px-4 py-3"><span className="text-slate-300 text-sm">—</span></td>
+                            <td className="px-4 py-3"><span className="text-slate-400 dark:text-zinc-600 text-sm">—</span></td>
                             <td className="px-4 py-3">
                               {referrer.feeSplitPercentage > 0 ? (
                                 <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700 border border-green-200">
                                   <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                                   <span className="font-mono">{referrer.feeSplitPercentage}%</span>
                                 </span>
-                              ) : (<span className="text-slate-300 text-sm">Not set</span>)}
+                              ) : (<span className="text-slate-400 dark:text-zinc-600 text-sm">Not set</span>)}
                             </td>
                             <td className="px-4 py-3">
                               <div className="flex justify-end gap-2">
@@ -4316,19 +4316,19 @@ function App({ currentUser }) {
                         if (isExpanded) {
                           referrerReferrals.forEach(referral => {
                             rows.push(
-                              <tr key={referral.id} className={`bg-white hover:bg-gray-50 transition-colors cursor-pointer border-l-4 border-l-gray-200 ${selectedReferrals.includes(referral.id) ? 'bg-purple-50' : ''}`} onContextMenu={(e) => handleReferralContextMenu(e, referral)}>
+                              <tr key={referral.id} className={`bg-white dark:bg-zinc-900 hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors cursor-pointer border-l-4 border-l-gray-200 dark:border-l-zinc-700 ${selectedReferrals.includes(referral.id) ? 'bg-purple-50 dark:bg-purple-950' : ''}`} onContextMenu={(e) => handleReferralContextMenu(e, referral)}>
                                 <td className="px-3 py-2 pl-10" onClick={(e) => e.stopPropagation()}><input type="checkbox" checked={selectedReferrals.includes(referral.id)} onChange={() => toggleReferralSelection(referral.id)} className="w-4 h-4 rounded border-gray-300 text-purple-600 focus:ring-purple-500" /></td>
                                 <td className="px-4 py-2 pl-8">
                                   <div className="flex items-center gap-2">
                                     <span className="text-gray-300">└</span>
-                                    <div className="font-medium text-gray-700">{referral.referredCompany}</div>
+                                    <div className="font-medium text-gray-700 dark:text-zinc-200">{referral.referredCompany}</div>
                                   </div>
                                   {referral.notes && <div className="text-xs text-slate-300 truncate max-w-[200px] ml-5">{referral.notes}</div>}
                                 </td>
-                                <td className="px-4 py-2"><span className="text-slate-400 text-sm">Referred Client</span></td>
+                                <td className="px-4 py-2"><span className="text-slate-500 dark:text-zinc-400 text-sm">Referred Client</span></td>
                                 <td className="px-4 py-2"><span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${REFERRAL_STATUS_COLORS[referral.status].bg} ${REFERRAL_STATUS_COLORS[referral.status].text} border ${REFERRAL_STATUS_COLORS[referral.status].border}`}>{referral.status}</span></td>
                                 <td className="px-4 py-2"><div className="flex flex-wrap gap-1">{referral.currencies.map(curr => (<span key={curr.id} className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs bg-blue-100 text-blue-700">{curr.currency}: <span className="font-mono">{curr.costPercentage}%</span></span>))}</div></td>
-                                <td className="px-4 py-2"><span className="text-slate-300 text-sm">—</span></td>
+                                <td className="px-4 py-2"><span className="text-slate-400 dark:text-zinc-600 text-sm">—</span></td>
                                 <td className="px-4 py-2"><div className="flex justify-end gap-2"><button onClick={() => { setEditingReferral(referral); setShowReferralModal(true); }} className="p-1.5 text-slate-400 hover:text-blue-600 hover:bg-gray-100 rounded transition-colors" title="Edit"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg></button><button onClick={() => setDeleteReferralTarget(referral)} className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded transition-colors" title="Delete"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></button></div></td>
                               </tr>
                             );
@@ -4339,19 +4339,19 @@ function App({ currentUser }) {
                       // Orphan referrals (no referrer)
                       if (orphanReferrals.length > 0) {
                         rows.push(
-                          <tr key="orphan-header" className="bg-gray-100">
+                          <tr key="orphan-header" className="bg-gray-100 dark:bg-zinc-800">
                             <td colSpan={7} className="px-4 py-2 text-xs font-semibold text-slate-400 uppercase tracking-wider">Unassigned Referrals ({orphanReferrals.length})</td>
                           </tr>
                         );
                         orphanReferrals.forEach(referral => {
                           rows.push(
-                            <tr key={referral.id} className={`bg-white hover:bg-gray-50 transition-colors cursor-pointer ${selectedReferrals.includes(referral.id) ? 'bg-purple-50' : ''}`} onContextMenu={(e) => handleReferralContextMenu(e, referral)}>
+                            <tr key={referral.id} className={`bg-white dark:bg-zinc-900 hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors cursor-pointer ${selectedReferrals.includes(referral.id) ? 'bg-purple-50 dark:bg-purple-950' : ''}`} onContextMenu={(e) => handleReferralContextMenu(e, referral)}>
                               <td className="px-3 py-3" onClick={(e) => e.stopPropagation()}><input type="checkbox" checked={selectedReferrals.includes(referral.id)} onChange={() => toggleReferralSelection(referral.id)} className="w-4 h-4 rounded border-gray-300 text-purple-600 focus:ring-purple-500" /></td>
-                              <td className="px-4 py-3"><div className="font-medium text-gray-800">{referral.referredCompany}</div>{referral.notes && <div className="text-xs text-slate-300 truncate max-w-[200px]">{referral.notes}</div>}</td>
-                              <td className="px-4 py-3"><span className="text-slate-300">No referrer</span></td>
+                              <td className="px-4 py-3"><div className="font-medium text-gray-800 dark:text-zinc-200">{referral.referredCompany}</div>{referral.notes && <div className="text-xs text-slate-400 dark:text-zinc-500 truncate max-w-[200px]">{referral.notes}</div>}</td>
+                              <td className="px-4 py-3"><span className="text-slate-400 dark:text-zinc-500">No referrer</span></td>
                               <td className="px-4 py-3"><span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${REFERRAL_STATUS_COLORS[referral.status].bg} ${REFERRAL_STATUS_COLORS[referral.status].text} border ${REFERRAL_STATUS_COLORS[referral.status].border}`}>{referral.status}</span></td>
                               <td className="px-4 py-3"><div className="flex flex-wrap gap-1">{referral.currencies.map(curr => (<span key={curr.id} className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs bg-blue-100 text-blue-700">{curr.currency}: <span className="font-mono">{curr.costPercentage}%</span></span>))}</div></td>
-                              <td className="px-4 py-3"><span className="text-slate-300 text-sm">—</span></td>
+                              <td className="px-4 py-3"><span className="text-slate-400 dark:text-zinc-600 text-sm">—</span></td>
                               <td className="px-4 py-3"><div className="flex justify-end gap-2"><button onClick={() => { setEditingReferral(referral); setShowReferralModal(true); }} className="p-1.5 text-slate-400 hover:text-blue-600 hover:bg-gray-100 rounded transition-colors" title="Edit"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg></button><button onClick={() => setDeleteReferralTarget(referral)} className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded transition-colors" title="Delete"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></button></div></td>
                             </tr>
                           );
@@ -4366,7 +4366,7 @@ function App({ currentUser }) {
                       const referrer = referrers.find(r => r.id === referral.referrerId);
                       const referrerReferralCount = referrals.filter(r => r.referrerId === referral.referrerId).length;
                       return (
-                        <tr key={referral.id} className={`hover:bg-gray-50/50 transition-colors cursor-pointer ${selectedReferrals.includes(referral.id) ? 'bg-gray-50' : ''}`} onContextMenu={(e) => handleReferralContextMenu(e, referral)}>
+                        <tr key={referral.id} className={`hover:bg-gray-50/50 dark:hover:bg-zinc-800 transition-colors cursor-pointer ${selectedReferrals.includes(referral.id) ? 'bg-gray-50 dark:bg-zinc-800' : ''}`} onContextMenu={(e) => handleReferralContextMenu(e, referral)}>
                           <td className="px-3 py-3" onClick={(e) => e.stopPropagation()}>
                             <input
                               type="checkbox"
@@ -4376,8 +4376,8 @@ function App({ currentUser }) {
                             />
                           </td>
                           <td className="px-4 py-3">
-                            <div className="font-medium text-gray-800">{referral.referredCompany}</div>
-                            {referral.notes && <div className="text-xs text-slate-300 truncate max-w-[200px]">{referral.notes}</div>}
+                            <div className="font-medium text-gray-800 dark:text-zinc-200">{referral.referredCompany}</div>
+                            {referral.notes && <div className="text-xs text-slate-400 dark:text-zinc-500 truncate max-w-[200px]">{referral.notes}</div>}
                           </td>
                           <td className="px-4 py-3">
                             {referrer ? (
@@ -4392,9 +4392,9 @@ function App({ currentUser }) {
                                 </svg>
                               </button>
                             ) : (
-                              <span className="text-slate-300">Unknown</span>
+                              <span className="text-slate-400 dark:text-zinc-500">Unknown</span>
                             )}
-                            <div className="text-xs text-slate-400">{referrer?.type} • {referrerReferralCount} referral{referrerReferralCount !== 1 ? 's' : ''}</div>
+                            <div className="text-xs text-slate-500 dark:text-zinc-500">{referrer?.type} • {referrerReferralCount} referral{referrerReferralCount !== 1 ? 's' : ''}</div>
                           </td>
                           <td className="px-4 py-3">
                             <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${REFERRAL_STATUS_COLORS[referral.status].bg} ${REFERRAL_STATUS_COLORS[referral.status].text} border ${REFERRAL_STATUS_COLORS[referral.status].border}`}>
@@ -4419,7 +4419,7 @@ function App({ currentUser }) {
                                 <span className="font-mono">{referrer.feeSplitPercentage}%</span>
                               </span>
                             ) : (
-                              <span className="text-slate-300 text-sm">Not set</span>
+                              <span className="text-slate-400 dark:text-zinc-600 text-sm">Not set</span>
                             )}
                           </td>
                           <td className="px-4 py-3">
