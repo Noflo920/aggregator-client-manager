@@ -137,10 +137,43 @@
         ::-webkit-scrollbar-thumb { background: #3f3f46; }
         ::-webkit-scrollbar-thumb:hover { background: #2970FF; }
 
-        /* Dark Mode overrides */
+        /* ============================================ */
+        /* LIGHT MODE (default) */
+        /* ============================================ */
+        body { background: #f8fafc; }
+        .geo-bg { background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); }
+        .glass-header { background: white; border-bottom: 1px solid #e2e8f0; }
+        .glass-card { background: white; border: 1px solid #e2e8f0; }
+        .stat-card { background: white; border: 1px solid #e2e8f0; }
+        .stat-card:hover { border-color: #2970FF; box-shadow: 0 4px 20px rgba(41, 112, 255, 0.15); }
+        tbody tr { background: white; border-bottom: 1px solid #e2e8f0; }
+        tbody tr:hover { background: #f8fafc !important; }
+        thead { background: #f8fafc; }
+        thead th { border-bottom: 2px solid #2970FF; color: #334155; }
+        .filter-pill { background: #f1f5f9; border: 1px solid #e2e8f0; }
+        .filter-pill:hover { border-color: #cbd5e1; }
+        .filter-pill.active { background: #2970FF; border-color: #2970FF; color: white; }
+        .accent-line { background: linear-gradient(90deg, transparent, #2970FF, #84ADFF, transparent); }
+        input, select, textarea { background: white; border: 1px solid #e2e8f0; color: #1e293b; }
+        input::placeholder { color: #94a3b8; }
+        input:focus, select:focus, textarea:focus { border-color: #2970FF; outline: none; box-shadow: 0 0 0 2px rgba(41, 112, 255, 0.2); }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; }
+        ::-webkit-scrollbar-thumb:hover { background: #2970FF; }
+
+        /* Light mode logo visibility */
+        .logo-dark { display: block; }
+        .logo-light { display: none; }
+
+        /* ============================================ */
+        /* DARK MODE */
+        /* ============================================ */
         .dark body { background: #09090b; }
+        .dark .geo-bg { background: linear-gradient(135deg, transparent 40%, rgba(41, 112, 255, 0.03) 100%), linear-gradient(to bottom, #09090b 0%, #0c0c0e 100%); }
+        .dark .glass-header { background: #0c0c0e; border-bottom: 1px solid #27272a; }
         .dark .glass-card { background: #18181b; border-color: #27272a; }
         .dark .stat-card { background: linear-gradient(135deg, #18181b 0%, #1c1c1f 100%); border-color: #27272a; }
+        .dark .stat-card:hover { border-color: #2970FF; box-shadow: 0 0 30px rgba(41, 112, 255, 0.15); }
         .dark .bg-white { background: #18181b !important; }
         .dark .text-gray-900 { color: #fafafa !important; }
         .dark .text-gray-800 { color: #e4e4e7 !important; }
@@ -153,11 +186,20 @@
         .dark .hover\:bg-gray-50:hover { background: #27272a !important; }
         .dark .hover\:bg-gray-100:hover { background: #27272a !important; }
         .dark thead { background: #0c0c0e !important; }
-        .dark tbody tr { background: #18181b; }
+        .dark thead th { color: #a1a1aa; }
+        .dark tbody tr { background: #18181b; border-bottom: 1px solid #27272a; }
         .dark tbody tr:hover { background: #1f1f23 !important; }
-        .dark input, .dark select, .dark textarea { background: #0c0c0e; border: 1px solid #27272a; color: #fafafa; border-radius: 0; }
+        .dark input, .dark select, .dark textarea { background: #0c0c0e; border: 1px solid #27272a; color: #fafafa; }
         .dark input::placeholder { color: #71717a; }
         .dark input:focus, .dark select:focus, .dark textarea:focus { border-color: #2970FF; outline: none; box-shadow: 0 0 0 1px #2970FF; }
+        .dark .filter-pill { background: #18181b; border: 1px solid #27272a; }
+        .dark .filter-pill:hover { border-color: #3f3f46; }
+        .dark ::-webkit-scrollbar-track { background: #18181b; }
+        .dark ::-webkit-scrollbar-thumb { background: #3f3f46; }
+
+        /* Dark mode logo visibility */
+        .dark .logo-dark { display: none; }
+        .dark .logo-light { display: block; }
 
         /* Kanban styles */
         .kanban-column { min-height: 400px; background: #18181b; border: 1px solid #27272a; }
@@ -1895,7 +1937,7 @@ function ReferralStatsBar({ referrers, referrals }) {
           </div>
           <div>
             <p className="text-[10px] text-[#84ADFF] uppercase tracking-[0.15em] font-bold">Partners</p>
-            <p className="text-2xl font-black font-mono text-white">{stats.totalReferrers}</p>
+            <p className="text-2xl font-black font-mono text-gray-900 dark:text-white">{stats.totalReferrers}</p>
           </div>
         </div>
       </div>
@@ -1903,14 +1945,14 @@ function ReferralStatsBar({ referrers, referrals }) {
       {/* Referrals */}
       <div className="stat-card p-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-[#27272a] flex items-center justify-center">
+          <div className="w-10 h-10 bg-gray-100 dark:bg-[#27272a] flex items-center justify-center">
             <svg className="w-5 h-5 text-[#84ADFF]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
               <path strokeLinecap="square" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
             </svg>
           </div>
           <div>
-            <p className="text-[10px] text-[#71717a] uppercase tracking-[0.15em] font-bold">Referrals</p>
-            <p className="text-2xl font-black font-mono text-white">{stats.totalReferrals}</p>
+            <p className="text-[10px] text-gray-500 dark:text-[#71717a] uppercase tracking-[0.15em] font-bold">Referrals</p>
+            <p className="text-2xl font-black font-mono text-gray-900 dark:text-white">{stats.totalReferrals}</p>
           </div>
         </div>
       </div>
@@ -1918,13 +1960,13 @@ function ReferralStatsBar({ referrers, referrals }) {
       {/* Active */}
       <div className="stat-card p-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-[#27272a] flex items-center justify-center">
+          <div className="w-10 h-10 bg-gray-100 dark:bg-[#27272a] flex items-center justify-center">
             <svg className="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
               <path strokeLinecap="square" d="M5 13l4 4L19 7" />
             </svg>
           </div>
           <div>
-            <p className="text-[10px] text-[#71717a] uppercase tracking-[0.15em] font-bold">Active</p>
+            <p className="text-[10px] text-gray-500 dark:text-[#71717a] uppercase tracking-[0.15em] font-bold">Active</p>
             <p className="text-2xl font-black font-mono text-emerald-500">{stats.statusCounts['Active']}</p>
           </div>
         </div>
@@ -1933,13 +1975,13 @@ function ReferralStatsBar({ referrers, referrals }) {
       {/* Pending */}
       <div className="stat-card p-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-[#27272a] flex items-center justify-center">
+          <div className="w-10 h-10 bg-gray-100 dark:bg-[#27272a] flex items-center justify-center">
             <svg className="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
               <path strokeLinecap="square" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
           <div>
-            <p className="text-[10px] text-[#71717a] uppercase tracking-[0.15em] font-bold">Pending</p>
+            <p className="text-[10px] text-gray-500 dark:text-[#71717a] uppercase tracking-[0.15em] font-bold">Pending</p>
             <p className="text-2xl font-black font-mono text-amber-500">{stats.statusCounts['Pending']}</p>
           </div>
         </div>
@@ -1948,13 +1990,13 @@ function ReferralStatsBar({ referrers, referrals }) {
       {/* Inactive */}
       <div className="stat-card p-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-[#27272a] flex items-center justify-center">
+          <div className="w-10 h-10 bg-gray-100 dark:bg-[#27272a] flex items-center justify-center">
             <svg className="w-5 h-5 text-[#71717a]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
               <path strokeLinecap="square" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
             </svg>
           </div>
           <div>
-            <p className="text-[10px] text-[#71717a] uppercase tracking-[0.15em] font-bold">Inactive</p>
+            <p className="text-[10px] text-gray-500 dark:text-[#71717a] uppercase tracking-[0.15em] font-bold">Inactive</p>
             <p className="text-2xl font-black font-mono text-[#71717a]">{stats.statusCounts['Inactive']}</p>
           </div>
         </div>
@@ -1963,13 +2005,13 @@ function ReferralStatsBar({ referrers, referrals }) {
       {/* Avg Cost */}
       <div className="stat-card p-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-[#27272a] flex items-center justify-center">
+          <div className="w-10 h-10 bg-gray-100 dark:bg-[#27272a] flex items-center justify-center">
             <svg className="w-5 h-5 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
               <path strokeLinecap="square" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
             </svg>
           </div>
           <div>
-            <p className="text-[10px] text-[#71717a] uppercase tracking-[0.15em] font-bold">Avg Cost</p>
+            <p className="text-[10px] text-gray-500 dark:text-[#71717a] uppercase tracking-[0.15em] font-bold">Avg Cost</p>
             <p className="text-2xl font-black font-mono text-orange-500">{stats.avgCost}%</p>
           </div>
         </div>
@@ -2305,14 +2347,14 @@ function StatsBar({ clients, onFilterClick, activeFilter }) {
       {/* Total Clients */}
       <button onClick={() => onFilterClick('all')} className={`stat-card p-4 text-left cursor-pointer transition-all ${!activeFilter ? 'border-[#2970FF] bg-[#2970FF]/5' : 'hover:border-[#3f3f46]'}`}>
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-[#27272a] flex items-center justify-center">
+          <div className="w-10 h-10 bg-gray-100 dark:bg-[#27272a] flex items-center justify-center">
             <svg className="w-5 h-5 text-[#84ADFF]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
               <path strokeLinecap="square" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
           </div>
           <div>
-            <p className="text-[10px] text-[#71717a] uppercase tracking-[0.15em] font-bold">Clients</p>
-            <p className="text-2xl font-black font-mono text-white">{stats.total}</p>
+            <p className="text-[10px] text-gray-500 dark:text-[#71717a] uppercase tracking-[0.15em] font-bold">Clients</p>
+            <p className="text-2xl font-black font-mono text-gray-900 dark:text-white">{stats.total}</p>
           </div>
         </div>
       </button>
@@ -2327,7 +2369,7 @@ function StatsBar({ clients, onFilterClick, activeFilter }) {
           </div>
           <div>
             <p className="text-[10px] text-[#84ADFF] uppercase tracking-[0.15em] font-bold">Pipeline</p>
-            <p className="text-3xl font-black font-mono text-white">{formatVolume(stats.totalVolume)}</p>
+            <p className="text-3xl font-black font-mono text-gray-900 dark:text-white">{formatVolume(stats.totalVolume)}</p>
           </div>
         </div>
       </div>
@@ -2335,13 +2377,13 @@ function StatsBar({ clients, onFilterClick, activeFilter }) {
       {/* Pending */}
       <button onClick={() => onFilterClick('Pending')} className={`stat-card p-4 text-left cursor-pointer transition-all ${isActive('Pending') ? 'border-amber-500 bg-amber-500/10' : 'hover:border-[#3f3f46]'}`}>
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-[#27272a] flex items-center justify-center">
+          <div className="w-10 h-10 bg-gray-100 dark:bg-[#27272a] flex items-center justify-center">
             <svg className="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
               <path strokeLinecap="square" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
           <div>
-            <p className="text-[10px] text-[#71717a] uppercase tracking-[0.15em] font-bold">Pending</p>
+            <p className="text-[10px] text-gray-500 dark:text-[#71717a] uppercase tracking-[0.15em] font-bold">Pending</p>
             <p className="text-2xl font-black font-mono text-amber-500">{stats.kybCounts['Pending']}</p>
           </div>
         </div>
@@ -2350,13 +2392,13 @@ function StatsBar({ clients, onFilterClick, activeFilter }) {
       {/* In Review */}
       <button onClick={() => onFilterClick('In Review')} className={`stat-card p-4 text-left cursor-pointer transition-all ${isActive('In Review') ? 'border-blue-500 bg-blue-500/10' : 'hover:border-[#3f3f46]'}`}>
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-[#27272a] flex items-center justify-center">
+          <div className="w-10 h-10 bg-gray-100 dark:bg-[#27272a] flex items-center justify-center">
             <svg className="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
               <path strokeLinecap="square" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
             </svg>
           </div>
           <div>
-            <p className="text-[10px] text-[#71717a] uppercase tracking-[0.15em] font-bold">In Review</p>
+            <p className="text-[10px] text-gray-500 dark:text-[#71717a] uppercase tracking-[0.15em] font-bold">In Review</p>
             <p className="text-2xl font-black font-mono text-blue-500">{stats.kybCounts['In Review']}</p>
           </div>
         </div>
@@ -2365,13 +2407,13 @@ function StatsBar({ clients, onFilterClick, activeFilter }) {
       {/* Approved */}
       <button onClick={() => onFilterClick('Approved')} className={`stat-card p-4 text-left cursor-pointer transition-all ${isActive('Approved') ? 'border-emerald-500 bg-emerald-500/10' : 'hover:border-[#3f3f46]'}`}>
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-[#27272a] flex items-center justify-center">
+          <div className="w-10 h-10 bg-gray-100 dark:bg-[#27272a] flex items-center justify-center">
             <svg className="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
               <path strokeLinecap="square" d="M5 13l4 4L19 7" />
             </svg>
           </div>
           <div>
-            <p className="text-[10px] text-[#71717a] uppercase tracking-[0.15em] font-bold">Approved</p>
+            <p className="text-[10px] text-gray-500 dark:text-[#71717a] uppercase tracking-[0.15em] font-bold">Approved</p>
             <p className="text-2xl font-black font-mono text-emerald-500">{stats.kybCounts['Approved']}</p>
           </div>
         </div>
@@ -2380,13 +2422,13 @@ function StatsBar({ clients, onFilterClick, activeFilter }) {
       {/* Rejected */}
       <button onClick={() => onFilterClick('Rejected')} className={`stat-card p-4 text-left cursor-pointer transition-all ${isActive('Rejected') ? 'border-red-500 bg-red-500/10' : 'hover:border-[#3f3f46]'}`}>
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-[#27272a] flex items-center justify-center">
+          <div className="w-10 h-10 bg-gray-100 dark:bg-[#27272a] flex items-center justify-center">
             <svg className="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
               <path strokeLinecap="square" d="M6 18L18 6M6 6l12 12" />
             </svg>
           </div>
           <div>
-            <p className="text-[10px] text-[#71717a] uppercase tracking-[0.15em] font-bold">Rejected</p>
+            <p className="text-[10px] text-gray-500 dark:text-[#71717a] uppercase tracking-[0.15em] font-bold">Rejected</p>
             <p className="text-2xl font-black font-mono text-red-500">{stats.kybCounts['Rejected']}</p>
           </div>
         </div>
@@ -2395,13 +2437,13 @@ function StatsBar({ clients, onFilterClick, activeFilter }) {
       {/* Missing KYB */}
       <button onClick={() => onFilterClick('missing')} className={`stat-card p-4 text-left cursor-pointer transition-all ${isActive('missing') ? 'border-violet-500 bg-violet-500/10' : 'hover:border-[#3f3f46]'}`}>
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-[#27272a] flex items-center justify-center">
+          <div className="w-10 h-10 bg-gray-100 dark:bg-[#27272a] flex items-center justify-center">
             <svg className="w-5 h-5 text-violet-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
               <path strokeLinecap="square" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
             </svg>
           </div>
           <div>
-            <p className="text-[10px] text-[#71717a] uppercase tracking-[0.15em] font-bold">Needs KYB</p>
+            <p className="text-[10px] text-gray-500 dark:text-[#71717a] uppercase tracking-[0.15em] font-bold">Needs KYB</p>
             <p className="text-2xl font-black font-mono text-violet-500">{stats.missingKyb}</p>
           </div>
         </div>
@@ -3378,80 +3420,90 @@ function App({ currentUser }) {
         .animate-draw-line { stroke-dasharray: 200; animation: drawLine 0.4s ease-out forwards; }
       `}</style>
 
-      <header className="glass-header text-white sticky top-0 z-30">
+      <header className={`glass-header sticky top-0 z-30 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
         {/* Accent line at top */}
         <div className="accent-line"></div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-6">
-            {/* SpherePay Logo */}
+            {/* SpherePay Logo - SVG inline for color control */}
             <div className="flex items-center gap-3">
-              <img
-                src="https://cdn.prod.website-files.com/6867d3933e172481e1e652b1/6976787f7e997eae28421e33_SpherePay_Light.svg"
-                alt="SpherePay"
-                className="h-8"
-              />
-              <div className="hidden sm:block border-l border-[#27272a] pl-3">
-                <p className="text-[10px] text-[#84ADFF] font-bold tracking-[0.15em] uppercase">Client Manager</p>
+              <svg className="h-8" viewBox="0 0 200 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+                {/* Sphere icon */}
+                <circle cx="19" cy="19" r="17.5" fill="white" stroke={darkMode ? "#27272a" : "#e2e8f0"} strokeWidth="1"/>
+                <defs>
+                  <linearGradient id="sphereGrad" x1="6" y1="8" x2="32" y2="36" gradientUnits="userSpaceOnUse">
+                    <stop stopColor="#2970FF"/>
+                    <stop offset="1" stopColor="#DDEDFF"/>
+                  </linearGradient>
+                </defs>
+                <path d="M19 2C9.06 2 1 10.06 1 20s8.06 18 18 18 18-8.06 18-18S28.94 2 19 2zm16.8 18.8c-.5.9-1.2 1.9-2.2 2.9-2.8 3-7 5.6-11.8 7.3-3.8 1.4-7.6 2.1-11.1 2.1-2.4 0-4.6-.4-6.5-1.4 3.3 4 8.3 6.5 13.8 6.5 10.1 0 18.3-8 18.3-18.1 0-.1 0-.2 0-.3zM19 4c9.9 0 17.9 7.9 17.9 17.7 0 2.1-.4 4.1-1 5.9-.5 1.4-1.6 2.4-3.3 3.2-1.6.7-3.7 1.1-6 1.1-3.1 0-6.7-.6-10.4-2.4-4.6-1.7-8.5-4.2-11-6.8-2.3-2.6-3.4-5.4-2.5-8.4C5.2 7.2 11.7 4.2 19.3 4H19z" fill="url(#sphereGrad)"/>
+                {/* "sphere" text */}
+                <text x="44" y="26" fontFamily="Inter, sans-serif" fontSize="22" fontWeight="800" fill={darkMode ? "white" : "#0f172a"}>sphere</text>
+                {/* "PAY" text */}
+                <text x="138" y="26" fontFamily="Inter, sans-serif" fontSize="22" fontWeight="800" fill="#84ADFF">PAY</text>
+              </svg>
+              <div className={`hidden sm:block border-l pl-3 ${darkMode ? 'border-[#27272a]' : 'border-gray-200'}`}>
+                <p className="text-[10px] text-[#2970FF] font-bold tracking-[0.15em] uppercase">Client Manager</p>
               </div>
             </div>
             {/* Navigation Tabs */}
-            <div className="flex border border-[#27272a]">
+            <div className={`flex border ${darkMode ? 'border-[#27272a]' : 'border-gray-200'}`}>
               <button
                 onClick={() => setViewMode('clients')}
-                className={`px-5 py-2.5 text-xs font-bold uppercase tracking-wider transition-all duration-150 flex items-center gap-2 ${viewMode === 'clients' ? 'bg-[#2970FF] text-white' : 'text-[#71717a] hover:text-white hover:bg-[#27272a]'}`}
+                className={`px-5 py-2.5 text-xs font-bold uppercase tracking-wider transition-all duration-150 flex items-center gap-2 ${viewMode === 'clients' ? 'bg-[#2970FF] text-white' : darkMode ? 'text-[#71717a] hover:text-white hover:bg-[#27272a]' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-100'}`}
               >
                 Clients
-                <span className={`font-mono text-xs ${viewMode === 'clients' ? 'text-white/70' : 'text-[#84ADFF]'}`}>{clients.length}</span>
+                <span className={`font-mono text-xs ${viewMode === 'clients' ? 'text-white/70' : 'text-[#2970FF]'}`}>{clients.length}</span>
               </button>
               <button
                 onClick={() => setViewMode('referrals')}
-                className={`px-5 py-2.5 text-xs font-bold uppercase tracking-wider transition-all duration-150 flex items-center gap-2 border-l border-[#27272a] ${viewMode === 'referrals' ? 'bg-[#2970FF] text-white' : 'text-[#71717a] hover:text-white hover:bg-[#27272a]'}`}
+                className={`px-5 py-2.5 text-xs font-bold uppercase tracking-wider transition-all duration-150 flex items-center gap-2 border-l ${darkMode ? 'border-[#27272a]' : 'border-gray-200'} ${viewMode === 'referrals' ? 'bg-[#2970FF] text-white' : darkMode ? 'text-[#71717a] hover:text-white hover:bg-[#27272a]' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-100'}`}
               >
                 Referrals
-                <span className={`font-mono text-xs ${viewMode === 'referrals' ? 'text-white/70' : 'text-[#84ADFF]'}`}>{referrals.length}</span>
+                <span className={`font-mono text-xs ${viewMode === 'referrals' ? 'text-white/70' : 'text-[#2970FF]'}`}>{referrals.length}</span>
               </button>
             </div>
           </div>
           <div className="flex items-center gap-3">
-            {/* Real-time sync indicator - sharp style */}
-            <div className="hidden md:flex items-center gap-2 text-[#a1a1aa] text-xs bg-[#18181b] px-3 py-2 border border-[#27272a]">
+            {/* Real-time sync indicator */}
+            <div className={`hidden md:flex items-center gap-2 text-xs px-3 py-2 border ${darkMode ? 'text-[#a1a1aa] bg-[#18181b] border-[#27272a]' : 'text-gray-500 bg-gray-50 border-gray-200'}`}>
               <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full bg-[#2970FF] opacity-75"></span>
-                <span className="relative inline-flex h-2 w-2 bg-[#2970FF]"></span>
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#2970FF] opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#2970FF]"></span>
               </span>
               <span className="font-bold uppercase tracking-wider">Live</span>
             </div>
-            {/* Dark mode toggle - sharp style */}
+            {/* Dark mode toggle */}
             <button
               onClick={() => setDarkMode(!darkMode)}
-              className="p-2 hover:bg-[#27272a] border border-transparent hover:border-[#27272a] transition-all duration-150 text-[#71717a] hover:text-white"
+              className={`p-2 border border-transparent transition-all duration-150 ${darkMode ? 'hover:bg-[#27272a] hover:border-[#27272a] text-[#71717a] hover:text-white' : 'hover:bg-gray-100 hover:border-gray-200 text-gray-500 hover:text-gray-900'}`}
               title={darkMode ? "Switch to light mode" : "Switch to dark mode"}
             >
               {darkMode ? (
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="square" strokeLinejoin="miter" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
                 </svg>
               ) : (
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="square" strokeLinejoin="miter" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
                 </svg>
               )}
             </button>
-            {/* User info and logout - sharp style */}
-            <div className="flex items-center gap-2 bg-[#18181b] px-3 py-2 border border-[#27272a]">
+            {/* User info and logout */}
+            <div className={`flex items-center gap-2 px-3 py-2 border ${darkMode ? 'bg-[#18181b] border-[#27272a]' : 'bg-gray-50 border-gray-200'}`}>
               <img
                 src={currentUser?.photoURL || 'https://www.gravatar.com/avatar/?d=mp'}
                 alt={currentUser?.displayName || 'User'}
-                className="w-7 h-7 border border-[#27272a]"
+                className={`w-7 h-7 rounded border ${darkMode ? 'border-[#27272a]' : 'border-gray-200'}`}
               />
-              <span className="hidden sm:inline text-xs font-bold uppercase tracking-wider text-[#a1a1aa]">{currentUser?.email?.split('@')[0]}</span>
+              <span className={`hidden sm:inline text-xs font-bold uppercase tracking-wider ${darkMode ? 'text-[#a1a1aa]' : 'text-gray-500'}`}>{currentUser?.email?.split('@')[0]}</span>
               <button
                 onClick={handleLogout}
-                className="p-1.5 hover:bg-[#27272a] transition-all duration-150 text-[#71717a] hover:text-red-500"
+                className={`p-1.5 transition-all duration-150 hover:text-red-500 ${darkMode ? 'hover:bg-[#27272a] text-[#71717a]' : 'hover:bg-gray-200 text-gray-400'}`}
                 title="Sign out"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="square" strokeLinejoin="miter" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                 </svg>
               </button>
             </div>
@@ -3577,7 +3629,7 @@ function App({ currentUser }) {
                 </button>
               </div>
             )}
-            <div className="p-4 border-b border-[#27272a] flex flex-wrap gap-3 items-center bg-[#0c0c0e]">
+            <div className="p-4 border-b border-gray-200 dark:border-[#27272a] flex flex-wrap gap-3 items-center bg-gray-50 dark:bg-[#0c0c0e]">
               <div className="flex-1 min-w-[200px]">
                 <div className="relative">
                   <svg className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[#71717a]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -3588,7 +3640,7 @@ function App({ currentUser }) {
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                     placeholder="SEARCH BY NAME OR CURRENCY... (⌘F)"
-                    className="w-full pl-10 pr-4 py-2.5 bg-[#18181b] border border-[#27272a] text-white text-sm placeholder-[#52525b] focus:border-[#2970FF] focus:ring-0 outline-none transition-colors"
+                    className="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-[#18181b] border border-gray-200 dark:border-[#27272a] text-gray-900 dark:text-white text-sm placeholder-gray-400 dark:placeholder-[#52525b] focus:border-[#2970FF] focus:ring-0 outline-none transition-colors"
                   />
                 </div>
               </div>
@@ -3625,7 +3677,7 @@ function App({ currentUser }) {
                   setFilters({ ...filters, kybStatus: e.target.value });
                   setActiveStatFilter(e.target.value || null);
                 }}
-                className="px-3 py-2.5 bg-[#18181b] border border-[#27272a] text-white text-xs font-bold uppercase tracking-wider focus:border-[#2970FF] outline-none cursor-pointer"
+                className="px-3 py-2.5 bg-white dark:bg-[#18181b] border border-gray-200 dark:border-[#27272a] text-gray-900 dark:text-white text-xs font-bold uppercase tracking-wider focus:border-[#2970FF] outline-none cursor-pointer"
               >
                 <option value="">All Status</option>
                 {KYB_STATUSES.map(s => <option key={s} value={s}>{s}</option>)}
@@ -3633,7 +3685,7 @@ function App({ currentUser }) {
               <select
                 value={filters.type}
                 onChange={(e) => setFilters({ ...filters, type: e.target.value })}
-                className="px-3 py-2.5 bg-[#18181b] border border-[#27272a] text-white text-xs font-bold uppercase tracking-wider focus:border-[#2970FF] outline-none cursor-pointer"
+                className="px-3 py-2.5 bg-white dark:bg-[#18181b] border border-gray-200 dark:border-[#27272a] text-gray-900 dark:text-white text-xs font-bold uppercase tracking-wider focus:border-[#2970FF] outline-none cursor-pointer"
               >
                 <option value="">All Types</option>
                 {CLIENT_TYPES.map(t => <option key={t} value={t}>{t}</option>)}
@@ -3641,21 +3693,21 @@ function App({ currentUser }) {
               <select
                 value={filters.priority}
                 onChange={(e) => setFilters({ ...filters, priority: e.target.value })}
-                className="px-3 py-2.5 bg-[#18181b] border border-[#27272a] text-white text-xs font-bold uppercase tracking-wider focus:border-[#2970FF] outline-none cursor-pointer"
+                className="px-3 py-2.5 bg-white dark:bg-[#18181b] border border-gray-200 dark:border-[#27272a] text-gray-900 dark:text-white text-xs font-bold uppercase tracking-wider focus:border-[#2970FF] outline-none cursor-pointer"
               >
                 <option value="">All Priorities</option>
                 {PRIORITIES.map(p => <option key={p} value={p}>{p}</option>)}
               </select>
               <div className="flex gap-2">
-                <button onClick={handleExport} className="px-4 py-2.5 bg-[#18181b] border border-[#27272a] text-[#a1a1aa] text-xs font-bold uppercase tracking-wider hover:border-[#2970FF] hover:text-[#84ADFF] transition-colors flex items-center gap-2">
+                <button onClick={handleExport} className="px-4 py-2.5 bg-white dark:bg-[#18181b] border border-gray-200 dark:border-[#27272a] text-gray-500 dark:text-[#a1a1aa] text-xs font-bold uppercase tracking-wider hover:border-[#2970FF] hover:text-[#2970FF] transition-colors flex items-center gap-2">
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="square" strokeLinejoin="miter" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
                   </svg>
                   Export
                 </button>
-                <label className="px-4 py-2.5 bg-[#18181b] border border-[#27272a] text-[#a1a1aa] text-xs font-bold uppercase tracking-wider hover:border-[#2970FF] hover:text-[#84ADFF] transition-colors flex items-center gap-2 cursor-pointer">
+                <label className="px-4 py-2.5 bg-white dark:bg-[#18181b] border border-gray-200 dark:border-[#27272a] text-gray-500 dark:text-[#a1a1aa] text-xs font-bold uppercase tracking-wider hover:border-[#2970FF] hover:text-[#2970FF] transition-colors flex items-center gap-2 cursor-pointer">
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="square" strokeLinejoin="miter" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                   </svg>
                   Import
                   <input type="file" accept=".csv" onChange={handleImport} className="hidden" />
