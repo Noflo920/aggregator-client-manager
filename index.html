@@ -1,10 +1,10 @@
-<!DOCTYPE html> <!-- v7 - Sharp Modern Design -->
+<!DOCTYPE html> <!-- v8 - SpherePay Brand -->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SpherePay • Client Manager</title>
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%2300ff88'/%3E%3Cpath d='M30 50 L45 65 L70 35' stroke='%23000' stroke-width='10' fill='none' stroke-linecap='square' stroke-linejoin='miter'/%3E%3C/svg%3E">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='47' fill='white'/%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%232970FF'/%3E%3Cstop offset='100%25' stop-color='%23DDEDFF'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M50 5C25.1 5 5 25.1 5 50s20.1 45 45 45 45-20.1 45-45S74.9 5 50 5zm42 47c-1.4 2.5-3.3 5-5.6 7.5-7 7.5-17.5 13.9-29.5 18.3-9.4 3.4-19 5.2-27.7 5.3-6.1 0-11.4-.9-16.3-3.4 8.2 9.9 20.6 16.2 34.5 16.2 25.2 0 45.7-20 45.7-45.1 0-.3 0-.6 0-.8zM50 8c24.7 0 44.7 19.9 44.7 44.3 0 5.2-1 10.2-2.6 14.9-1.2 3.4-4.1 6-8.2 8-4 1.8-9.2 2.8-15.1 2.8-7.8 0-16.7-1.6-26-5.9-11.6-4.2-21.3-10.4-27.5-17-5.7-6.6-8.4-13.5-6.3-20.9C15.6 18.5 31.8 8.5 50.8 8H50z' fill='url(%23g)'/%3E%3C/svg%3E">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,7 +14,9 @@
         theme: {
           extend: {
             colors: {
-              accent: '#00ff88',
+              brand: '#2970FF',
+              'brand-light': '#84ADFF',
+              'brand-pale': '#DDEDFF',
               surface: '#18181b',
               base: '#09090b',
               border: '#27272a',
@@ -40,15 +42,15 @@
         }
         .font-mono { font-family: 'JetBrains Mono', monospace; }
 
-        /* Geometric background */
+        /* SpherePay brand background */
         .geo-bg {
           background:
-            linear-gradient(135deg, transparent 40%, rgba(0, 255, 136, 0.02) 100%),
+            linear-gradient(135deg, transparent 40%, rgba(41, 112, 255, 0.03) 100%),
             linear-gradient(to bottom, #09090b 0%, #0c0c0e 100%);
           background-attachment: fixed;
         }
 
-        /* Sharp stat cards */
+        /* Stat cards with SpherePay blue */
         .stat-card {
           transition: all 0.2s ease;
           background: linear-gradient(135deg, #18181b 0%, #1c1c1f 100%);
@@ -57,22 +59,22 @@
         }
         .stat-card:hover {
           transform: translateY(-2px);
-          border-color: #00ff88;
-          box-shadow: 0 0 30px rgba(0, 255, 136, 0.1);
+          border-color: #2970FF;
+          box-shadow: 0 0 30px rgba(41, 112, 255, 0.15);
         }
 
-        /* Gradient text - now green accent */
+        /* Gradient text - SpherePay blue */
         .gradient-text {
-          background: linear-gradient(135deg, #00ff88 0%, #00cc6a 100%);
+          background: linear-gradient(135deg, #2970FF 0%, #84ADFF 100%);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           background-clip: text;
         }
 
-        /* Sharp primary buttons */
+        /* Primary buttons - SpherePay blue */
         .btn-primary {
-          background: #00ff88;
-          color: #000;
+          background: #2970FF;
+          color: #fff;
           font-weight: 700;
           text-transform: uppercase;
           letter-spacing: 0.05em;
@@ -80,24 +82,25 @@
           transition: all 0.2s ease;
         }
         .btn-primary:hover {
-          box-shadow: 0 0 30px rgba(0, 255, 136, 0.4);
+          background: #1a5fe6;
+          box-shadow: 0 0 30px rgba(41, 112, 255, 0.4);
           transform: translateY(-1px);
         }
 
-        /* Sharp header */
+        /* Header */
         .glass-header {
           background: #0c0c0e;
           border-bottom: 1px solid #27272a;
         }
 
-        /* Sharp cards */
+        /* Cards */
         .glass-card {
           background: #18181b;
           border: 1px solid #27272a;
           border-radius: 0;
         }
 
-        /* Filter pills - sharp style */
+        /* Filter pills - SpherePay style */
         .filter-pill {
           background: #18181b;
           border: 1px solid #27272a;
@@ -108,9 +111,9 @@
           border-color: #3f3f46;
         }
         .filter-pill.active {
-          background: #00ff88;
-          border-color: #00ff88;
-          color: #000;
+          background: #2970FF;
+          border-color: #2970FF;
+          color: #fff;
         }
 
         html { scroll-behavior: smooth; }
@@ -122,19 +125,19 @@
         .animate-scale-in { animation: scaleIn 0.15s ease-out; }
         .table-row { animation: fadeIn 0.15s ease-out backwards; }
 
-        /* Table styling - sharp dark */
+        /* Table styling - SpherePay blue accent */
         tbody tr { background: #18181b; border-bottom: 1px solid #27272a; }
         tbody tr:hover { background: #1f1f23 !important; }
         thead { position: sticky; top: 0; z-index: 10; background: #0c0c0e; }
-        thead th { border-bottom: 2px solid #00ff88; }
+        thead th { border-bottom: 2px solid #2970FF; }
 
-        /* Custom scrollbar - sharp */
+        /* Custom scrollbar */
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: #18181b; }
         ::-webkit-scrollbar-thumb { background: #3f3f46; }
-        ::-webkit-scrollbar-thumb:hover { background: #00ff88; }
+        ::-webkit-scrollbar-thumb:hover { background: #2970FF; }
 
-        /* Dark Mode is now default - override for light elements */
+        /* Dark Mode overrides */
         .dark body { background: #09090b; }
         .dark .glass-card { background: #18181b; border-color: #27272a; }
         .dark .stat-card { background: linear-gradient(135deg, #18181b 0%, #1c1c1f 100%); border-color: #27272a; }
@@ -154,15 +157,15 @@
         .dark tbody tr:hover { background: #1f1f23 !important; }
         .dark input, .dark select, .dark textarea { background: #0c0c0e; border: 1px solid #27272a; color: #fafafa; border-radius: 0; }
         .dark input::placeholder { color: #71717a; }
-        .dark input:focus, .dark select:focus, .dark textarea:focus { border-color: #00ff88; outline: none; box-shadow: 0 0 0 1px #00ff88; }
+        .dark input:focus, .dark select:focus, .dark textarea:focus { border-color: #2970FF; outline: none; box-shadow: 0 0 0 1px #2970FF; }
 
-        /* Kanban styles - sharp */
+        /* Kanban styles */
         .kanban-column { min-height: 400px; background: #18181b; border: 1px solid #27272a; }
         .kanban-card { cursor: grab; background: #0c0c0e; border: 1px solid #27272a; border-radius: 0; }
         .kanban-card:active { cursor: grabbing; }
-        .kanban-card:hover { border-color: #00ff88; }
+        .kanban-card:hover { border-color: #2970FF; }
 
-        /* Sharp status badges */
+        /* Status badges */
         .status-badge {
           border-radius: 0;
           font-weight: 600;
@@ -171,14 +174,14 @@
           font-size: 10px;
         }
 
-        /* Accent line animation */
+        /* Accent line - SpherePay blue gradient */
         @keyframes accentPulse {
           0%, 100% { opacity: 0.5; }
           50% { opacity: 1; }
         }
         .accent-line {
           height: 2px;
-          background: linear-gradient(90deg, transparent, #00ff88, transparent);
+          background: linear-gradient(90deg, transparent, #2970FF, #84ADFF, transparent);
         }
     </style>
 </head>
@@ -318,15 +321,14 @@ function LoginScreen({ onLogin }) {
     <div className="min-h-screen geo-bg flex items-center justify-center p-4">
       <div className="bg-[#18181b] border border-[#27272a] max-w-md w-full p-8">
         {/* Accent line */}
-        <div className="h-1 bg-[#00ff88] w-16 mb-8"></div>
+        <div className="h-1 bg-gradient-to-r from-[#2970FF] to-[#84ADFF] w-20 mb-8"></div>
         <div className="mb-8">
-          <div className="w-14 h-14 bg-[#00ff88] flex items-center justify-center mb-6">
-            <svg className="w-8 h-8 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={3}>
-              <path strokeLinecap="square" strokeLinejoin="miter" d="M5 12l5 5L19 7" />
-            </svg>
-          </div>
-          <h1 className="text-2xl font-black text-white mb-2 tracking-tight">SPHEREPAY</h1>
-          <p className="text-[10px] text-[#71717a] font-bold tracking-[0.2em] uppercase">Client Manager</p>
+          <img
+            src="https://cdn.prod.website-files.com/6867d3933e172481e1e652b1/6976787f7e997eae28421e33_SpherePay_Light.svg"
+            alt="SpherePay"
+            className="h-10 mb-6"
+          />
+          <p className="text-[10px] text-[#84ADFF] font-bold tracking-[0.2em] uppercase">Client Manager</p>
         </div>
 
         {error && (
@@ -338,10 +340,10 @@ function LoginScreen({ onLogin }) {
         <button
           onClick={handleGoogleLogin}
           disabled={isLoading}
-          className="w-full flex items-center justify-center gap-3 px-4 py-3.5 bg-[#27272a] border border-[#3f3f46] text-white text-sm font-bold uppercase tracking-wider hover:border-[#00ff88] hover:bg-[#27272a] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full flex items-center justify-center gap-3 px-4 py-3.5 bg-[#27272a] border border-[#3f3f46] text-white text-sm font-bold uppercase tracking-wider hover:border-[#2970FF] hover:bg-[#27272a] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isLoading ? (
-            <div className="w-5 h-5 border-2 border-[#3f3f46] border-t-[#00ff88] animate-spin"></div>
+            <div className="w-5 h-5 border-2 border-[#3f3f46] border-t-[#2970FF] animate-spin"></div>
           ) : (
             <svg className="w-5 h-5" viewBox="0 0 24 24">
               <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -572,7 +574,7 @@ function ClientDetailSidebar({ client, onClose, onEdit, onDelete, formatVolume }
       <div className="relative w-full max-w-md bg-[#18181b] border-l border-[#27272a] animate-slide-in-right overflow-hidden flex flex-col">
         {/* Header - Sharp style */}
         <div className="bg-[#0c0c0e] text-white px-6 py-5 border-b border-[#27272a]">
-          <div className="h-1 bg-[#00ff88] w-12 mb-4"></div>
+          <div className="h-1 bg-gradient-to-r from-[#2970FF] to-[#84ADFF] w-12 mb-4"></div>
           <div className="flex items-start justify-between">
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 mb-2">
@@ -763,7 +765,7 @@ function CommandPalette({ isOpen, onClose, clients, onSelectClient, onAddClient,
       <div className="fixed inset-0 bg-black/80" onClick={onClose}></div>
       <div className="relative w-full max-w-xl bg-[#18181b] border border-[#27272a] overflow-hidden animate-scale-in">
         {/* Accent line at top */}
-        <div className="h-1 bg-[#00ff88]"></div>
+        <div className="h-1 bg-gradient-to-r from-[#2970FF] to-[#84ADFF]"></div>
         {/* Search Input */}
         <div className="flex items-center gap-3 px-4 py-4 border-b border-[#27272a] bg-[#0c0c0e]">
           <svg className="w-5 h-5 text-[#71717a]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -974,7 +976,7 @@ function BulkConfirmModal({ isOpen, onClose, onConfirm, action, count }) {
     <div className="fixed inset-0 z-[80] flex items-center justify-center p-4">
       <div className="fixed inset-0 bg-black/80" onClick={onClose}></div>
       <div className="relative bg-[#18181b] border border-[#27272a] max-w-md w-full p-6 animate-scale-in">
-        <div className="h-1 bg-[#00ff88] w-12 mb-4"></div>
+        <div className="h-1 bg-gradient-to-r from-[#2970FF] to-[#84ADFF] w-12 mb-4"></div>
         <h3 className="text-lg font-black text-white uppercase tracking-wider mb-2">{config.title}</h3>
         <p className="text-[#a1a1aa] mb-6">{config.message}</p>
         <div className="flex justify-end gap-3">
@@ -1262,7 +1264,7 @@ function Modal({ isOpen, onClose, title, children }) {
       <div className="fixed inset-0 bg-black/80 animate-fade-in" onClick={onClose}></div>
       <div className="relative bg-[#18181b] border border-[#27272a] max-w-2xl w-full max-h-[90vh] overflow-hidden animate-scale-in">
         {/* Accent line at top */}
-        <div className="h-1 bg-[#00ff88]"></div>
+        <div className="h-1 bg-gradient-to-r from-[#2970FF] to-[#84ADFF]"></div>
         <div className="sticky top-0 bg-[#18181b] border-b border-[#27272a] px-6 py-4 flex items-center justify-between z-10">
           <h2 className="text-lg font-black text-white uppercase tracking-wider">{title}</h2>
           <button onClick={onClose} className="p-2 hover:bg-[#27272a] transition-all" title="Close (Esc)">
@@ -1812,7 +1814,7 @@ function ReferralForm({ referral, onSave, onClose, allReferrers }) {
             <div key={curr.id} className="flex gap-2 items-start p-3 bg-gray-50 rounded-lg">
               <div className="flex-1">
                 <select value={curr.currency} onChange={(e) => updateCurrency(curr.id, 'currency', e.target.value)}
-                  className="w-full px-3 py-2.5 bg-[#0c0c0e] border border-[#27272a] text-white text-sm focus:border-[#00ff88] focus:ring-0 outline-none transition-colors">
+                  className="w-full px-3 py-2.5 bg-[#0c0c0e] border border-[#27272a] text-white text-sm focus:border-[#2970FF] focus:ring-0 outline-none transition-colors">
                   {CURRENCIES.map(c => <option key={c} value={c}>{c}</option>)}
                 </select>
               </div>
@@ -1884,15 +1886,15 @@ function ReferralStatsBar({ referrers, referrals }) {
   return (
     <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mb-6 animate-fade-in">
       {/* Partners */}
-      <div className="stat-card p-4 border-[#00ff88] bg-[#00ff88]/5">
+      <div className="stat-card p-4 border-[#2970FF] bg-[#2970FF]/5">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-[#00ff88] flex items-center justify-center">
+          <div className="w-10 h-10 bg-[#2970FF] flex items-center justify-center">
             <svg className="w-5 h-5 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
               <path strokeLinecap="square" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
             </svg>
           </div>
           <div>
-            <p className="text-[10px] text-[#00ff88] uppercase tracking-[0.15em] font-bold">Partners</p>
+            <p className="text-[10px] text-[#84ADFF] uppercase tracking-[0.15em] font-bold">Partners</p>
             <p className="text-2xl font-black font-mono text-white">{stats.totalReferrers}</p>
           </div>
         </div>
@@ -1902,7 +1904,7 @@ function ReferralStatsBar({ referrers, referrals }) {
       <div className="stat-card p-4">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 bg-[#27272a] flex items-center justify-center">
-            <svg className="w-5 h-5 text-[#00ff88]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+            <svg className="w-5 h-5 text-[#84ADFF]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
               <path strokeLinecap="square" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
             </svg>
           </div>
@@ -2147,7 +2149,7 @@ function ClientForm({ client, onSave, onClose, allClients }) {
                 <select
                   value={corridor.currency}
                   onChange={(e) => updateCorridor(corridor.id, 'currency', e.target.value)}
-                  className="w-full px-3 py-2.5 bg-[#0c0c0e] border border-[#27272a] text-white text-sm focus:border-[#00ff88] focus:ring-0 outline-none transition-colors"
+                  className="w-full px-3 py-2.5 bg-[#0c0c0e] border border-[#27272a] text-white text-sm focus:border-[#2970FF] focus:ring-0 outline-none transition-colors"
                 >
                   {CURRENCIES.map(c => <option key={c} value={c}>{c}</option>)}
                 </select>
@@ -2158,14 +2160,14 @@ function ClientForm({ client, onSave, onClose, allClients }) {
                   value={corridor.expectedVolume}
                   onChange={(e) => updateCorridor(corridor.id, 'expectedVolume', e.target.value)}
                   placeholder="Volume (USD)"
-                  className="w-full px-3 py-2.5 bg-[#0c0c0e] border border-[#27272a] text-white text-sm font-mono focus:border-[#00ff88] focus:ring-0 outline-none transition-colors"
+                  className="w-full px-3 py-2.5 bg-[#0c0c0e] border border-[#27272a] text-white text-sm font-mono focus:border-[#2970FF] focus:ring-0 outline-none transition-colors"
                 />
               </div>
               <div className="flex-1">
                 <select
                   value={corridor.priority}
                   onChange={(e) => updateCorridor(corridor.id, 'priority', e.target.value)}
-                  className="w-full px-3 py-2.5 bg-[#0c0c0e] border border-[#27272a] text-white text-sm focus:border-[#00ff88] focus:ring-0 outline-none transition-colors"
+                  className="w-full px-3 py-2.5 bg-[#0c0c0e] border border-[#27272a] text-white text-sm focus:border-[#2970FF] focus:ring-0 outline-none transition-colors"
                 >
                   {PRIORITIES.map(p => <option key={p} value={p}>{p}</option>)}
                 </select>
@@ -2301,10 +2303,10 @@ function StatsBar({ clients, onFilterClick, activeFilter }) {
   return (
     <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-8 gap-3 mb-6 animate-slide-up">
       {/* Total Clients */}
-      <button onClick={() => onFilterClick('all')} className={`stat-card p-4 text-left cursor-pointer transition-all ${!activeFilter ? 'border-[#00ff88] bg-[#00ff88]/5' : 'hover:border-[#3f3f46]'}`}>
+      <button onClick={() => onFilterClick('all')} className={`stat-card p-4 text-left cursor-pointer transition-all ${!activeFilter ? 'border-[#2970FF] bg-[#2970FF]/5' : 'hover:border-[#3f3f46]'}`}>
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 bg-[#27272a] flex items-center justify-center">
-            <svg className="w-5 h-5 text-[#00ff88]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+            <svg className="w-5 h-5 text-[#84ADFF]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
               <path strokeLinecap="square" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
           </div>
@@ -2316,15 +2318,15 @@ function StatsBar({ clients, onFilterClick, activeFilter }) {
       </button>
 
       {/* Pipeline Volume - Prominent (not clickable) */}
-      <div className="stat-card p-4 col-span-2 sm:col-span-1 lg:col-span-2 border-[#00ff88] bg-[#00ff88]/5">
+      <div className="stat-card p-4 col-span-2 sm:col-span-1 lg:col-span-2 border-[#2970FF] bg-[#2970FF]/5">
         <div className="flex items-center gap-3">
-          <div className="w-11 h-11 bg-[#00ff88] flex items-center justify-center">
+          <div className="w-11 h-11 bg-[#2970FF] flex items-center justify-center">
             <svg className="w-6 h-6 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
               <path strokeLinecap="square" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
           <div>
-            <p className="text-[10px] text-[#00ff88] uppercase tracking-[0.15em] font-bold">Pipeline</p>
+            <p className="text-[10px] text-[#84ADFF] uppercase tracking-[0.15em] font-bold">Pipeline</p>
             <p className="text-3xl font-black font-mono text-white">{formatVolume(stats.totalVolume)}</p>
           </div>
         </div>
@@ -3381,33 +3383,32 @@ function App({ currentUser }) {
         <div className="accent-line"></div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-6">
-            {/* Sharp geometric logo */}
+            {/* SpherePay Logo */}
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-[#00ff88] flex items-center justify-center">
-                <svg className="w-5 h-5 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={3}>
-                  <path strokeLinecap="square" strokeLinejoin="miter" d="M5 12l5 5L19 7" />
-                </svg>
-              </div>
-              <div className="hidden sm:block">
-                <h1 className="text-lg font-black tracking-tight text-white">SPHEREPAY</h1>
-                <p className="text-[10px] text-[#71717a] font-bold tracking-[0.2em] uppercase">CLIENT MANAGER</p>
+              <img
+                src="https://cdn.prod.website-files.com/6867d3933e172481e1e652b1/6976787f7e997eae28421e33_SpherePay_Light.svg"
+                alt="SpherePay"
+                className="h-8"
+              />
+              <div className="hidden sm:block border-l border-[#27272a] pl-3">
+                <p className="text-[10px] text-[#84ADFF] font-bold tracking-[0.15em] uppercase">Client Manager</p>
               </div>
             </div>
-            {/* Sharp Navigation Tabs */}
+            {/* Navigation Tabs */}
             <div className="flex border border-[#27272a]">
               <button
                 onClick={() => setViewMode('clients')}
-                className={`px-5 py-2.5 text-xs font-bold uppercase tracking-wider transition-all duration-150 flex items-center gap-2 ${viewMode === 'clients' ? 'bg-[#00ff88] text-black' : 'text-[#71717a] hover:text-white hover:bg-[#27272a]'}`}
+                className={`px-5 py-2.5 text-xs font-bold uppercase tracking-wider transition-all duration-150 flex items-center gap-2 ${viewMode === 'clients' ? 'bg-[#2970FF] text-white' : 'text-[#71717a] hover:text-white hover:bg-[#27272a]'}`}
               >
                 Clients
-                <span className={`font-mono text-xs ${viewMode === 'clients' ? 'text-black/70' : 'text-[#00ff88]'}`}>{clients.length}</span>
+                <span className={`font-mono text-xs ${viewMode === 'clients' ? 'text-white/70' : 'text-[#84ADFF]'}`}>{clients.length}</span>
               </button>
               <button
                 onClick={() => setViewMode('referrals')}
-                className={`px-5 py-2.5 text-xs font-bold uppercase tracking-wider transition-all duration-150 flex items-center gap-2 border-l border-[#27272a] ${viewMode === 'referrals' ? 'bg-[#00ff88] text-black' : 'text-[#71717a] hover:text-white hover:bg-[#27272a]'}`}
+                className={`px-5 py-2.5 text-xs font-bold uppercase tracking-wider transition-all duration-150 flex items-center gap-2 border-l border-[#27272a] ${viewMode === 'referrals' ? 'bg-[#2970FF] text-white' : 'text-[#71717a] hover:text-white hover:bg-[#27272a]'}`}
               >
                 Referrals
-                <span className={`font-mono text-xs ${viewMode === 'referrals' ? 'text-black/70' : 'text-[#00ff88]'}`}>{referrals.length}</span>
+                <span className={`font-mono text-xs ${viewMode === 'referrals' ? 'text-white/70' : 'text-[#84ADFF]'}`}>{referrals.length}</span>
               </button>
             </div>
           </div>
@@ -3415,8 +3416,8 @@ function App({ currentUser }) {
             {/* Real-time sync indicator - sharp style */}
             <div className="hidden md:flex items-center gap-2 text-[#a1a1aa] text-xs bg-[#18181b] px-3 py-2 border border-[#27272a]">
               <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full bg-[#00ff88] opacity-75"></span>
-                <span className="relative inline-flex h-2 w-2 bg-[#00ff88]"></span>
+                <span className="animate-ping absolute inline-flex h-full w-full bg-[#2970FF] opacity-75"></span>
+                <span className="relative inline-flex h-2 w-2 bg-[#2970FF]"></span>
               </span>
               <span className="font-bold uppercase tracking-wider">Live</span>
             </div>
@@ -3555,15 +3556,15 @@ function App({ currentUser }) {
           <div className="glass-card animate-fade-in overflow-hidden">
             {/* Active filter indicator - sharp style */}
             {activeStatFilter && (
-              <div className="px-4 py-3 bg-[#00ff88]/10 border-b border-[#00ff88]/30 flex items-center justify-between">
-                <div className="flex items-center gap-2 text-sm text-[#00ff88]">
-                  <div className="w-6 h-6 bg-[#00ff88] flex items-center justify-center">
+              <div className="px-4 py-3 bg-[#2970FF]/10 border-b border-[#2970FF]/30 flex items-center justify-between">
+                <div className="flex items-center gap-2 text-sm text-[#84ADFF]">
+                  <div className="w-6 h-6 bg-[#2970FF] flex items-center justify-center">
                     <svg className="w-3.5 h-3.5 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="square" strokeLinejoin="miter" strokeWidth={2.5} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
                     </svg>
                   </div>
                   <span className="uppercase tracking-wider text-xs font-bold">Filtering: <strong className="text-white">{activeStatFilter === 'missing' ? 'Needs KYB Approval' : activeStatFilter}</strong></span>
-                  <span className="px-2 py-1 bg-[#27272a] text-[#00ff88] text-[10px] font-bold uppercase tracking-wider">{sortedClients.length} results</span>
+                  <span className="px-2 py-1 bg-[#27272a] text-[#84ADFF] text-[10px] font-bold uppercase tracking-wider">{sortedClients.length} results</span>
                 </div>
                 <button
                   onClick={() => handleStatFilterClick('all')}
@@ -3587,7 +3588,7 @@ function App({ currentUser }) {
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                     placeholder="SEARCH BY NAME OR CURRENCY... (⌘F)"
-                    className="w-full pl-10 pr-4 py-2.5 bg-[#18181b] border border-[#27272a] text-white text-sm placeholder-[#52525b] focus:border-[#00ff88] focus:ring-0 outline-none transition-colors"
+                    className="w-full pl-10 pr-4 py-2.5 bg-[#18181b] border border-[#27272a] text-white text-sm placeholder-[#52525b] focus:border-[#2970FF] focus:ring-0 outline-none transition-colors"
                   />
                 </div>
               </div>
@@ -3624,7 +3625,7 @@ function App({ currentUser }) {
                   setFilters({ ...filters, kybStatus: e.target.value });
                   setActiveStatFilter(e.target.value || null);
                 }}
-                className="px-3 py-2.5 bg-[#18181b] border border-[#27272a] text-white text-xs font-bold uppercase tracking-wider focus:border-[#00ff88] outline-none cursor-pointer"
+                className="px-3 py-2.5 bg-[#18181b] border border-[#27272a] text-white text-xs font-bold uppercase tracking-wider focus:border-[#2970FF] outline-none cursor-pointer"
               >
                 <option value="">All Status</option>
                 {KYB_STATUSES.map(s => <option key={s} value={s}>{s}</option>)}
@@ -3632,7 +3633,7 @@ function App({ currentUser }) {
               <select
                 value={filters.type}
                 onChange={(e) => setFilters({ ...filters, type: e.target.value })}
-                className="px-3 py-2.5 bg-[#18181b] border border-[#27272a] text-white text-xs font-bold uppercase tracking-wider focus:border-[#00ff88] outline-none cursor-pointer"
+                className="px-3 py-2.5 bg-[#18181b] border border-[#27272a] text-white text-xs font-bold uppercase tracking-wider focus:border-[#2970FF] outline-none cursor-pointer"
               >
                 <option value="">All Types</option>
                 {CLIENT_TYPES.map(t => <option key={t} value={t}>{t}</option>)}
@@ -3640,19 +3641,19 @@ function App({ currentUser }) {
               <select
                 value={filters.priority}
                 onChange={(e) => setFilters({ ...filters, priority: e.target.value })}
-                className="px-3 py-2.5 bg-[#18181b] border border-[#27272a] text-white text-xs font-bold uppercase tracking-wider focus:border-[#00ff88] outline-none cursor-pointer"
+                className="px-3 py-2.5 bg-[#18181b] border border-[#27272a] text-white text-xs font-bold uppercase tracking-wider focus:border-[#2970FF] outline-none cursor-pointer"
               >
                 <option value="">All Priorities</option>
                 {PRIORITIES.map(p => <option key={p} value={p}>{p}</option>)}
               </select>
               <div className="flex gap-2">
-                <button onClick={handleExport} className="px-4 py-2.5 bg-[#18181b] border border-[#27272a] text-[#a1a1aa] text-xs font-bold uppercase tracking-wider hover:border-[#00ff88] hover:text-[#00ff88] transition-colors flex items-center gap-2">
+                <button onClick={handleExport} className="px-4 py-2.5 bg-[#18181b] border border-[#27272a] text-[#a1a1aa] text-xs font-bold uppercase tracking-wider hover:border-[#2970FF] hover:text-[#84ADFF] transition-colors flex items-center gap-2">
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="square" strokeLinejoin="miter" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
                   </svg>
                   Export
                 </button>
-                <label className="px-4 py-2.5 bg-[#18181b] border border-[#27272a] text-[#a1a1aa] text-xs font-bold uppercase tracking-wider hover:border-[#00ff88] hover:text-[#00ff88] transition-colors flex items-center gap-2 cursor-pointer">
+                <label className="px-4 py-2.5 bg-[#18181b] border border-[#27272a] text-[#a1a1aa] text-xs font-bold uppercase tracking-wider hover:border-[#2970FF] hover:text-[#84ADFF] transition-colors flex items-center gap-2 cursor-pointer">
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="square" strokeLinejoin="miter" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                   </svg>
