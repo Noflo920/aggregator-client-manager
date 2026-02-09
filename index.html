@@ -3584,18 +3584,18 @@ function App({ currentUser }) {
                 </button>
               </div>
             )}
-            <div className="p-4 border-b border-gray-200 dark:border-[#27272a] flex flex-wrap gap-3 items-center bg-gray-50 dark:bg-[#0c0c0e]">
+            <div className="p-4 border-b border-gray-200 dark:border-[#27272a] flex flex-wrap gap-3 items-center bg-white dark:bg-[#0c0c0e]">
               <div className="flex-1 min-w-[200px]">
                 <div className="relative">
-                  <svg className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[#71717a]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="square" strokeLinejoin="miter" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  <svg className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-[#71717a]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                   </svg>
                   <input
                     type="text"
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
-                    placeholder="SEARCH BY NAME OR CURRENCY... (⌘F)"
-                    className="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-[#18181b] border border-gray-200 dark:border-[#27272a] text-gray-900 dark:text-white text-sm placeholder-gray-400 dark:placeholder-[#52525b] focus:border-[#2970FF] focus:ring-0 outline-none transition-colors"
+                    placeholder="Search by name or currency... (⌘)"
+                    className="w-full pl-10 pr-4 py-2.5 bg-gray-50 dark:bg-[#18181b] border border-gray-200 dark:border-[#27272a] rounded-lg text-gray-900 dark:text-white text-sm placeholder-gray-400 dark:placeholder-[#52525b] focus:border-[#2970FF] focus:ring-0 outline-none transition-colors"
                   />
                 </div>
               </div>
@@ -3632,7 +3632,7 @@ function App({ currentUser }) {
                   setFilters({ ...filters, kybStatus: e.target.value });
                   setActiveStatFilter(e.target.value || null);
                 }}
-                className="px-3 py-2.5 bg-white dark:bg-[#18181b] border border-gray-200 dark:border-[#27272a] text-gray-900 dark:text-white text-xs font-bold uppercase tracking-wider focus:border-[#2970FF] outline-none cursor-pointer"
+                className="px-3 py-2.5 bg-gray-50 dark:bg-[#18181b] border border-gray-200 dark:border-[#27272a] rounded-lg text-gray-700 dark:text-white text-xs font-semibold uppercase tracking-wide focus:border-[#2970FF] outline-none cursor-pointer"
               >
                 <option value="">All Status</option>
                 {KYB_STATUSES.map(s => <option key={s} value={s}>{s}</option>)}
@@ -3640,7 +3640,7 @@ function App({ currentUser }) {
               <select
                 value={filters.type}
                 onChange={(e) => setFilters({ ...filters, type: e.target.value })}
-                className="px-3 py-2.5 bg-white dark:bg-[#18181b] border border-gray-200 dark:border-[#27272a] text-gray-900 dark:text-white text-xs font-bold uppercase tracking-wider focus:border-[#2970FF] outline-none cursor-pointer"
+                className="px-3 py-2.5 bg-gray-50 dark:bg-[#18181b] border border-gray-200 dark:border-[#27272a] rounded-lg text-gray-700 dark:text-white text-xs font-semibold uppercase tracking-wide focus:border-[#2970FF] outline-none cursor-pointer"
               >
                 <option value="">All Types</option>
                 {CLIENT_TYPES.map(t => <option key={t} value={t}>{t}</option>)}
@@ -3648,19 +3648,19 @@ function App({ currentUser }) {
               <select
                 value={filters.priority}
                 onChange={(e) => setFilters({ ...filters, priority: e.target.value })}
-                className="px-3 py-2.5 bg-white dark:bg-[#18181b] border border-gray-200 dark:border-[#27272a] text-gray-900 dark:text-white text-xs font-bold uppercase tracking-wider focus:border-[#2970FF] outline-none cursor-pointer"
+                className="px-3 py-2.5 bg-gray-50 dark:bg-[#18181b] border border-gray-200 dark:border-[#27272a] rounded-lg text-gray-700 dark:text-white text-xs font-semibold uppercase tracking-wide focus:border-[#2970FF] outline-none cursor-pointer"
               >
                 <option value="">All Priorities</option>
                 {PRIORITIES.map(p => <option key={p} value={p}>{p}</option>)}
               </select>
               <div className="flex gap-2">
-                <button onClick={handleExport} className="px-4 py-2.5 bg-white dark:bg-[#18181b] border border-gray-200 dark:border-[#27272a] text-gray-500 dark:text-[#a1a1aa] text-xs font-bold uppercase tracking-wider hover:border-[#2970FF] hover:text-[#2970FF] transition-colors flex items-center gap-2">
+                <button onClick={handleExport} className="px-4 py-2.5 bg-gray-50 dark:bg-[#18181b] border border-gray-200 dark:border-[#27272a] rounded-lg text-gray-600 dark:text-[#a1a1aa] text-xs font-semibold uppercase tracking-wide hover:border-[#2970FF] hover:text-[#2970FF] transition-colors flex items-center gap-2">
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
                   </svg>
                   Export
                 </button>
-                <label className="px-4 py-2.5 bg-white dark:bg-[#18181b] border border-gray-200 dark:border-[#27272a] text-gray-500 dark:text-[#a1a1aa] text-xs font-bold uppercase tracking-wider hover:border-[#2970FF] hover:text-[#2970FF] transition-colors flex items-center gap-2 cursor-pointer">
+                <label className="px-4 py-2.5 bg-gray-50 dark:bg-[#18181b] border border-gray-200 dark:border-[#27272a] rounded-lg text-gray-600 dark:text-[#a1a1aa] text-xs font-semibold uppercase tracking-wide hover:border-[#2970FF] hover:text-[#2970FF] transition-colors flex items-center gap-2 cursor-pointer">
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                   </svg>
@@ -3670,7 +3670,7 @@ function App({ currentUser }) {
                 <div className="relative">
                   <button
                     onClick={() => setShowColumnSettings(!showColumnSettings)}
-                    className="px-3 py-2.5 bg-white dark:bg-[#18181b] border border-gray-200 dark:border-[#27272a] text-gray-500 dark:text-[#a1a1aa] rounded-md hover:border-[#2970FF] hover:text-[#2970FF] transition-colors flex items-center gap-2"
+                    className="px-3 py-2.5 bg-gray-50 dark:bg-[#18181b] border border-gray-200 dark:border-[#27272a] text-gray-600 dark:text-[#a1a1aa] rounded-lg hover:border-[#2970FF] hover:text-[#2970FF] transition-colors flex items-center gap-2"
                     title="Column settings"
                   >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -3689,7 +3689,7 @@ function App({ currentUser }) {
                 {/* Grouped View Toggle */}
                 <button
                   onClick={() => setClientsGroupedView(!clientsGroupedView)}
-                  className={`px-3 py-2.5 rounded-md transition-colors flex items-center gap-2 text-xs font-semibold ${clientsGroupedView ? 'bg-[#2970FF] text-white' : 'bg-white dark:bg-[#18181b] border border-gray-200 dark:border-[#27272a] text-gray-500 dark:text-[#a1a1aa] hover:border-[#2970FF] hover:text-[#2970FF]'}`}
+                  className={`px-3 py-2.5 rounded-lg transition-colors flex items-center gap-2 text-xs font-semibold ${clientsGroupedView ? 'bg-[#2970FF] text-white' : 'bg-gray-50 dark:bg-[#18181b] border border-gray-200 dark:border-[#27272a] text-gray-600 dark:text-[#a1a1aa] hover:border-[#2970FF] hover:text-[#2970FF]'}`}
                   title={clientsGroupedView ? "Switch to flat view" : "Group by Aggregator"}
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -3735,32 +3735,32 @@ function App({ currentUser }) {
 
             <div className="overflow-x-auto">
               <table className="w-full">
-                <thead className="bg-gray-50 border-b">
+                <thead className="bg-gray-50 dark:bg-zinc-900 border-b border-gray-200 dark:border-zinc-700">
                   <tr>
                     <th className="px-3 py-3 text-left">
                       <input
                         type="checkbox"
                         checked={selectedClients.length === sortedClients.length && sortedClients.length > 0}
                         onChange={toggleSelectAll}
-                        className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-cyan-500"
+                        className="w-4 h-4 rounded border-gray-300 text-[#2970FF] focus:ring-[#2970FF]"
                       />
                     </th>
-                    <th onClick={() => handleSort('name')} className="px-4 py-3 text-left text-sm font-semibold text-gray-700 cursor-pointer hover:bg-gray-100">
+                    <th onClick={() => handleSort('name')} className="px-4 py-3 text-left text-sm font-semibold text-gray-600 dark:text-zinc-400 cursor-pointer hover:bg-gray-100 dark:hover:bg-zinc-800">
                       Client Name <SortIcon columnKey="name" />
                     </th>
-                    <th onClick={() => handleSort('type')} className="px-4 py-3 text-left text-sm font-semibold text-gray-700 cursor-pointer hover:bg-gray-100">
+                    <th onClick={() => handleSort('type')} className="px-4 py-3 text-left text-sm font-semibold text-gray-600 dark:text-zinc-400 cursor-pointer hover:bg-gray-100 dark:hover:bg-zinc-800">
                       Type <SortIcon columnKey="type" />
                     </th>
-                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Flow of Funds</th>
-                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Corridors</th>
-                    <th onClick={() => handleSort('volume')} className="px-4 py-3 text-left text-sm font-semibold text-gray-700 cursor-pointer hover:bg-gray-100">
+                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-600 dark:text-zinc-400">Flow of Funds</th>
+                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-600 dark:text-zinc-400">Corridors</th>
+                    <th onClick={() => handleSort('volume')} className="px-4 py-3 text-left text-sm font-semibold text-gray-600 dark:text-zinc-400 cursor-pointer hover:bg-gray-100 dark:hover:bg-zinc-800">
                       Total Volume <SortIcon columnKey="volume" />
                     </th>
-                    <th onClick={() => handleSort('kybStatus')} className="px-4 py-3 text-left text-sm font-semibold text-gray-700 cursor-pointer hover:bg-gray-100">
+                    <th onClick={() => handleSort('kybStatus')} className="px-4 py-3 text-left text-sm font-semibold text-gray-600 dark:text-zinc-400 cursor-pointer hover:bg-gray-100 dark:hover:bg-zinc-800">
                       KYB Status <SortIcon columnKey="kybStatus" />
                     </th>
-                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Sumsub</th>
-                    <th className="px-4 py-3 text-right text-sm font-semibold text-gray-700">Actions</th>
+                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-600 dark:text-zinc-400">Sumsub</th>
+                    <th className="px-4 py-3 text-right text-sm font-semibold text-gray-600 dark:text-zinc-400">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y">
