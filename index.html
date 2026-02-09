@@ -546,7 +546,7 @@ function ClientDetailSidebar({ client, onClose, onEdit, onDelete, formatVolume }
         <div className="flex-1 overflow-y-auto p-6 space-y-6">
           {/* Volume Card */}
           <div className="bg-slate-800 rounded-xl p-4 text-white">
-            <p className="bg-slate-80text-slate-4000 text-xs uppercase tracking-wider font-semibold mb-1">Total Pipeline</p>
+            <p className="text-slate-300 text-xs uppercase tracking-wider font-semibold mb-1">Total Pipeline</p>
             <p className="text-3xl font-extrabold font-mono">{formatVolume(totalVolume)}</p>
           </div>
 
@@ -2270,7 +2270,7 @@ function StatsBar({ clients, onFilterClick, activeFilter }) {
             </svg>
           </div>
           <div>
-            <p className="text-[10px] bg-slate-80text-slate-4000 uppercase tracking-wider font-semibold">Pipeline</p>
+            <p className="text-[10px] text-slate-300 uppercase tracking-wider font-semibold">Pipeline</p>
             <p className="text-3xl font-extrabold font-mono text-white">{formatVolume(stats.totalVolume)}</p>
           </div>
         </div>
@@ -3557,7 +3557,7 @@ function App({ currentUser }) {
                   <span className="font-semibold">{selectedClients.length} selected</span>
                   <button
                     onClick={() => setSelectedClients([])}
-                    className="bg-slate-80text-slate-4000 hover:text-white text-sm underline"
+                    className="text-slate-300 hover:text-white text-sm underline"
                   >
                     Clear selection
                   </button>
