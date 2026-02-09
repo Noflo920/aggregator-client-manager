@@ -2270,7 +2270,7 @@ function StatsBar({ clients, onFilterClick, activeFilter }) {
             </svg>
           </div>
           <div>
-            <p className="text-[10px] bg-slate-80text-slate-4000 uppercase tracking-wider font-semibold">Pipeline</p>
+            <p className="text-[10px] text-white/80 uppercase tracking-wider font-semibold">Pipeline</p>
             <p className="text-3xl font-extrabold font-mono text-white">{formatVolume(stats.totalVolume)}</p>
           </div>
         </div>
@@ -3643,7 +3643,7 @@ function App({ currentUser }) {
                   <span className="font-semibold">{selectedClients.length} selected</span>
                   <button
                     onClick={() => setSelectedClients([])}
-                    className="bg-slate-80text-slate-4000 hover:text-white text-sm underline"
+                    className="text-white/80 hover:text-white text-sm underline"
                   >
                     Clear selection
                   </button>
