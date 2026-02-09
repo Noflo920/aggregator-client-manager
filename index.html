@@ -147,17 +147,7 @@
         .dark ::-webkit-scrollbar-track { background: #18181b; }
         .dark ::-webkit-scrollbar-thumb { background: #3f3f46; }
 
-        /* Dark mode text overrides */
-        .dark .text-gray-900, .dark .text-slate-900 { color: #fafafa !important; }
-        .dark .text-gray-800, .dark .text-slate-800 { color: #e4e4e7 !important; }
-        .dark .text-gray-700, .dark .text-slate-700 { color: #d4d4d8 !important; }
-        .dark .text-gray-600, .dark .text-slate-600 { color: #a1a1aa !important; }
-        .dark .text-gray-500, .dark .text-slate-500 { color: #71717a !important; }
-        .dark .bg-white { background: #18181b !important; }
-        .dark .bg-gray-50, .dark .bg-slate-50 { background: #0f0f11 !important; }
-        .dark .bg-gray-100, .dark .bg-slate-100 { background: #18181b !important; }
-        .dark .border-gray-200, .dark .border-slate-200 { border-color: #27272a !important; }
-        .dark .border-gray-300, .dark .border-slate-300 { border-color: #3f3f46 !important; }
+        /* Dark mode logo visibility */
         .dark .logo-dark { display: none; }
         .dark .logo-light { display: block; }
 
@@ -3654,13 +3644,13 @@ function App({ currentUser }) {
                 {PRIORITIES.map(p => <option key={p} value={p}>{p}</option>)}
               </select>
               <div className="flex gap-2">
-                <button onClick={handleExport} className="px-4 py-2.5 bg-gray-50 dark:bg-[#18181b] border border-gray-200 dark:border-[#27272a] rounded-lg text-gray-600 dark:text-[#a1a1aa] text-xs font-semibold uppercase tracking-wide hover:border-[#2970FF] hover:text-[#2970FF] transition-colors flex items-center gap-2">
+                <button onClick={handleExport} className="px-4 py-2.5 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg text-gray-600 dark:text-zinc-400 text-xs font-semibold uppercase tracking-wide hover:border-[#2970FF] hover:text-[#2970FF] transition-colors flex items-center gap-2">
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
                   </svg>
                   Export
                 </button>
-                <label className="px-4 py-2.5 bg-gray-50 dark:bg-[#18181b] border border-gray-200 dark:border-[#27272a] rounded-lg text-gray-600 dark:text-[#a1a1aa] text-xs font-semibold uppercase tracking-wide hover:border-[#2970FF] hover:text-[#2970FF] transition-colors flex items-center gap-2 cursor-pointer">
+                <label className="px-4 py-2.5 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg text-gray-600 dark:text-zinc-400 text-xs font-semibold uppercase tracking-wide hover:border-[#2970FF] hover:text-[#2970FF] transition-colors flex items-center gap-2 cursor-pointer">
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                   </svg>
@@ -3670,7 +3660,7 @@ function App({ currentUser }) {
                 <div className="relative">
                   <button
                     onClick={() => setShowColumnSettings(!showColumnSettings)}
-                    className="px-3 py-2.5 bg-gray-50 dark:bg-[#18181b] border border-gray-200 dark:border-[#27272a] text-gray-600 dark:text-[#a1a1aa] rounded-lg hover:border-[#2970FF] hover:text-[#2970FF] transition-colors flex items-center gap-2"
+                    className="px-3 py-2.5 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 text-gray-600 dark:text-zinc-400 rounded-lg hover:border-[#2970FF] hover:text-[#2970FF] transition-colors flex items-center gap-2"
                     title="Column settings"
                   >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -3689,7 +3679,7 @@ function App({ currentUser }) {
                 {/* Grouped View Toggle */}
                 <button
                   onClick={() => setClientsGroupedView(!clientsGroupedView)}
-                  className={`px-3 py-2.5 rounded-lg transition-colors flex items-center gap-2 text-xs font-semibold ${clientsGroupedView ? 'bg-[#2970FF] text-white' : 'bg-gray-50 dark:bg-[#18181b] border border-gray-200 dark:border-[#27272a] text-gray-600 dark:text-[#a1a1aa] hover:border-[#2970FF] hover:text-[#2970FF]'}`}
+                  className={`px-3 py-2.5 rounded-lg transition-colors flex items-center gap-2 text-xs font-semibold ${clientsGroupedView ? 'bg-[#2970FF] text-white' : 'bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 text-gray-600 dark:text-zinc-400 hover:border-[#2970FF] hover:text-[#2970FF]'}`}
                   title={clientsGroupedView ? "Switch to flat view" : "Group by Aggregator"}
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
