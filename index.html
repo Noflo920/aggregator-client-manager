@@ -2255,7 +2255,7 @@ function StatsBar({ clients, onFilterClick, activeFilter }) {
             </svg>
           </div>
           <div>
-            <p className="text-[10px] text-gray-600 uppercase tracking-wider font-semibold">Clients</p>
+            <p className="text-[10px] text-gray-400 uppercase tracking-wider font-semibold">Clients</p>
             <p className="text-2xl font-extrabold font-mono text-gray-800">{stats.total}</p>
           </div>
         </div>
@@ -2270,7 +2270,7 @@ function StatsBar({ clients, onFilterClick, activeFilter }) {
             </svg>
           </div>
           <div>
-            <p className="text-[10px] text-slate-300 uppercase tracking-wider font-semibold">Pipeline</p>
+            <p className="text-[10px] bg-slate-80text-slate-4000 uppercase tracking-wider font-semibold">Pipeline</p>
             <p className="text-3xl font-extrabold font-mono text-white">{formatVolume(stats.totalVolume)}</p>
           </div>
         </div>
@@ -2285,7 +2285,7 @@ function StatsBar({ clients, onFilterClick, activeFilter }) {
             </svg>
           </div>
           <div>
-            <p className="text-[10px] text-gray-600 uppercase tracking-wider font-semibold">Pending</p>
+            <p className="text-[10px] text-gray-400 uppercase tracking-wider font-semibold">Pending</p>
             <p className="text-2xl font-extrabold font-mono text-amber-600">{stats.kybCounts['Pending']}</p>
           </div>
         </div>
@@ -2300,7 +2300,7 @@ function StatsBar({ clients, onFilterClick, activeFilter }) {
             </svg>
           </div>
           <div>
-            <p className="text-[10px] text-gray-600 uppercase tracking-wider font-semibold">In Review</p>
+            <p className="text-[10px] text-gray-400 uppercase tracking-wider font-semibold">In Review</p>
             <p className="text-2xl font-extrabold font-mono text-blue-600">{stats.kybCounts['In Review']}</p>
           </div>
         </div>
@@ -2315,7 +2315,7 @@ function StatsBar({ clients, onFilterClick, activeFilter }) {
             </svg>
           </div>
           <div>
-            <p className="text-[10px] text-gray-600 uppercase tracking-wider font-semibold">Approved</p>
+            <p className="text-[10px] text-gray-400 uppercase tracking-wider font-semibold">Approved</p>
             <p className="text-2xl font-extrabold font-mono text-emerald-600">{stats.kybCounts['Approved']}</p>
           </div>
         </div>
@@ -2330,7 +2330,7 @@ function StatsBar({ clients, onFilterClick, activeFilter }) {
             </svg>
           </div>
           <div>
-            <p className="text-[10px] text-gray-600 uppercase tracking-wider font-semibold">Rejected</p>
+            <p className="text-[10px] text-gray-400 uppercase tracking-wider font-semibold">Rejected</p>
             <p className="text-2xl font-extrabold font-mono text-red-600">{stats.kybCounts['Rejected']}</p>
           </div>
         </div>
@@ -2345,7 +2345,7 @@ function StatsBar({ clients, onFilterClick, activeFilter }) {
             </svg>
           </div>
           <div>
-            <p className="text-[10px] text-gray-600 uppercase tracking-wider font-semibold">Needs KYB</p>
+            <p className="text-[10px] text-gray-400 uppercase tracking-wider font-semibold">Needs KYB</p>
             <p className="text-2xl font-extrabold font-mono text-purple-600">{stats.missingKyb}</p>
           </div>
         </div>
@@ -2485,7 +2485,9 @@ function App({ currentUser }) {
   const [deletedClient, setDeletedClient] = useState(null); // For undo functionality
   const [showCommandPalette, setShowCommandPalette] = useState(false); // Cmd+K palette
   const [selectedClients, setSelectedClients] = useState([]); // For bulk actions
-  const [darkMode, setDarkMode] = useState(() => { try { return JSON.parse(localStorage.getItem('darkMode')) || false; } catch { return false; } }); // Dark mode toggle
+  const [darkMode, setDarkMode] = useState(() => {
+    try { return JSON.parse(localStorage.getItem('darkMode')) || false; } catch { return false; }
+  }); // Dark mode toggle
   const [showKanban, setShowKanban] = useState(false); // Kanban board view
   const [contextMenu, setContextMenu] = useState(null); // Right-click context menu
   const [selectedReferrals, setSelectedReferrals] = useState([]); // For bulk actions on referrals
@@ -2516,6 +2518,58 @@ function App({ currentUser }) {
   const [referralSortConfig, setReferralSortConfig] = useState({ key: 'referredCompany', direction: 'asc' });
   const [networkViewReferrer, setNetworkViewReferrer] = useState(null);
 
+  // Grouped view state for hierarchical display
+  const [clientsGroupedView, setClientsGroupedView] = useState(false);
+  const [referralsGroupedView, setReferralsGroupedView] = useState(false);
+  const [expandedAggregators, setExpandedAggregators] = useState(new Set());
+  const [expandedReferrers, setExpandedReferrers] = useState(new Set());
+
+  // Toggle expand/collapse for aggregators
+  const toggleAggregatorExpanded = (aggregatorId) => {
+    setExpandedAggregators(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(aggregatorId)) {
+        newSet.delete(aggregatorId);
+      } else {
+        newSet.add(aggregatorId);
+      }
+      return newSet;
+    });
+  };
+
+  // Toggle expand/collapse for referrers
+  const toggleReferrerExpanded = (referrerId) => {
+    setExpandedReferrers(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(referrerId)) {
+        newSet.delete(referrerId);
+      } else {
+        newSet.add(referrerId);
+      }
+      return newSet;
+    });
+  };
+
+  // Expand/collapse all aggregators
+  const toggleAllAggregators = (expand) => {
+    if (expand) {
+      const allAggregatorIds = clients.filter(c => c.type === 'Aggregator').map(c => c.id);
+      setExpandedAggregators(new Set(allAggregatorIds));
+    } else {
+      setExpandedAggregators(new Set());
+    }
+  };
+
+  // Expand/collapse all referrers
+  const toggleAllReferrers = (expand) => {
+    if (expand) {
+      const allReferrerIds = referrers.map(r => r.id);
+      setExpandedReferrers(new Set(allReferrerIds));
+    } else {
+      setExpandedReferrers(new Set());
+    }
+  };
+
   // Get sub-merchants for an aggregator
   const getSubMerchants = (aggregatorId) => {
     return clients.filter(c => c.parentAggregatorId === aggregatorId);
@@ -2536,7 +2590,12 @@ function App({ currentUser }) {
         };
   };
 
-  // Persist dark mode preference  useEffect(() => { localStorage.setItem('darkMode', JSON.stringify(darkMode)); }, [darkMode]);  // Subscribe to Firestore collections for real-time sync  useEffect(() => { localStorage.setItem('darkMode', JSON.stringify(darkMode)); }, [darkMode]);
+  // Persist dark mode preference
+  useEffect(() => {
+    localStorage.setItem('darkMode', JSON.stringify(darkMode));
+  }, [darkMode]);
+
+  // Subscribe to Firestore collections for real-time sync
   useEffect(() => {
     let loadedCount = 0;
     const checkLoaded = () => {
@@ -3249,7 +3308,7 @@ function App({ currentUser }) {
   }
 
   return (
-    <div className={`min-h-screen transition-colors duration-300 ${darkMode ? 'dark bg-gray-900' : 'bg-gray-100'}`}>
+    <div className={`min-h-screen transition-colors duration-300 ${darkMode ? 'dark bg-gray-900' : 'bg-gray-100'}`}
       <style>{`
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes scaleIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
@@ -3305,7 +3364,23 @@ function App({ currentUser }) {
               </span>
               <span className="font-medium">Live</span>
             </div>
-            {/* Dark mode toggle */}<button onClick={() => setDarkMode(!darkMode)} className="p-2 hover:bg-white/10 rounded-lg transition-all duration-200 text-gray-400 hover:text-white" title={darkMode ? "Switch to light mode" : "Switch to dark mode"}>{darkMode ? (<svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>) : (<svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>)}</button>{/* User info and logout */}
+            {/* Dark mode toggle */}
+            <button
+              onClick={() => setDarkMode(!darkMode)}
+              className="p-2 hover:bg-white/10 rounded-lg transition-all duration-200 text-gray-400 hover:text-white"
+              title={darkMode ? "Switch to light mode" : "Switch to dark mode"}
+            >
+              {darkMode ? (
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+              ) : (
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                </svg>
+              )}
+            </button>
+            {/* User info and logout */}
             <div className="flex items-center gap-2 bg-white/5 rounded-xl px-2 py-1.5 border border-white/10">
               <img
                 src={currentUser?.photoURL || 'https://www.gravatar.com/avatar/?d=mp'}
@@ -3547,6 +3622,17 @@ function App({ currentUser }) {
                     />
                   )}
                 </div>
+                {/* Grouped View Toggle */}
+                <button
+                  onClick={() => setClientsGroupedView(!clientsGroupedView)}
+                  className={`px-3 py-2 border rounded-lg transition-colors flex items-center gap-2 ${clientsGroupedView ? 'bg-blue-50 border-blue-300 text-blue-700' : 'border-gray-300 hover:bg-gray-50 text-gray-700'}`}
+                  title={clientsGroupedView ? "Switch to flat view" : "Group by Aggregator"}
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                  </svg>
+                  {clientsGroupedView ? 'Grouped' : 'Group'}
+                </button>
               </div>
             </div>
 
@@ -3557,7 +3643,7 @@ function App({ currentUser }) {
                   <span className="font-semibold">{selectedClients.length} selected</span>
                   <button
                     onClick={() => setSelectedClients([])}
-                    className="text-slate-300 hover:text-white text-sm underline"
+                    className="bg-slate-80text-slate-4000 hover:text-white text-sm underline"
                   >
                     Clear selection
                   </button>
@@ -3656,7 +3742,108 @@ function App({ currentUser }) {
                         )}
                       </td>
                     </tr>
+                  ) : clientsGroupedView ? (
+                    /* Grouped View - Aggregators with nested Sub-merchants */
+                    (() => {
+                      const aggregators = sortedClients.filter(c => c.type === 'Aggregator');
+                      const standaloneSubMerchants = sortedClients.filter(c => c.type === 'Sub-merchant' && !c.parentAggregatorId);
+                      const rows = [];
+
+                      // Render each aggregator with its sub-merchants
+                      aggregators.forEach(aggregator => {
+                        const subMerchants = clients.filter(c => c.parentAggregatorId === aggregator.id);
+                        const isExpanded = expandedAggregators.has(aggregator.id);
+                        const aggregatorVolume = subMerchants.reduce((sum, sm) => sum + sm.corridors.reduce((s, c) => s + (c.expectedVolume || 0), 0), 0);
+
+                        // Aggregator row (parent)
+                        rows.push(
+                          <tr key={aggregator.id} className={`bg-gradient-to-r from-blue-50 to-slate-50 hover:from-blue-100 hover:to-slate-100 transition-colors cursor-pointer border-l-4 border-l-blue-500 ${selectedClients.includes(aggregator.id) ? 'ring-2 ring-blue-300' : ''}`} onClick={() => setSelectedClient(aggregator)} onContextMenu={(e) => handleContextMenu(e, aggregator)}>
+                            <td className="px-3 py-3" onClick={(e) => e.stopPropagation()}>
+                              <div className="flex items-center gap-2">
+                                <input type="checkbox" checked={selectedClients.includes(aggregator.id)} onChange={() => toggleClientSelection(aggregator.id)} className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500" />
+                                {subMerchants.length > 0 && (
+                                  <button onClick={(e) => { e.stopPropagation(); toggleAggregatorExpanded(aggregator.id); }} className="p-0.5 hover:bg-blue-200 rounded transition-colors">
+                                    <svg className={`w-4 h-4 text-blue-600 transition-transform ${isExpanded ? 'rotate-90' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                    </svg>
+                                  </button>
+                                )}
+                              </div>
+                            </td>
+                            <td className="px-4 py-3">
+                              <button onClick={(e) => { e.stopPropagation(); setNetworkViewAggregator(aggregator); }} className="font-semibold text-blue-800 hover:text-blue-600 transition-colors text-left flex items-center gap-2 group">
+                                {pinnedClients.includes(aggregator.id) && <span className="text-amber-400">⭐</span>}
+                                <span className="bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded text-xs font-medium">AGG</span>
+                                {aggregator.name}
+                                <svg className="w-4 h-4 text-blue-400 group-hover:text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+                              </button>
+                              {subMerchants.length > 0 && <div className="text-xs text-blue-600 mt-0.5 font-medium">{subMerchants.length} sub-merchant{subMerchants.length !== 1 ? 's' : ''}</div>}
+                            </td>
+                            <td className="px-4 py-3"><span className="text-blue-700 font-medium">Aggregator</span></td>
+                            <td className="px-4 py-3"><span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${aggregator.inFlowOfFunds ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'}`}>{aggregator.inFlowOfFunds ? 'Yes' : 'No'}</span></td>
+                            <td className="px-4 py-3"><div className="flex flex-wrap gap-1">{aggregator.corridors.map(cor => (<span key={cor.id} className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs ${PRIORITY_COLORS[cor.priority].bg} ${PRIORITY_COLORS[cor.priority].text}`}>{cor.currency}</span>))}</div></td>
+                            <td className="px-4 py-3 font-mono text-blue-700 font-semibold">{formatVolume(aggregatorVolume)}</td>
+                            <td className="px-4 py-3"><span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${KYB_COLORS[aggregator.kybStatus].bg} ${KYB_COLORS[aggregator.kybStatus].text} border ${KYB_COLORS[aggregator.kybStatus].border}`}>{aggregator.kybStatus}</span></td>
+                            <td className="px-4 py-3">{aggregator.sumsubLink ? (<a href={aggregator.sumsubLink} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()} className="text-blue-600 hover:underline text-sm">View Link</a>) : (<span className="text-gray-400 text-sm">—</span>)}</td>
+                            <td className="px-4 py-3"><div className="flex justify-end gap-2"><button onClick={(e) => { e.stopPropagation(); setEditingClient(aggregator); setShowModal(true); }} className="p-1.5 text-gray-500 hover:text-blue-600 hover:bg-blue-100 rounded transition-colors" title="Edit"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg></button><button onClick={(e) => { e.stopPropagation(); setDeleteTarget(aggregator); }} className="p-1.5 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded transition-colors" title="Delete"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></button></div></td>
+                          </tr>
+                        );
+
+                        // Sub-merchant rows (children) - only if expanded
+                        if (isExpanded) {
+                          subMerchants.forEach(subMerchant => {
+                            const smVolume = subMerchant.corridors.reduce((sum, c) => sum + (c.expectedVolume || 0), 0);
+                            rows.push(
+                              <tr key={subMerchant.id} className={`bg-white hover:bg-gray-50 transition-colors cursor-pointer border-l-4 border-l-gray-200 ${selectedClients.includes(subMerchant.id) ? 'bg-blue-50' : ''}`} onClick={() => setSelectedClient(subMerchant)} onContextMenu={(e) => handleContextMenu(e, subMerchant)}>
+                                <td className="px-3 py-2 pl-10" onClick={(e) => e.stopPropagation()}><input type="checkbox" checked={selectedClients.includes(subMerchant.id)} onChange={() => toggleClientSelection(subMerchant.id)} className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500" /></td>
+                                <td className="px-4 py-2 pl-8">
+                                  <div className="flex items-center gap-2">
+                                    <span className="text-gray-300">└</span>
+                                    <div className="font-medium text-gray-700 flex items-center gap-1.5">{pinnedClients.includes(subMerchant.id) && <span className="text-amber-400">⭐</span>}<InlineEdit value={subMerchant.name} onSave={(newValue) => handleInlineEdit(subMerchant.id, 'name', newValue)} className="font-medium" /></div>
+                                  </div>
+                                </td>
+                                <td className="px-4 py-2"><span className="text-gray-500 text-sm">Sub-merchant</span></td>
+                                <td className="px-4 py-2"><span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${subMerchant.inFlowOfFunds ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'}`}>{subMerchant.inFlowOfFunds ? 'Yes' : 'No'}</span></td>
+                                <td className="px-4 py-2"><div className="flex flex-wrap gap-1">{subMerchant.corridors.map(cor => (<span key={cor.id} className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs ${PRIORITY_COLORS[cor.priority].bg} ${PRIORITY_COLORS[cor.priority].text}`}>{cor.currency}</span>))}</div></td>
+                                <td className="px-4 py-2 font-mono text-gray-600">{formatVolume(smVolume)}</td>
+                                <td className="px-4 py-2"><span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${KYB_COLORS[subMerchant.kybStatus].bg} ${KYB_COLORS[subMerchant.kybStatus].text} border ${KYB_COLORS[subMerchant.kybStatus].border}`}>{subMerchant.kybStatus}</span></td>
+                                <td className="px-4 py-2">{subMerchant.sumsubLink ? (<a href={subMerchant.sumsubLink} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()} className="text-blue-600 hover:underline text-sm">View Link</a>) : (<span className="text-gray-400 text-sm">—</span>)}</td>
+                                <td className="px-4 py-2"><div className="flex justify-end gap-2"><button onClick={(e) => { e.stopPropagation(); setEditingClient(subMerchant); setShowModal(true); }} className="p-1.5 text-gray-500 hover:text-blue-600 hover:bg-gray-100 rounded transition-colors" title="Edit"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg></button><button onClick={(e) => { e.stopPropagation(); setDeleteTarget(subMerchant); }} className="p-1.5 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded transition-colors" title="Delete"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></button></div></td>
+                              </tr>
+                            );
+                          });
+                        }
+                      });
+
+                      // Standalone sub-merchants (no parent)
+                      if (standaloneSubMerchants.length > 0) {
+                        rows.push(
+                          <tr key="standalone-header" className="bg-gray-100">
+                            <td colSpan={9} className="px-4 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">Standalone Sub-merchants ({standaloneSubMerchants.length})</td>
+                          </tr>
+                        );
+                        standaloneSubMerchants.forEach(sm => {
+                          const smVolume = sm.corridors.reduce((sum, c) => sum + (c.expectedVolume || 0), 0);
+                          rows.push(
+                            <tr key={sm.id} className={`bg-white hover:bg-gray-50 transition-colors cursor-pointer ${selectedClients.includes(sm.id) ? 'bg-blue-50' : ''}`} onClick={() => setSelectedClient(sm)} onContextMenu={(e) => handleContextMenu(e, sm)}>
+                              <td className="px-3 py-3" onClick={(e) => e.stopPropagation()}><input type="checkbox" checked={selectedClients.includes(sm.id)} onChange={() => toggleClientSelection(sm.id)} className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500" /></td>
+                              <td className="px-4 py-3"><div className="font-medium text-gray-800 flex items-center gap-1.5">{pinnedClients.includes(sm.id) && <span className="text-amber-400">⭐</span>}<InlineEdit value={sm.name} onSave={(newValue) => handleInlineEdit(sm.id, 'name', newValue)} className="font-medium" /></div></td>
+                              <td className="px-4 py-3"><span className="text-gray-500">Sub-merchant</span></td>
+                              <td className="px-4 py-3"><span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${sm.inFlowOfFunds ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'}`}>{sm.inFlowOfFunds ? 'Yes' : 'No'}</span></td>
+                              <td className="px-4 py-3"><div className="flex flex-wrap gap-1">{sm.corridors.map(cor => (<span key={cor.id} className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs ${PRIORITY_COLORS[cor.priority].bg} ${PRIORITY_COLORS[cor.priority].text}`}>{cor.currency}</span>))}</div></td>
+                              <td className="px-4 py-3 font-mono text-gray-700">{formatVolume(smVolume)}</td>
+                              <td className="px-4 py-3"><span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${KYB_COLORS[sm.kybStatus].bg} ${KYB_COLORS[sm.kybStatus].text} border ${KYB_COLORS[sm.kybStatus].border}`}>{sm.kybStatus}</span></td>
+                              <td className="px-4 py-3">{sm.sumsubLink ? (<a href={sm.sumsubLink} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()} className="text-blue-600 hover:underline text-sm">View Link</a>) : (<span className="text-gray-400 text-sm">—</span>)}</td>
+                              <td className="px-4 py-3"><div className="flex justify-end gap-2"><button onClick={(e) => { e.stopPropagation(); setEditingClient(sm); setShowModal(true); }} className="p-1.5 text-gray-500 hover:text-blue-600 hover:bg-gray-100 rounded transition-colors" title="Edit"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg></button><button onClick={(e) => { e.stopPropagation(); setDeleteTarget(sm); }} className="p-1.5 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded transition-colors" title="Delete"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></button></div></td>
+                            </tr>
+                          );
+                        });
+                      }
+
+                      return rows;
+                    })()
                   ) : (
+                    /* Flat View - Original rendering */
                     sortedClients.map(client => {
                       const parentAggregator = client.parentAggregatorId ? clients.find(c => c.id === client.parentAggregatorId) : null;
                       const subMerchantCount = client.type === 'Aggregator' ? clients.filter(c => c.parentAggregatorId === client.id).length : 0;
@@ -3825,6 +4012,17 @@ function App({ currentUser }) {
                 <option value="">All Referrers</option>
                 {referrers.map(r => <option key={r.id} value={r.id}>{r.name}</option>)}
               </select>
+              {/* Grouped View Toggle for Referrals */}
+              <button
+                onClick={() => setReferralsGroupedView(!referralsGroupedView)}
+                className={`px-3 py-2 border rounded-lg transition-colors flex items-center gap-2 ${referralsGroupedView ? 'bg-purple-50 border-purple-300 text-purple-700' : 'border-gray-300 hover:bg-gray-50 text-gray-700'}`}
+                title={referralsGroupedView ? "Switch to flat view" : "Group by Referrer"}
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                </svg>
+                {referralsGroupedView ? 'Grouped' : 'Group'}
+              </button>
               <button onClick={exportReferralsToCSV} className="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors flex items-center gap-2 text-gray-700">
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
@@ -3923,7 +4121,116 @@ function App({ currentUser }) {
                         )}
                       </td>
                     </tr>
+                  ) : referralsGroupedView ? (
+                    /* Grouped View - Referrers with nested Referrals */
+                    (() => {
+                      const rows = [];
+                      const referrersWithReferrals = referrers.filter(r => referrals.some(ref => ref.referrerId === r.id));
+                      const orphanReferrals = sortedReferrals.filter(r => !r.referrerId || !referrers.find(ref => ref.id === r.referrerId));
+
+                      // Render each referrer with their referrals
+                      referrersWithReferrals.forEach(referrer => {
+                        const referrerReferrals = sortedReferrals.filter(r => r.referrerId === referrer.id);
+                        const isExpanded = expandedReferrers.has(referrer.id);
+                        const activeCount = referrerReferrals.filter(r => r.status === 'Active').length;
+
+                        // Referrer row (parent)
+                        rows.push(
+                          <tr key={`referrer-${referrer.id}`} className={`bg-gradient-to-r from-purple-50 to-slate-50 hover:from-purple-100 hover:to-slate-100 transition-colors cursor-pointer border-l-4 border-l-purple-500`}>
+                            <td className="px-3 py-3" onClick={(e) => e.stopPropagation()}>
+                              <div className="flex items-center gap-2">
+                                <input type="checkbox" className="w-4 h-4 rounded border-gray-300 text-purple-600 focus:ring-purple-500 opacity-50" disabled />
+                                {referrerReferrals.length > 0 && (
+                                  <button onClick={(e) => { e.stopPropagation(); toggleReferrerExpanded(referrer.id); }} className="p-0.5 hover:bg-purple-200 rounded transition-colors">
+                                    <svg className={`w-4 h-4 text-purple-600 transition-transform ${isExpanded ? 'rotate-90' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                    </svg>
+                                  </button>
+                                )}
+                              </div>
+                            </td>
+                            <td className="px-4 py-3">
+                              <button onClick={() => setNetworkViewReferrer(referrer)} className="font-semibold text-purple-800 hover:text-purple-600 transition-colors text-left flex items-center gap-2 group">
+                                <span className="bg-purple-100 text-purple-700 px-1.5 py-0.5 rounded text-xs font-medium">PARTNER</span>
+                                {referrer.name}
+                                <svg className="w-4 h-4 text-purple-400 group-hover:text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+                              </button>
+                              <div className="text-xs text-purple-600 mt-0.5 font-medium">{referrerReferrals.length} referral{referrerReferrals.length !== 1 ? 's' : ''} • {activeCount} active</div>
+                            </td>
+                            <td className="px-4 py-3"><span className="text-purple-700 font-medium">{referrer.type}</span></td>
+                            <td className="px-4 py-3">
+                              <div className="flex gap-1">
+                                <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-700">{activeCount} Active</span>
+                                {referrerReferrals.length - activeCount > 0 && <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600">{referrerReferrals.length - activeCount} Other</span>}
+                              </div>
+                            </td>
+                            <td className="px-4 py-3"><span className="text-gray-400 text-sm">—</span></td>
+                            <td className="px-4 py-3">
+                              {referrer.feeSplitPercentage > 0 ? (
+                                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700 border border-green-200">
+                                  <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                  <span className="font-mono">{referrer.feeSplitPercentage}%</span>
+                                </span>
+                              ) : (<span className="text-gray-400 text-sm">Not set</span>)}
+                            </td>
+                            <td className="px-4 py-3">
+                              <div className="flex justify-end gap-2">
+                                <button onClick={() => { setEditingReferrer(referrer); setShowReferrerModal(true); }} className="p-1.5 text-gray-500 hover:text-purple-600 hover:bg-purple-100 rounded transition-colors" title="Edit Partner"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg></button>
+                              </div>
+                            </td>
+                          </tr>
+                        );
+
+                        // Referral rows (children) - only if expanded
+                        if (isExpanded) {
+                          referrerReferrals.forEach(referral => {
+                            rows.push(
+                              <tr key={referral.id} className={`bg-white hover:bg-gray-50 transition-colors cursor-pointer border-l-4 border-l-gray-200 ${selectedReferrals.includes(referral.id) ? 'bg-purple-50' : ''}`} onContextMenu={(e) => handleReferralContextMenu(e, referral)}>
+                                <td className="px-3 py-2 pl-10" onClick={(e) => e.stopPropagation()}><input type="checkbox" checked={selectedReferrals.includes(referral.id)} onChange={() => toggleReferralSelection(referral.id)} className="w-4 h-4 rounded border-gray-300 text-purple-600 focus:ring-purple-500" /></td>
+                                <td className="px-4 py-2 pl-8">
+                                  <div className="flex items-center gap-2">
+                                    <span className="text-gray-300">└</span>
+                                    <div className="font-medium text-gray-700">{referral.referredCompany}</div>
+                                  </div>
+                                  {referral.notes && <div className="text-xs text-gray-400 truncate max-w-[200px] ml-5">{referral.notes}</div>}
+                                </td>
+                                <td className="px-4 py-2"><span className="text-gray-500 text-sm">Referred Client</span></td>
+                                <td className="px-4 py-2"><span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${REFERRAL_STATUS_COLORS[referral.status].bg} ${REFERRAL_STATUS_COLORS[referral.status].text} border ${REFERRAL_STATUS_COLORS[referral.status].border}`}>{referral.status}</span></td>
+                                <td className="px-4 py-2"><div className="flex flex-wrap gap-1">{referral.currencies.map(curr => (<span key={curr.id} className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs bg-blue-100 text-blue-700">{curr.currency}: <span className="font-mono">{curr.costPercentage}%</span></span>))}</div></td>
+                                <td className="px-4 py-2"><span className="text-gray-400 text-sm">—</span></td>
+                                <td className="px-4 py-2"><div className="flex justify-end gap-2"><button onClick={() => { setEditingReferral(referral); setShowReferralModal(true); }} className="p-1.5 text-gray-500 hover:text-blue-600 hover:bg-gray-100 rounded transition-colors" title="Edit"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg></button><button onClick={() => setDeleteReferralTarget(referral)} className="p-1.5 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded transition-colors" title="Delete"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></button></div></td>
+                              </tr>
+                            );
+                          });
+                        }
+                      });
+
+                      // Orphan referrals (no referrer)
+                      if (orphanReferrals.length > 0) {
+                        rows.push(
+                          <tr key="orphan-header" className="bg-gray-100">
+                            <td colSpan={7} className="px-4 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">Unassigned Referrals ({orphanReferrals.length})</td>
+                          </tr>
+                        );
+                        orphanReferrals.forEach(referral => {
+                          rows.push(
+                            <tr key={referral.id} className={`bg-white hover:bg-gray-50 transition-colors cursor-pointer ${selectedReferrals.includes(referral.id) ? 'bg-purple-50' : ''}`} onContextMenu={(e) => handleReferralContextMenu(e, referral)}>
+                              <td className="px-3 py-3" onClick={(e) => e.stopPropagation()}><input type="checkbox" checked={selectedReferrals.includes(referral.id)} onChange={() => toggleReferralSelection(referral.id)} className="w-4 h-4 rounded border-gray-300 text-purple-600 focus:ring-purple-500" /></td>
+                              <td className="px-4 py-3"><div className="font-medium text-gray-800">{referral.referredCompany}</div>{referral.notes && <div className="text-xs text-gray-400 truncate max-w-[200px]">{referral.notes}</div>}</td>
+                              <td className="px-4 py-3"><span className="text-gray-400">No referrer</span></td>
+                              <td className="px-4 py-3"><span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${REFERRAL_STATUS_COLORS[referral.status].bg} ${REFERRAL_STATUS_COLORS[referral.status].text} border ${REFERRAL_STATUS_COLORS[referral.status].border}`}>{referral.status}</span></td>
+                              <td className="px-4 py-3"><div className="flex flex-wrap gap-1">{referral.currencies.map(curr => (<span key={curr.id} className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs bg-blue-100 text-blue-700">{curr.currency}: <span className="font-mono">{curr.costPercentage}%</span></span>))}</div></td>
+                              <td className="px-4 py-3"><span className="text-gray-400 text-sm">—</span></td>
+                              <td className="px-4 py-3"><div className="flex justify-end gap-2"><button onClick={() => { setEditingReferral(referral); setShowReferralModal(true); }} className="p-1.5 text-gray-500 hover:text-blue-600 hover:bg-gray-100 rounded transition-colors" title="Edit"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg></button><button onClick={() => setDeleteReferralTarget(referral)} className="p-1.5 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded transition-colors" title="Delete"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></button></div></td>
+                            </tr>
+                          );
+                        });
+                      }
+
+                      return rows;
+                    })()
                   ) : (
+                    /* Flat View - Original rendering */
                     sortedReferrals.map(referral => {
                       const referrer = referrers.find(r => r.id === referral.referrerId);
                       const referrerReferralCount = referrals.filter(r => r.referrerId === referral.referrerId).length;
