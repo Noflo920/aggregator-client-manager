@@ -117,7 +117,7 @@
         .dark .text-gray-800 { color: rgb(226, 232, 240) !important; }
         .dark .text-gray-700 { color: rgb(203, 213, 225) !important; }
         .dark .text-gray-600 { color: rgb(148, 163, 184) !important; }
-        .dark .text-gray-500 { color: rgb(100, 116, 139) !important; }
+        .dark .text-slate-400 { color: rgb(100, 116, 139) !important; }
         .dark .border-gray-200 { border-color: rgb(51, 65, 85) !important; }
         .dark .border-gray-300 { border-color: rgb(51, 65, 85) !important; }
         .dark .bg-gray-50 { background: rgb(15, 23, 42) !important; }
@@ -278,7 +278,7 @@ function LoginScreen({ onLogin }) {
             </svg>
           </div>
           <h1 className="text-2xl font-bold text-gray-800 mb-2">Aggregator Client Manager</h1>
-          <p className="text-gray-500">Sign in with your SpherePay account</p>
+          <p className="text-slate-400">Sign in with your SpherePay account</p>
         </div>
 
         {error && (
@@ -307,7 +307,7 @@ function LoginScreen({ onLogin }) {
           </span>
         </button>
 
-        <p className="mt-6 text-center text-xs text-gray-400">
+        <p className="mt-6 text-center text-xs text-slate-300">
           Access restricted to @spherepay.co accounts
         </p>
       </div>
@@ -553,18 +553,18 @@ function ClientDetailSidebar({ client, onClose, onEdit, onDelete, formatVolume }
           {/* Quick Stats */}
           <div className="grid grid-cols-2 gap-3">
             <div className="bg-gray-50 rounded-xl p-4">
-              <p className="text-gray-500 text-xs uppercase tracking-wider font-semibold mb-1">Corridors</p>
+              <p className="text-slate-400 text-xs uppercase tracking-wider font-semibold mb-1">Corridors</p>
               <p className="text-2xl font-bold text-gray-800">{client.corridors.length}</p>
             </div>
             <div className="bg-gray-50 rounded-xl p-4">
-              <p className="text-gray-500 text-xs uppercase tracking-wider font-semibold mb-1">Flow of Funds</p>
+              <p className="text-slate-400 text-xs uppercase tracking-wider font-semibold mb-1">Flow of Funds</p>
               <p className="text-2xl font-bold text-gray-800">{client.inFlowOfFunds ? 'Yes' : 'No'}</p>
             </div>
           </div>
 
           {/* Corridors */}
           <div>
-            <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">Corridors</h3>
+            <h3 className="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-3">Corridors</h3>
             <div className="space-y-2">
               {client.corridors.map((cor, i) => (
                 <div key={i} className="flex items-center justify-between p-3 bg-gray-50 rounded-xl">
@@ -574,7 +574,7 @@ function ClientDetailSidebar({ client, onClose, onEdit, onDelete, formatVolume }
                   </div>
                   <div className="text-right">
                     <p className="font-mono font-semibold text-gray-800">{formatVolume(cor.expectedVolume || 0)}</p>
-                    <p className={`text-xs font-medium ${cor.priority === 'High' ? 'text-red-500' : cor.priority === 'Med' ? 'text-amber-500' : 'text-gray-400'}`}>
+                    <p className={`text-xs font-medium ${cor.priority === 'High' ? 'text-red-500' : cor.priority === 'Med' ? 'text-amber-500' : 'text-slate-300'}`}>
                       {cor.priority} Priority
                     </p>
                   </div>
@@ -586,7 +586,7 @@ function ClientDetailSidebar({ client, onClose, onEdit, onDelete, formatVolume }
           {/* Sumsub Link */}
           {client.sumsubLink && (
             <div>
-              <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">KYB Link</h3>
+              <h3 className="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-2">KYB Link</h3>
               <a
                 href={client.sumsubLink}
                 target="_blank"
@@ -604,7 +604,7 @@ function ClientDetailSidebar({ client, onClose, onEdit, onDelete, formatVolume }
           {/* Notes */}
           {client.notes && (
             <div>
-              <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">Notes</h3>
+              <h3 className="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-2">Notes</h3>
               <p className="text-gray-700 bg-gray-50 rounded-xl p-4 whitespace-pre-wrap">{client.notes}</p>
             </div>
           )}
@@ -715,7 +715,7 @@ function CommandPalette({ isOpen, onClose, clients, onSelectClient, onAddClient,
       <div className="relative w-full max-w-xl bg-white rounded-2xl shadow-lg overflow-hidden animate-scale-in border border-gray-200">
         {/* Search Input */}
         <div className="flex items-center gap-3 px-4 py-4 border-b">
-          <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-5 h-5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
           </svg>
           <input
@@ -727,13 +727,13 @@ function CommandPalette({ isOpen, onClose, clients, onSelectClient, onAddClient,
             placeholder="Search commands, clients..."
             className="flex-1 text-lg outline-none placeholder-gray-400"
           />
-          <kbd className="px-2 py-1 text-xs font-mono bg-gray-100 text-gray-500 rounded">ESC</kbd>
+          <kbd className="px-2 py-1 text-xs font-mono bg-gray-100 text-slate-400 rounded">ESC</kbd>
         </div>
 
         {/* Results */}
         <div className="max-h-80 overflow-y-auto py-2">
           {filteredCommands.length === 0 ? (
-            <div className="px-4 py-8 text-center text-gray-500">
+            <div className="px-4 py-8 text-center text-slate-400">
               No results found for "{query}"
             </div>
           ) : (
@@ -751,11 +751,11 @@ function CommandPalette({ isOpen, onClose, clients, onSelectClient, onAddClient,
                     {cmd.label}
                   </div>
                   {cmd.subtitle && (
-                    <div className="text-sm text-gray-500 truncate">{cmd.subtitle}</div>
+                    <div className="text-sm text-slate-400 truncate">{cmd.subtitle}</div>
                   )}
                 </div>
                 {cmd.type === 'action' && (
-                  <span className="text-xs text-gray-400 uppercase font-medium">Action</span>
+                  <span className="text-xs text-slate-300 uppercase font-medium">Action</span>
                 )}
               </button>
             ))
@@ -763,7 +763,7 @@ function CommandPalette({ isOpen, onClose, clients, onSelectClient, onAddClient,
         </div>
 
         {/* Footer */}
-        <div className="border-t px-4 py-2 flex items-center gap-4 text-xs text-gray-500 bg-gray-50">
+        <div className="border-t px-4 py-2 flex items-center gap-4 text-xs text-slate-400 bg-gray-50">
           <span className="flex items-center gap-1">
             <kbd className="px-1.5 py-0.5 bg-gray-200 rounded font-mono">↑↓</kbd> Navigate
           </span>
@@ -863,7 +863,7 @@ function KanbanBoard({ clients, onUpdateStatus, onSelectClient, formatVolume }) 
                       {client.type === 'Aggregator' ? '🏢' : '🏪'}
                     </span>
                   </div>
-                  <div className="text-sm text-gray-500 mb-2">
+                  <div className="text-sm text-slate-400 mb-2">
                     {client.corridors.length} corridor{client.corridors.length !== 1 ? 's' : ''}
                   </div>
                   <div className="flex items-center justify-between">
@@ -874,7 +874,7 @@ function KanbanBoard({ clients, onUpdateStatus, onSelectClient, formatVolume }) 
                         </span>
                       ))}
                       {client.corridors.length > 3 && (
-                        <span className="text-xs px-1.5 py-0.5 bg-gray-100 rounded text-gray-500">
+                        <span className="text-xs px-1.5 py-0.5 bg-gray-100 rounded text-slate-400">
                           +{client.corridors.length - 3}
                         </span>
                       )}
@@ -896,7 +896,7 @@ function KanbanBoard({ clients, onUpdateStatus, onSelectClient, formatVolume }) 
               );
             })}
             {clientsByStatus[status].length === 0 && (
-              <div className="text-center py-8 text-gray-400">
+              <div className="text-center py-8 text-slate-300">
                 <div className="text-3xl mb-2">📭</div>
                 <div className="text-sm">No clients</div>
               </div>
@@ -952,7 +952,7 @@ function ColumnSettings({ columns, visibleColumns, onToggle, onClose }) {
 
   return (
     <div ref={menuRef} className="absolute right-0 top-full mt-2 bg-white rounded-xl shadow-lg border border-gray-200 py-2 min-w-[200px] z-50 animate-scale-in">
-      <p className="px-4 py-2 text-xs font-semibold text-gray-400 uppercase border-b">Show Columns</p>
+      <p className="px-4 py-2 text-xs font-semibold text-slate-300 uppercase border-b">Show Columns</p>
       {columns.map(col => (
         <label key={col.key} className="flex items-center gap-3 px-4 py-2 hover:bg-gray-50 cursor-pointer">
           <input
@@ -962,7 +962,7 @@ function ColumnSettings({ columns, visibleColumns, onToggle, onClose }) {
             disabled={col.key === 'name' || col.key === 'actions'}
             className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-cyan-500"
           />
-          <span className={`text-sm ${visibleColumns.includes(col.key) ? 'text-gray-700' : 'text-gray-400'}`}>{col.label}</span>
+          <span className={`text-sm ${visibleColumns.includes(col.key) ? 'text-gray-700' : 'text-slate-300'}`}>{col.label}</span>
         </label>
       ))}
     </div>
@@ -996,19 +996,19 @@ function ContextMenu({ x, y, client, onClose, onChangeStatus, onEdit, onDelete, 
     >
       <div className="px-3 py-2 border-b mb-1">
         <p className="text-sm font-semibold text-gray-800 truncate">{client.name}</p>
-        <p className="text-xs text-gray-500">{client.type}</p>
+        <p className="text-xs text-slate-400">{client.type}</p>
       </div>
 
       {/* Status Change Submenu */}
       <div className="px-1">
-        <p className="px-3 py-1 text-xs font-semibold text-gray-400 uppercase">Change Status</p>
+        <p className="px-3 py-1 text-xs font-semibold text-slate-300 uppercase">Change Status</p>
         {KYB_STATUSES.map(status => (
           <button
             key={status}
             onClick={() => { onChangeStatus(client.id, status); onClose(); }}
             disabled={client.kybStatus === status}
             className={`w-full px-3 py-2 text-left text-sm flex items-center gap-2 rounded-lg transition-colors ${
-              client.kybStatus === status ? 'bg-gray-100 text-gray-400' : 'hover:bg-gray-50 text-gray-700'
+              client.kybStatus === status ? 'bg-gray-100 text-slate-300' : 'hover:bg-gray-50 text-gray-700'
             }`}
           >
             <span className={`w-2 h-2 rounded-full ${
@@ -1100,18 +1100,18 @@ function ReferralContextMenu({ x, y, referral, onClose, onChangeStatus, onEdit, 
     >
       <div className="px-3 py-2 border-b mb-1">
         <p className="text-sm font-semibold text-gray-800 truncate">{referral.referredCompany}</p>
-        <p className="text-xs text-gray-500">Referral</p>
+        <p className="text-xs text-slate-400">Referral</p>
       </div>
 
       <div className="px-1">
-        <p className="px-3 py-1 text-xs font-semibold text-gray-400 uppercase">Change Status</p>
+        <p className="px-3 py-1 text-xs font-semibold text-slate-300 uppercase">Change Status</p>
         {STATUSES.map(status => (
           <button
             key={status}
             onClick={() => { onChangeStatus(referral.id, status); onClose(); }}
             disabled={referral.status === status}
             className={`w-full px-3 py-2 text-left text-sm flex items-center gap-2 rounded-lg transition-colors ${
-              referral.status === status ? 'bg-gray-100 text-gray-400' : 'hover:bg-gray-50 text-gray-700'
+              referral.status === status ? 'bg-gray-100 text-slate-300' : 'hover:bg-gray-50 text-gray-700'
             }`}
           >
             <span className={`w-2 h-2 rounded-full ${STATUS_COLORS[status]}`}></span>
@@ -1212,7 +1212,7 @@ function Modal({ isOpen, onClose, title, children }) {
         <div className="sticky top-0 bg-white/95 backdrop-blur border-b px-6 py-4 flex items-center justify-between z-10">
           <h2 className="text-xl font-bold text-gray-900">{title}</h2>
           <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-xl transition-all" title="Close (Esc)">
-            <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
@@ -1295,7 +1295,7 @@ function NetworkModal({ isOpen, onClose, aggregator, subMerchants }) {
         <div className="sticky top-0 bg-white border-b px-6 py-4 flex items-center justify-between rounded-t-xl">
           <div>
             <h2 className="text-xl font-semibold text-gray-800">{aggregator.name}</h2>
-            <p className="text-sm text-gray-500">Network Visualization • {subMerchants.length} sub-merchant{subMerchants.length !== 1 ? 's' : ''}</p>
+            <p className="text-sm text-slate-400">Network Visualization • {subMerchants.length} sub-merchant{subMerchants.length !== 1 ? 's' : ''}</p>
           </div>
           <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-full transition-colors">
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1306,7 +1306,7 @@ function NetworkModal({ isOpen, onClose, aggregator, subMerchants }) {
 
         <div className="p-6">
           {subMerchants.length === 0 ? (
-            <div className="text-center py-12 text-gray-400">
+            <div className="text-center py-12 text-slate-300">
               <svg className="w-16 h-16 mx-auto mb-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
               </svg>
@@ -1430,7 +1430,7 @@ Volume: $${volume.toLocaleString()}`)} style={{ animationDelay: `${0.2 + index *
 
           {/* Legend */}
           {subMerchants.length > 0 && (
-            <div className="mt-4 flex flex-wrap justify-center gap-4 text-xs text-gray-500">
+            <div className="mt-4 flex flex-wrap justify-center gap-4 text-xs text-slate-400">
               <div className="flex items-center gap-1">
                 <span className="w-3 h-3 rounded-full bg-yellow-400"></span> Pending
               </div>
@@ -1489,7 +1489,7 @@ function ReferralNetworkModal({ isOpen, onClose, referrer, referrals }) {
         <div className="sticky top-0 bg-white border-b px-6 py-4 flex items-center justify-between rounded-t-xl">
           <div>
             <h2 className="text-xl font-semibold text-gray-800">{referrer.name}</h2>
-            <p className="text-sm text-gray-500">Referral Network • {totalReferrals} referral{totalReferrals !== 1 ? 's' : ''}</p>
+            <p className="text-sm text-slate-400">Referral Network • {totalReferrals} referral{totalReferrals !== 1 ? 's' : ''}</p>
           </div>
           <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-full transition-colors">
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1500,7 +1500,7 @@ function ReferralNetworkModal({ isOpen, onClose, referrer, referrals }) {
 
         <div className="p-6">
           {referrals.length === 0 ? (
-            <div className="text-center py-12 text-gray-400">
+            <div className="text-center py-12 text-slate-300">
               <svg className="w-16 h-16 mx-auto mb-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
               </svg>
@@ -1557,7 +1557,7 @@ Volume: $${volume.toLocaleString()}`)} style={{ animationDelay: `${0.2 + index *
           </div>
 
           {referrals.length > 0 && (
-            <div className="mt-4 flex flex-wrap justify-center gap-4 text-xs text-gray-500">
+            <div className="mt-4 flex flex-wrap justify-center gap-4 text-xs text-slate-400">
               <div className="flex items-center gap-1"><span className="w-3 h-3 rounded-full bg-slate-80bg-emerald-600bg-gray-500bg-gray-50text-slate-4000"></span> Active</div>
               <div className="flex items-center gap-1"><span className="w-3 h-3 rounded-full bg-yellow-400"></span> Pending</div>
               <div className="flex items-center gap-1"><span className="w-3 h-3 rounded-full bg-gray-400"></span> Inactive</div>
@@ -1631,13 +1631,13 @@ function ReferrerForm({ referrer, onSave, onClose }) {
 
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">Fee Split Percentage</label>
-        <p className="text-xs text-gray-500 mb-2">The percentage of revenue to share with this referrer</p>
+        <p className="text-xs text-slate-400 mb-2">The percentage of revenue to share with this referrer</p>
         <div className="relative w-48">
           <input type="number" step="0.01" min="0" max="100" value={formData.feeSplitPercentage}
             onChange={(e) => setFormData({ ...formData, feeSplitPercentage: e.target.value })}
             className={`w-full px-4 py-2 pr-10 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none font-mono ${errors.feeSplitPercentage ? 'border-red-500' : 'border-gray-300'}`}
             placeholder="0.00" />
-          <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400">%</span>
+          <span className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-300">%</span>
         </div>
         {errors.feeSplitPercentage && <p className="text-red-500 text-sm mt-1">{errors.feeSplitPercentage}</p>}
       </div>
@@ -1768,11 +1768,11 @@ function ReferralForm({ referral, onSave, onClose, allReferrers }) {
                     onChange={(e) => updateCurrency(curr.id, 'costPercentage', e.target.value)}
                     placeholder="Cost %"
                     className="w-full px-3 py-2 pr-8 border border-gray-300 rounded-lg text-sm font-mono focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none" />
-                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">%</span>
+                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-300 text-sm">%</span>
                 </div>
               </div>
               <button type="button" onClick={() => removeCurrency(curr.id)} disabled={formData.currencies.length === 1}
-                className="p-2 text-gray-400 hover:text-red-500 disabled:opacity-30 disabled:cursor-not-allowed transition-colors">
+                className="p-2 text-slate-300 hover:text-red-500 disabled:opacity-30 disabled:cursor-not-allowed transition-colors">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                 </svg>
@@ -1853,7 +1853,7 @@ function ReferralStatsBar({ referrers, referrals }) {
             </svg>
           </div>
           <div>
-            <p className="text-xs text-gray-500 uppercase tracking-wide font-medium">Referrals</p>
+            <p className="text-xs text-slate-400 uppercase tracking-wide font-medium">Referrals</p>
             <p className="text-2xl font-bold font-mono text-gray-800">{stats.totalReferrals}</p>
           </div>
         </div>
@@ -1868,7 +1868,7 @@ function ReferralStatsBar({ referrers, referrals }) {
             </svg>
           </div>
           <div>
-            <p className="text-xs text-gray-500 uppercase tracking-wide font-medium">Active</p>
+            <p className="text-xs text-slate-400 uppercase tracking-wide font-medium">Active</p>
             <p className="text-2xl font-bold font-mono text-green-600">{stats.statusCounts['Active']}</p>
           </div>
         </div>
@@ -1883,7 +1883,7 @@ function ReferralStatsBar({ referrers, referrals }) {
             </svg>
           </div>
           <div>
-            <p className="text-xs text-gray-500 uppercase tracking-wide font-medium">Pending</p>
+            <p className="text-xs text-slate-400 uppercase tracking-wide font-medium">Pending</p>
             <p className="text-2xl font-bold font-mono text-yellow-600">{stats.statusCounts['Pending']}</p>
           </div>
         </div>
@@ -1898,7 +1898,7 @@ function ReferralStatsBar({ referrers, referrals }) {
             </svg>
           </div>
           <div>
-            <p className="text-xs text-gray-500 uppercase tracking-wide font-medium">Inactive</p>
+            <p className="text-xs text-slate-400 uppercase tracking-wide font-medium">Inactive</p>
             <p className="text-2xl font-bold font-mono text-gray-600">{stats.statusCounts['Inactive']}</p>
           </div>
         </div>
@@ -1913,7 +1913,7 @@ function ReferralStatsBar({ referrers, referrals }) {
             </svg>
           </div>
           <div>
-            <p className="text-xs text-gray-500 uppercase tracking-wide font-medium">Avg Cost</p>
+            <p className="text-xs text-slate-400 uppercase tracking-wide font-medium">Avg Cost</p>
             <p className="text-2xl font-bold font-mono text-orange-600">{stats.avgCost}%</p>
           </div>
         </div>
@@ -2059,7 +2059,7 @@ function ClientForm({ client, onSave, onClose, allClients }) {
               <option key={agg.id} value={agg.id}>{agg.name}</option>
             ))}
           </select>
-          <p className="text-xs text-gray-500 mt-1">Associate this sub-merchant with an aggregator</p>
+          <p className="text-xs text-slate-400 mt-1">Associate this sub-merchant with an aggregator</p>
         </div>
       )}
 
@@ -2120,7 +2120,7 @@ function ClientForm({ client, onSave, onClose, allClients }) {
                 type="button"
                 onClick={() => removeCorridor(corridor.id)}
                 disabled={formData.corridors.length === 1}
-                className="p-2 text-gray-400 hover:text-red-500 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                className="p-2 text-slate-300 hover:text-red-500 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -2178,7 +2178,7 @@ function ClientForm({ client, onSave, onClose, allClients }) {
           </div>
           {/* Suggested Tags */}
           <div className="flex flex-wrap gap-1">
-            <span className="text-xs text-gray-400 mr-1">Suggestions:</span>
+            <span className="text-xs text-slate-300 mr-1">Suggestions:</span>
             {SUGGESTED_TAGS.filter(t => !(formData.tags || []).includes(t)).slice(0, 5).map(tag => (
               <button
                 key={tag}
@@ -2255,7 +2255,7 @@ function StatsBar({ clients, onFilterClick, activeFilter }) {
             </svg>
           </div>
           <div>
-            <p className="text-[10px] text-gray-400 uppercase tracking-wider font-semibold">Clients</p>
+            <p className="text-[10px] text-slate-300 uppercase tracking-wider font-semibold">Clients</p>
             <p className="text-2xl font-extrabold font-mono text-gray-800">{stats.total}</p>
           </div>
         </div>
@@ -2285,7 +2285,7 @@ function StatsBar({ clients, onFilterClick, activeFilter }) {
             </svg>
           </div>
           <div>
-            <p className="text-[10px] text-gray-400 uppercase tracking-wider font-semibold">Pending</p>
+            <p className="text-[10px] text-slate-300 uppercase tracking-wider font-semibold">Pending</p>
             <p className="text-2xl font-extrabold font-mono text-amber-600">{stats.kybCounts['Pending']}</p>
           </div>
         </div>
@@ -2300,7 +2300,7 @@ function StatsBar({ clients, onFilterClick, activeFilter }) {
             </svg>
           </div>
           <div>
-            <p className="text-[10px] text-gray-400 uppercase tracking-wider font-semibold">In Review</p>
+            <p className="text-[10px] text-slate-300 uppercase tracking-wider font-semibold">In Review</p>
             <p className="text-2xl font-extrabold font-mono text-blue-600">{stats.kybCounts['In Review']}</p>
           </div>
         </div>
@@ -2315,7 +2315,7 @@ function StatsBar({ clients, onFilterClick, activeFilter }) {
             </svg>
           </div>
           <div>
-            <p className="text-[10px] text-gray-400 uppercase tracking-wider font-semibold">Approved</p>
+            <p className="text-[10px] text-slate-300 uppercase tracking-wider font-semibold">Approved</p>
             <p className="text-2xl font-extrabold font-mono text-emerald-600">{stats.kybCounts['Approved']}</p>
           </div>
         </div>
@@ -2330,7 +2330,7 @@ function StatsBar({ clients, onFilterClick, activeFilter }) {
             </svg>
           </div>
           <div>
-            <p className="text-[10px] text-gray-400 uppercase tracking-wider font-semibold">Rejected</p>
+            <p className="text-[10px] text-slate-300 uppercase tracking-wider font-semibold">Rejected</p>
             <p className="text-2xl font-extrabold font-mono text-red-600">{stats.kybCounts['Rejected']}</p>
           </div>
         </div>
@@ -2345,7 +2345,7 @@ function StatsBar({ clients, onFilterClick, activeFilter }) {
             </svg>
           </div>
           <div>
-            <p className="text-[10px] text-gray-400 uppercase tracking-wider font-semibold">Needs KYB</p>
+            <p className="text-[10px] text-slate-300 uppercase tracking-wider font-semibold">Needs KYB</p>
             <p className="text-2xl font-extrabold font-mono text-purple-600">{stats.missingKyb}</p>
           </div>
         </div>
@@ -2416,7 +2416,7 @@ function Dashboard({ clients }) {
             </PieChart>
           </ResponsiveContainer>
         ) : (
-          <div className="h-[250px] flex items-center justify-center text-gray-400">No data available</div>
+          <div className="h-[250px] flex items-center justify-center text-slate-300">No data available</div>
         )}
       </div>
 
@@ -2433,7 +2433,7 @@ function Dashboard({ clients }) {
             </BarChart>
           </ResponsiveContainer>
         ) : (
-          <div className="h-[250px] flex items-center justify-center text-gray-400">No data available</div>
+          <div className="h-[250px] flex items-center justify-center text-slate-300">No data available</div>
         )}
       </div>
 
@@ -2448,7 +2448,7 @@ function Dashboard({ clients }) {
               </span>
             </div>
           )) : (
-            <div className="text-center py-8 text-gray-400">All clients approved!</div>
+            <div className="text-center py-8 text-slate-300">All clients approved!</div>
           )}
         </div>
       </div>
@@ -3301,7 +3301,7 @@ function App({ currentUser }) {
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
           <p className="text-gray-600 font-medium">Loading data...</p>
-          <p className="text-gray-400 text-sm mt-1">Syncing with team database</p>
+          <p className="text-slate-300 text-sm mt-1">Syncing with team database</p>
         </div>
       </div>
     );
@@ -3334,21 +3334,21 @@ function App({ currentUser }) {
               </div>
               <div className="hidden sm:block">
                 <h1 className="text-lg font-bold tracking-tight gradient-text">SpherePay</h1>
-                <p className="text-[10px] text-gray-500 -mt-0.5 font-medium tracking-wider uppercase">Client Manager</p>
+                <p className="text-[10px] text-slate-400 -mt-0.5 font-medium tracking-wider uppercase">Client Manager</p>
               </div>
             </div>
             {/* Navigation Tabs */}
             <div className="flex bg-white/5 rounded-xl p-1 border border-white/10">
               <button
                 onClick={() => setViewMode('clients')}
-                className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300 flex items-center gap-2 ${viewMode === 'clients' ? 'bg-slate-700 text-white shadow-lg' : 'text-gray-400 hover:text-white hover:bg-white/5'}`}
+                className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300 flex items-center gap-2 ${viewMode === 'clients' ? 'bg-slate-700 text-white shadow-lg' : 'text-slate-300 hover:text-white hover:bg-white/5'}`}
               >
                 Clients
                 <span className={`text-xs px-1.5 py-0.5 rounded-full ${viewMode === 'clients' ? 'bg-white/20' : 'bg-white/10'}`}>{clients.length}</span>
               </button>
               <button
                 onClick={() => setViewMode('referrals')}
-                className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300 flex items-center gap-2 ${viewMode === 'referrals' ? 'bg-slate-700 text-white shadow-lg' : 'text-gray-400 hover:text-white hover:bg-white/5'}`}
+                className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300 flex items-center gap-2 ${viewMode === 'referrals' ? 'bg-slate-700 text-white shadow-lg' : 'text-slate-300 hover:text-white hover:bg-white/5'}`}
               >
                 Referrals
                 <span className={`text-xs px-1.5 py-0.5 rounded-full ${viewMode === 'referrals' ? 'bg-white/20' : 'bg-white/10'}`}>{referrals.length}</span>
@@ -3357,7 +3357,7 @@ function App({ currentUser }) {
           </div>
           <div className="flex items-center gap-2 sm:gap-3">
             {/* Real-time sync indicator */}
-            <div className="hidden md:flex items-center gap-2 text-gray-400 text-xs bg-white/5 px-3 py-2 rounded-lg border border-white/10">
+            <div className="hidden md:flex items-center gap-2 text-slate-300 text-xs bg-white/5 px-3 py-2 rounded-lg border border-white/10">
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-slate-80bg-emerald-600bg-gray-500bg-gray-50text-slate-4000"></span>
@@ -3367,7 +3367,7 @@ function App({ currentUser }) {
             {/* Dark mode toggle */}
             <button
               onClick={() => setDarkMode(!darkMode)}
-              className="p-2 hover:bg-white/10 rounded-lg transition-all duration-200 text-gray-400 hover:text-white"
+              className="p-2 hover:bg-white/10 rounded-lg transition-all duration-200 text-slate-300 hover:text-white"
               title={darkMode ? "Switch to light mode" : "Switch to dark mode"}
             >
               {darkMode ? (
@@ -3390,7 +3390,7 @@ function App({ currentUser }) {
               <span className="hidden sm:inline text-sm font-medium text-gray-300">{currentUser?.email?.split('@')[0]}</span>
               <button
                 onClick={handleLogout}
-                className="p-1.5 hover:bg-white/10 rounded-lg transition-all duration-200 text-gray-400 hover:text-red-400"
+                className="p-1.5 hover:bg-white/10 rounded-lg transition-all duration-200 text-slate-300 hover:text-red-400"
                 title="Sign out"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -3404,7 +3404,7 @@ function App({ currentUser }) {
                 <div className="hidden sm:flex bg-white/5 rounded-xl p-1 border border-white/10">
                   <button
                     onClick={() => { setShowDashboard(false); setShowKanban && setShowKanban(false); }}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${!showDashboard && !showKanban ? 'bg-white/10 text-white' : 'text-gray-400 hover:text-white'}`}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${!showDashboard && !showKanban ? 'bg-white/10 text-white' : 'text-slate-300 hover:text-white'}`}
                     title="Table View"
                   >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -3413,7 +3413,7 @@ function App({ currentUser }) {
                   </button>
                   <button
                     onClick={() => { setShowKanban(true); setShowDashboard(false); }}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${showKanban ? 'bg-white/10 text-white' : 'text-gray-400 hover:text-white'}`}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${showKanban ? 'bg-white/10 text-white' : 'text-slate-300 hover:text-white'}`}
                     title="Kanban Board"
                   >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -3422,7 +3422,7 @@ function App({ currentUser }) {
                   </button>
                   <button
                     onClick={() => { setShowDashboard(true); setShowKanban(false); }}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${showDashboard ? 'bg-white/10 text-white' : 'text-gray-400 hover:text-white'}`}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${showDashboard ? 'bg-white/10 text-white' : 'text-slate-300 hover:text-white'}`}
                     title="Analytics"
                   >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -3484,7 +3484,7 @@ function App({ currentUser }) {
                 </svg>
                 KYB Pipeline
               </h2>
-              <p className="text-gray-400 text-sm">Drag clients between columns to update status</p>
+              <p className="text-slate-300 text-sm">Drag clients between columns to update status</p>
             </div>
             <KanbanBoard
               clients={clients}
@@ -3523,7 +3523,7 @@ function App({ currentUser }) {
             <div className="p-4 border-b flex flex-wrap gap-4 items-center">
               <div className="flex-1 min-w-[200px]">
                 <div className="relative">
-                  <svg className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                   </svg>
                   <input
@@ -3718,22 +3718,22 @@ function App({ currentUser }) {
                               </div>
                             </div>
                             <h3 className="text-xl font-bold text-gray-800 mb-2">Welcome to SpherePay</h3>
-                            <p className="text-gray-500 mb-6">Start building your pipeline by adding your first client</p>
+                            <p className="text-slate-400 mb-6">Start building your pipeline by adding your first client</p>
                             <button onClick={() => { setEditingClient(null); setShowModal(true); }} className="btn-primary px-6 py-3 text-white rounded-xl font-semibold flex items-center gap-2">
                               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" /></svg>
                               Add Your First Client
                             </button>
-                            <p className="text-xs text-gray-400 mt-4">Pro tip: Press <kbd className="px-1.5 py-0.5 bg-gray-100 rounded text-gray-600 font-mono">Ctrl+N</kbd> to quickly add clients</p>
+                            <p className="text-xs text-slate-300 mt-4">Pro tip: Press <kbd className="px-1.5 py-0.5 bg-gray-100 rounded text-gray-600 font-mono">Ctrl+N</kbd> to quickly add clients</p>
                           </div>
                         ) : (
                           <div className="flex flex-col items-center max-w-sm mx-auto">
                             <div className="w-20 h-20 bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl flex items-center justify-center mb-4 shadow-inner">
-                              <svg className="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <svg className="w-10 h-10 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                               </svg>
                             </div>
                             <h3 className="text-lg font-semibold text-gray-700 mb-1">No results found</h3>
-                            <p className="text-gray-500 mb-4">Try adjusting your search or filters</p>
+                            <p className="text-slate-400 mb-4">Try adjusting your search or filters</p>
                             <button onClick={() => { setSearch(''); setFilters({ kybStatus: '', type: '', priority: '' }); setActiveStatFilter(null); }} className="text-slate-600 hover:text-slate-800 font-medium flex items-center gap-1">
                               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
                               Clear all filters
@@ -3784,8 +3784,8 @@ function App({ currentUser }) {
                             <td className="px-4 py-3"><div className="flex flex-wrap gap-1">{aggregator.corridors.map(cor => (<span key={cor.id} className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs ${PRIORITY_COLORS[cor.priority].bg} ${PRIORITY_COLORS[cor.priority].text}`}>{cor.currency}</span>))}</div></td>
                             <td className="px-4 py-3 font-mono text-blue-700 font-semibold">{formatVolume(aggregatorVolume)}</td>
                             <td className="px-4 py-3"><span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${KYB_COLORS[aggregator.kybStatus].bg} ${KYB_COLORS[aggregator.kybStatus].text} border ${KYB_COLORS[aggregator.kybStatus].border}`}>{aggregator.kybStatus}</span></td>
-                            <td className="px-4 py-3">{aggregator.sumsubLink ? (<a href={aggregator.sumsubLink} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()} className="text-blue-600 hover:underline text-sm">View Link</a>) : (<span className="text-gray-400 text-sm">—</span>)}</td>
-                            <td className="px-4 py-3"><div className="flex justify-end gap-2"><button onClick={(e) => { e.stopPropagation(); setEditingClient(aggregator); setShowModal(true); }} className="p-1.5 text-gray-500 hover:text-blue-600 hover:bg-blue-100 rounded transition-colors" title="Edit"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg></button><button onClick={(e) => { e.stopPropagation(); setDeleteTarget(aggregator); }} className="p-1.5 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded transition-colors" title="Delete"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></button></div></td>
+                            <td className="px-4 py-3">{aggregator.sumsubLink ? (<a href={aggregator.sumsubLink} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()} className="text-blue-600 hover:underline text-sm">View Link</a>) : (<span className="text-slate-300 text-sm">—</span>)}</td>
+                            <td className="px-4 py-3"><div className="flex justify-end gap-2"><button onClick={(e) => { e.stopPropagation(); setEditingClient(aggregator); setShowModal(true); }} className="p-1.5 text-slate-400 hover:text-blue-600 hover:bg-blue-100 rounded transition-colors" title="Edit"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg></button><button onClick={(e) => { e.stopPropagation(); setDeleteTarget(aggregator); }} className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded transition-colors" title="Delete"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></button></div></td>
                           </tr>
                         );
 
@@ -3802,13 +3802,13 @@ function App({ currentUser }) {
                                     <div className="font-medium text-gray-700 flex items-center gap-1.5">{pinnedClients.includes(subMerchant.id) && <span className="text-amber-400">⭐</span>}<InlineEdit value={subMerchant.name} onSave={(newValue) => handleInlineEdit(subMerchant.id, 'name', newValue)} className="font-medium" /></div>
                                   </div>
                                 </td>
-                                <td className="px-4 py-2"><span className="text-gray-500 text-sm">Sub-merchant</span></td>
+                                <td className="px-4 py-2"><span className="text-slate-400 text-sm">Sub-merchant</span></td>
                                 <td className="px-4 py-2"><span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${subMerchant.inFlowOfFunds ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'}`}>{subMerchant.inFlowOfFunds ? 'Yes' : 'No'}</span></td>
                                 <td className="px-4 py-2"><div className="flex flex-wrap gap-1">{subMerchant.corridors.map(cor => (<span key={cor.id} className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs ${PRIORITY_COLORS[cor.priority].bg} ${PRIORITY_COLORS[cor.priority].text}`}>{cor.currency}</span>))}</div></td>
                                 <td className="px-4 py-2 font-mono text-gray-600">{formatVolume(smVolume)}</td>
                                 <td className="px-4 py-2"><span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${KYB_COLORS[subMerchant.kybStatus].bg} ${KYB_COLORS[subMerchant.kybStatus].text} border ${KYB_COLORS[subMerchant.kybStatus].border}`}>{subMerchant.kybStatus}</span></td>
-                                <td className="px-4 py-2">{subMerchant.sumsubLink ? (<a href={subMerchant.sumsubLink} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()} className="text-blue-600 hover:underline text-sm">View Link</a>) : (<span className="text-gray-400 text-sm">—</span>)}</td>
-                                <td className="px-4 py-2"><div className="flex justify-end gap-2"><button onClick={(e) => { e.stopPropagation(); setEditingClient(subMerchant); setShowModal(true); }} className="p-1.5 text-gray-500 hover:text-blue-600 hover:bg-gray-100 rounded transition-colors" title="Edit"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg></button><button onClick={(e) => { e.stopPropagation(); setDeleteTarget(subMerchant); }} className="p-1.5 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded transition-colors" title="Delete"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></button></div></td>
+                                <td className="px-4 py-2">{subMerchant.sumsubLink ? (<a href={subMerchant.sumsubLink} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()} className="text-blue-600 hover:underline text-sm">View Link</a>) : (<span className="text-slate-300 text-sm">—</span>)}</td>
+                                <td className="px-4 py-2"><div className="flex justify-end gap-2"><button onClick={(e) => { e.stopPropagation(); setEditingClient(subMerchant); setShowModal(true); }} className="p-1.5 text-slate-400 hover:text-blue-600 hover:bg-gray-100 rounded transition-colors" title="Edit"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg></button><button onClick={(e) => { e.stopPropagation(); setDeleteTarget(subMerchant); }} className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded transition-colors" title="Delete"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></button></div></td>
                               </tr>
                             );
                           });
@@ -3819,7 +3819,7 @@ function App({ currentUser }) {
                       if (standaloneSubMerchants.length > 0) {
                         rows.push(
                           <tr key="standalone-header" className="bg-gray-100">
-                            <td colSpan={9} className="px-4 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">Standalone Sub-merchants ({standaloneSubMerchants.length})</td>
+                            <td colSpan={9} className="px-4 py-2 text-xs font-semibold text-slate-400 uppercase tracking-wider">Standalone Sub-merchants ({standaloneSubMerchants.length})</td>
                           </tr>
                         );
                         standaloneSubMerchants.forEach(sm => {
@@ -3828,13 +3828,13 @@ function App({ currentUser }) {
                             <tr key={sm.id} className={`bg-white hover:bg-gray-50 transition-colors cursor-pointer ${selectedClients.includes(sm.id) ? 'bg-blue-50' : ''}`} onClick={() => setSelectedClient(sm)} onContextMenu={(e) => handleContextMenu(e, sm)}>
                               <td className="px-3 py-3" onClick={(e) => e.stopPropagation()}><input type="checkbox" checked={selectedClients.includes(sm.id)} onChange={() => toggleClientSelection(sm.id)} className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500" /></td>
                               <td className="px-4 py-3"><div className="font-medium text-gray-800 flex items-center gap-1.5">{pinnedClients.includes(sm.id) && <span className="text-amber-400">⭐</span>}<InlineEdit value={sm.name} onSave={(newValue) => handleInlineEdit(sm.id, 'name', newValue)} className="font-medium" /></div></td>
-                              <td className="px-4 py-3"><span className="text-gray-500">Sub-merchant</span></td>
+                              <td className="px-4 py-3"><span className="text-slate-400">Sub-merchant</span></td>
                               <td className="px-4 py-3"><span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${sm.inFlowOfFunds ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'}`}>{sm.inFlowOfFunds ? 'Yes' : 'No'}</span></td>
                               <td className="px-4 py-3"><div className="flex flex-wrap gap-1">{sm.corridors.map(cor => (<span key={cor.id} className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs ${PRIORITY_COLORS[cor.priority].bg} ${PRIORITY_COLORS[cor.priority].text}`}>{cor.currency}</span>))}</div></td>
                               <td className="px-4 py-3 font-mono text-gray-700">{formatVolume(smVolume)}</td>
                               <td className="px-4 py-3"><span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${KYB_COLORS[sm.kybStatus].bg} ${KYB_COLORS[sm.kybStatus].text} border ${KYB_COLORS[sm.kybStatus].border}`}>{sm.kybStatus}</span></td>
-                              <td className="px-4 py-3">{sm.sumsubLink ? (<a href={sm.sumsubLink} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()} className="text-blue-600 hover:underline text-sm">View Link</a>) : (<span className="text-gray-400 text-sm">—</span>)}</td>
-                              <td className="px-4 py-3"><div className="flex justify-end gap-2"><button onClick={(e) => { e.stopPropagation(); setEditingClient(sm); setShowModal(true); }} className="p-1.5 text-gray-500 hover:text-blue-600 hover:bg-gray-100 rounded transition-colors" title="Edit"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg></button><button onClick={(e) => { e.stopPropagation(); setDeleteTarget(sm); }} className="p-1.5 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded transition-colors" title="Delete"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></button></div></td>
+                              <td className="px-4 py-3">{sm.sumsubLink ? (<a href={sm.sumsubLink} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()} className="text-blue-600 hover:underline text-sm">View Link</a>) : (<span className="text-slate-300 text-sm">—</span>)}</td>
+                              <td className="px-4 py-3"><div className="flex justify-end gap-2"><button onClick={(e) => { e.stopPropagation(); setEditingClient(sm); setShowModal(true); }} className="p-1.5 text-slate-400 hover:text-blue-600 hover:bg-gray-100 rounded transition-colors" title="Edit"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg></button><button onClick={(e) => { e.stopPropagation(); setDeleteTarget(sm); }} className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded transition-colors" title="Delete"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></button></div></td>
                             </tr>
                           );
                         });
@@ -3865,7 +3865,7 @@ function App({ currentUser }) {
                             >
                               {pinnedClients.includes(client.id) && <span className="text-amber-400">⭐</span>}
                               {client.name}
-                              <svg className="w-4 h-4 text-gray-400 group-hover:text-blue-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <svg className="w-4 h-4 text-slate-300 group-hover:text-blue-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                               </svg>
@@ -3893,14 +3893,14 @@ function App({ currentUser }) {
                               {parentAggregator.name}
                             </button>
                           )}
-                          {client.notes && <div className="text-xs text-gray-400 truncate max-w-[200px]">{client.notes}</div>}
+                          {client.notes && <div className="text-xs text-slate-300 truncate max-w-[200px]">{client.notes}</div>}
                           {client.tags && client.tags.length > 0 && (
                             <div className="flex flex-wrap gap-1 mt-1">
                               {client.tags.slice(0, 3).map((tag, i) => (
                                 <span key={i} className="text-xs px-1.5 py-0.5 bg-blue-50 text-blue-700 rounded-full">{tag}</span>
                               ))}
                               {client.tags.length > 3 && (
-                                <span className="text-xs px-1.5 py-0.5 bg-gray-100 text-gray-500 rounded-full">+{client.tags.length - 3}</span>
+                                <span className="text-xs px-1.5 py-0.5 bg-gray-100 text-slate-400 rounded-full">+{client.tags.length - 3}</span>
                               )}
                             </div>
                           )}
@@ -3944,14 +3944,14 @@ function App({ currentUser }) {
                               View Link
                             </a>
                           ) : (
-                            <span className="text-gray-400 text-sm">—</span>
+                            <span className="text-slate-300 text-sm">—</span>
                           )}
                         </td>
                         <td className="px-4 py-3">
                           <div className="flex justify-end gap-2">
                             <button
                               onClick={(e) => { e.stopPropagation(); setEditingClient(client); setShowModal(true); }}
-                              className="p-1.5 text-gray-500 hover:text-blue-600 hover:bg-gray-50 rounded transition-colors"
+                              className="p-1.5 text-slate-400 hover:text-blue-600 hover:bg-gray-50 rounded transition-colors"
                               title="Edit"
                             >
                               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -3960,7 +3960,7 @@ function App({ currentUser }) {
                             </button>
                             <button
                               onClick={(e) => { e.stopPropagation(); setDeleteTarget(client); }}
-                              className="p-1.5 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
+                              className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
                               title="Delete"
                             >
                               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -3984,7 +3984,7 @@ function App({ currentUser }) {
             <div className="p-4 border-b flex flex-wrap gap-4 items-center">
               <div className="flex-1 min-w-[200px]">
                 <div className="relative">
-                  <svg className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                   </svg>
                   <input
@@ -4102,7 +4102,7 @@ function App({ currentUser }) {
                               </svg>
                             </div>
                             <h3 className="text-lg font-semibold text-gray-800 mb-1">No referrals yet</h3>
-                            <p className="text-gray-500 mb-4">Add a partner first, then track clients they bring in</p>
+                            <p className="text-slate-400 mb-4">Add a partner first, then track clients they bring in</p>
                             <div className="flex gap-3">
                               <button onClick={() => { setEditingReferrer(null); setShowReferrerModal(true); }} className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors">Add Partner</button>
                               <button onClick={() => { setEditingReferral(null); setShowReferralModal(true); }} className="px-4 py-2 bg-purple-600 text-white rounded-lg font-medium hover:bg-purple-700 transition-colors">Add Referral</button>
@@ -4111,12 +4111,12 @@ function App({ currentUser }) {
                         ) : (
                           <div className="flex flex-col items-center">
                             <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-3">
-                              <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <svg className="w-8 h-8 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                               </svg>
                             </div>
                             <h3 className="text-lg font-medium text-gray-700 mb-1">No matching referrals</h3>
-                            <p className="text-gray-500">Try adjusting your search or filters</p>
+                            <p className="text-slate-400">Try adjusting your search or filters</p>
                           </div>
                         )}
                       </td>
@@ -4164,18 +4164,18 @@ function App({ currentUser }) {
                                 {referrerReferrals.length - activeCount > 0 && <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600">{referrerReferrals.length - activeCount} Other</span>}
                               </div>
                             </td>
-                            <td className="px-4 py-3"><span className="text-gray-400 text-sm">—</span></td>
+                            <td className="px-4 py-3"><span className="text-slate-300 text-sm">—</span></td>
                             <td className="px-4 py-3">
                               {referrer.feeSplitPercentage > 0 ? (
                                 <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700 border border-green-200">
                                   <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                                   <span className="font-mono">{referrer.feeSplitPercentage}%</span>
                                 </span>
-                              ) : (<span className="text-gray-400 text-sm">Not set</span>)}
+                              ) : (<span className="text-slate-300 text-sm">Not set</span>)}
                             </td>
                             <td className="px-4 py-3">
                               <div className="flex justify-end gap-2">
-                                <button onClick={() => { setEditingReferrer(referrer); setShowReferrerModal(true); }} className="p-1.5 text-gray-500 hover:text-purple-600 hover:bg-purple-100 rounded transition-colors" title="Edit Partner"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg></button>
+                                <button onClick={() => { setEditingReferrer(referrer); setShowReferrerModal(true); }} className="p-1.5 text-slate-400 hover:text-purple-600 hover:bg-purple-100 rounded transition-colors" title="Edit Partner"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg></button>
                               </div>
                             </td>
                           </tr>
@@ -4192,13 +4192,13 @@ function App({ currentUser }) {
                                     <span className="text-gray-300">└</span>
                                     <div className="font-medium text-gray-700">{referral.referredCompany}</div>
                                   </div>
-                                  {referral.notes && <div className="text-xs text-gray-400 truncate max-w-[200px] ml-5">{referral.notes}</div>}
+                                  {referral.notes && <div className="text-xs text-slate-300 truncate max-w-[200px] ml-5">{referral.notes}</div>}
                                 </td>
-                                <td className="px-4 py-2"><span className="text-gray-500 text-sm">Referred Client</span></td>
+                                <td className="px-4 py-2"><span className="text-slate-400 text-sm">Referred Client</span></td>
                                 <td className="px-4 py-2"><span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${REFERRAL_STATUS_COLORS[referral.status].bg} ${REFERRAL_STATUS_COLORS[referral.status].text} border ${REFERRAL_STATUS_COLORS[referral.status].border}`}>{referral.status}</span></td>
                                 <td className="px-4 py-2"><div className="flex flex-wrap gap-1">{referral.currencies.map(curr => (<span key={curr.id} className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs bg-blue-100 text-blue-700">{curr.currency}: <span className="font-mono">{curr.costPercentage}%</span></span>))}</div></td>
-                                <td className="px-4 py-2"><span className="text-gray-400 text-sm">—</span></td>
-                                <td className="px-4 py-2"><div className="flex justify-end gap-2"><button onClick={() => { setEditingReferral(referral); setShowReferralModal(true); }} className="p-1.5 text-gray-500 hover:text-blue-600 hover:bg-gray-100 rounded transition-colors" title="Edit"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg></button><button onClick={() => setDeleteReferralTarget(referral)} className="p-1.5 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded transition-colors" title="Delete"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></button></div></td>
+                                <td className="px-4 py-2"><span className="text-slate-300 text-sm">—</span></td>
+                                <td className="px-4 py-2"><div className="flex justify-end gap-2"><button onClick={() => { setEditingReferral(referral); setShowReferralModal(true); }} className="p-1.5 text-slate-400 hover:text-blue-600 hover:bg-gray-100 rounded transition-colors" title="Edit"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg></button><button onClick={() => setDeleteReferralTarget(referral)} className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded transition-colors" title="Delete"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></button></div></td>
                               </tr>
                             );
                           });
@@ -4209,19 +4209,19 @@ function App({ currentUser }) {
                       if (orphanReferrals.length > 0) {
                         rows.push(
                           <tr key="orphan-header" className="bg-gray-100">
-                            <td colSpan={7} className="px-4 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">Unassigned Referrals ({orphanReferrals.length})</td>
+                            <td colSpan={7} className="px-4 py-2 text-xs font-semibold text-slate-400 uppercase tracking-wider">Unassigned Referrals ({orphanReferrals.length})</td>
                           </tr>
                         );
                         orphanReferrals.forEach(referral => {
                           rows.push(
                             <tr key={referral.id} className={`bg-white hover:bg-gray-50 transition-colors cursor-pointer ${selectedReferrals.includes(referral.id) ? 'bg-purple-50' : ''}`} onContextMenu={(e) => handleReferralContextMenu(e, referral)}>
                               <td className="px-3 py-3" onClick={(e) => e.stopPropagation()}><input type="checkbox" checked={selectedReferrals.includes(referral.id)} onChange={() => toggleReferralSelection(referral.id)} className="w-4 h-4 rounded border-gray-300 text-purple-600 focus:ring-purple-500" /></td>
-                              <td className="px-4 py-3"><div className="font-medium text-gray-800">{referral.referredCompany}</div>{referral.notes && <div className="text-xs text-gray-400 truncate max-w-[200px]">{referral.notes}</div>}</td>
-                              <td className="px-4 py-3"><span className="text-gray-400">No referrer</span></td>
+                              <td className="px-4 py-3"><div className="font-medium text-gray-800">{referral.referredCompany}</div>{referral.notes && <div className="text-xs text-slate-300 truncate max-w-[200px]">{referral.notes}</div>}</td>
+                              <td className="px-4 py-3"><span className="text-slate-300">No referrer</span></td>
                               <td className="px-4 py-3"><span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${REFERRAL_STATUS_COLORS[referral.status].bg} ${REFERRAL_STATUS_COLORS[referral.status].text} border ${REFERRAL_STATUS_COLORS[referral.status].border}`}>{referral.status}</span></td>
                               <td className="px-4 py-3"><div className="flex flex-wrap gap-1">{referral.currencies.map(curr => (<span key={curr.id} className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs bg-blue-100 text-blue-700">{curr.currency}: <span className="font-mono">{curr.costPercentage}%</span></span>))}</div></td>
-                              <td className="px-4 py-3"><span className="text-gray-400 text-sm">—</span></td>
-                              <td className="px-4 py-3"><div className="flex justify-end gap-2"><button onClick={() => { setEditingReferral(referral); setShowReferralModal(true); }} className="p-1.5 text-gray-500 hover:text-blue-600 hover:bg-gray-100 rounded transition-colors" title="Edit"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg></button><button onClick={() => setDeleteReferralTarget(referral)} className="p-1.5 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded transition-colors" title="Delete"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></button></div></td>
+                              <td className="px-4 py-3"><span className="text-slate-300 text-sm">—</span></td>
+                              <td className="px-4 py-3"><div className="flex justify-end gap-2"><button onClick={() => { setEditingReferral(referral); setShowReferralModal(true); }} className="p-1.5 text-slate-400 hover:text-blue-600 hover:bg-gray-100 rounded transition-colors" title="Edit"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg></button><button onClick={() => setDeleteReferralTarget(referral)} className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded transition-colors" title="Delete"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></button></div></td>
                             </tr>
                           );
                         });
@@ -4246,7 +4246,7 @@ function App({ currentUser }) {
                           </td>
                           <td className="px-4 py-3">
                             <div className="font-medium text-gray-800">{referral.referredCompany}</div>
-                            {referral.notes && <div className="text-xs text-gray-400 truncate max-w-[200px]">{referral.notes}</div>}
+                            {referral.notes && <div className="text-xs text-slate-300 truncate max-w-[200px]">{referral.notes}</div>}
                           </td>
                           <td className="px-4 py-3">
                             {referrer ? (
@@ -4261,9 +4261,9 @@ function App({ currentUser }) {
                                 </svg>
                               </button>
                             ) : (
-                              <span className="text-gray-400">Unknown</span>
+                              <span className="text-slate-300">Unknown</span>
                             )}
-                            <div className="text-xs text-gray-500">{referrer?.type} • {referrerReferralCount} referral{referrerReferralCount !== 1 ? 's' : ''}</div>
+                            <div className="text-xs text-slate-400">{referrer?.type} • {referrerReferralCount} referral{referrerReferralCount !== 1 ? 's' : ''}</div>
                           </td>
                           <td className="px-4 py-3">
                             <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${REFERRAL_STATUS_COLORS[referral.status].bg} ${REFERRAL_STATUS_COLORS[referral.status].text} border ${REFERRAL_STATUS_COLORS[referral.status].border}`}>
@@ -4288,14 +4288,14 @@ function App({ currentUser }) {
                                 <span className="font-mono">{referrer.feeSplitPercentage}%</span>
                               </span>
                             ) : (
-                              <span className="text-gray-400 text-sm">Not set</span>
+                              <span className="text-slate-300 text-sm">Not set</span>
                             )}
                           </td>
                           <td className="px-4 py-3">
                             <div className="flex justify-end gap-2">
                               <button
                                 onClick={() => { setEditingReferral(referral); setShowReferralModal(true); }}
-                                className="p-1.5 text-gray-500 hover:text-blue-600 hover:bg-gray-50 rounded transition-colors"
+                                className="p-1.5 text-slate-400 hover:text-blue-600 hover:bg-gray-50 rounded transition-colors"
                                 title="Edit"
                               >
                                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -4304,7 +4304,7 @@ function App({ currentUser }) {
                               </button>
                               <button
                                 onClick={() => setDeleteReferralTarget(referral)}
-                                className="p-1.5 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
+                                className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
                                 title="Delete"
                               >
                                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
